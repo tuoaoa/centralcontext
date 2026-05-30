@@ -155,6 +155,47 @@
       color: #818cf8;
       text-decoration: underline;
     }
+    
+    /* Toggle switch styles */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 20px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #334155;
+      transition: .3s;
+      border-radius: 20px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #10b981;
+    }
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
   </style>
 </head>
 <body>
@@ -172,12 +213,34 @@
 
   <div class="section-title">Auto Context Injection</div>
   
+  <!-- Auto Inject Toggle Block -->
+  <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 8px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; flex-direction: column; gap: 2px;">
+      <span style="font-size: 12px; font-weight: 600; color: #f8fafc;">Auto Inject Context</span>
+      <span id="auto-inject-status" style="font-size: 10px; color: #94a3b8; font-weight: 600;">Status: OFF</span>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="auto-inject-toggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- First-run Warning Alert -->
+  <div id="auto-inject-warning" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 10px; margin-bottom: 12px; font-size: 11px; line-height: 1.4; color: #fef08a; font-family: sans-serif;">
+    <p style="margin: 0 0 8px 0; font-weight: 500;">
+      Auto Inject sẽ tự điền CentralContext Pack vào chat mới, nhưng không tự gửi. Bạn vẫn kiểm soát nội dung trước khi gửi.
+    </p>
+    <button id="confirm-auto-inject" class="btn btn-emerald" style="padding: 6px 12px; font-size: 11px; width: auto; display: inline-block; border-radius: 4px;">Enable Auto Inject</button>
+  </div>
+  
   <div class="btn-group">
     <button id="inject-pack" class="btn btn-emerald">Inject CentralContext Pack</button>
     <button id="new-session" class="btn btn-slate">New Session With Context</button>
+    <button id="reset-inject-state" class="btn btn-slate" style="background: transparent; border: 1px dashed #475569; color: #94a3b8; font-size: 11px; padding: 8px 0;">Reset Inject State</button>
   </div>
 
   <div class="section-title">Backfill & Debug</div>
+
   
   <div class="btn-group">
     <button id="capture-current" class="btn btn-sky">Capture Current Conversation</button>

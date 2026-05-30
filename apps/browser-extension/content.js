@@ -517,7 +517,108 @@ if (isContextValid()) {
   } catch (e) {}
 }
 
-// MutationObserver configuration for automatic logging
+// MutationObserver configuration for automatic logging and auto-injection checks
+let lastCheckedUrl = '';
+let hasAttemptedAutoInject = false;
+
+function checkAutoInjectTrigger() {
+  if (!isContextValid()) return;
+
+  const currentUrl = window.location.href;
+  const platform = getPlatform();
+  
+  if (platform === 'unknown') return;
+
+  if (currentUrl !== lastCheckedUrl) {
+    lastCheckedUrl = currentUrl;
+    hasAttemptedAutoInject = false;
+  }
+
+  if (hasAttemptedAutoInject) return;
+
+  try {
+    chrome.storage.local.get(['centralcontext_auto_inject_enabled', 'centralcontext_injected_urls'], async (result) => {
+      if (!isContextValid()) return;
+      if (hasAttemptedAutoInject) return; // double check inside callback
+
+      const autoInjectEnabled = result.centralcontext_auto_inject_enabled === true;
+      if (!autoInjectEnabled) return;
+
+      hasAttemptedAutoInject = true; // prevent duplicate parallel calls
+
+      chrome.runtime.sendMessage({ action: 'get_context_pack' }, async (response) => {
+        if (!isContextValid()) return;
+        if (!response || !response.success) {
+          console.warn('[CentralContext] Auto-inject aborted: Local API is unavailable.');
+          hasAttemptedAutoInject = false; // retry next time
+          return;
+        }
+
+        const packText = response.pack;
+        const packHash = await sha256(packText);
+        const injectedUrls = result.centralcontext_injected_urls || {};
+
+        // Check if already injected with the current pack version
+        if (injectedUrls[currentUrl] === packHash) {
+          console.log('[CentralContext] Auto-inject skipped: already injected for this URL.');
+          return;
+        }
+
+        // Locate prompt textarea element
+        let inputEl = null;
+        if (platform === 'chatgpt') {
+          inputEl = document.getElementById('prompt-textarea') || 
+                    document.querySelector('textarea[placeholder*="ChatGPT"]') || 
+                    document.querySelector('div[contenteditable="true"]');
+        } else if (platform === 'gemini') {
+          inputEl = document.querySelector('rich-textarea div[contenteditable="true"]') || 
+                    document.querySelector('div[role="textbox"]') || 
+                    document.querySelector('textarea');
+        } else if (platform === 'claude') {
+          inputEl = document.querySelector('div[role="textbox"]') || 
+                    document.querySelector('div[contenteditable="true"]') || 
+                    document.querySelector('textarea');
+        }
+
+        if (!inputEl) {
+          // Element not rendered yet, reset flag so MutationObserver retries when DOM renders it
+          hasAttemptedAutoInject = false;
+          return;
+        }
+
+        // Get textbox text content safely
+        let currentVal = '';
+        if (inputEl.tagName && (inputEl.tagName.toLowerCase() === 'textarea' || inputEl.tagName.toLowerCase() === 'input')) {
+          currentVal = inputEl.value || '';
+        } else {
+          currentVal = inputEl.innerText || '';
+        }
+        currentVal = currentVal.trim();
+
+        // Safe to inject if textbox is empty OR already populated with identical pack text
+        const isDirty = currentVal.length > 0 && currentVal !== packText.trim();
+        if (isDirty) {
+          console.log('[CentralContext] Auto-inject skipped: Textbox contains user typing.');
+          return;
+        }
+
+        // Inject pack text natively
+        const success = injectPackText(packText);
+        if (success) {
+          injectedUrls[currentUrl] = packHash;
+          chrome.storage.local.set({ centralcontext_injected_urls: injectedUrls }, () => {
+            console.log('[CentralContext] Auto-inject succeeded for:', currentUrl);
+          });
+        } else {
+          hasAttemptedAutoInject = false; // retry if inject script failed
+        }
+      });
+    });
+  } catch (err) {
+    hasAttemptedAutoInject = false;
+  }
+}
+
 observer = new MutationObserver((mutations) => {
   if (!isContextValid()) return;
   try {
@@ -530,6 +631,7 @@ observer = new MutationObserver((mutations) => {
     }
     if (hasNewNode) {
       scrapeAll();
+      checkAutoInjectTrigger(); // continuously check for textbox rendering
     }
   } catch (e) {}
 });
@@ -540,7 +642,10 @@ if (isContextValid()) {
   try {
     observer.observe(document.body, { childList: true, subtree: true });
     console.log('[CentralContext] active and observing chat flow.');
-    // Check and run auto-inject if scheduled
+    // Check and run manual load triggers
     checkAndAutoInjectOnLoad();
+    // Run automated trigger sequence
+    checkAutoInjectTrigger();
   } catch (e) {}
 }
+

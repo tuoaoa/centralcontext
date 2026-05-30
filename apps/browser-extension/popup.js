@@ -2,7 +2,73 @@ console.log('[CentralContext] Popup script loaded.');
 
 const statusPanel = document.getElementById('status-panel');
 
+const autoInjectToggle = document.getElementById('auto-inject-toggle');
+const autoInjectStatus = document.getElementById('auto-inject-status');
+const autoInjectWarning = document.getElementById('auto-inject-warning');
+const confirmAutoInject = document.getElementById('confirm-auto-inject');
+const resetInjectStateBtn = document.getElementById('reset-inject-state');
+
+// 1. Initialize UI states from chrome.storage.local
+chrome.storage.local.get(['centralcontext_auto_inject_enabled', 'centralcontext_first_run_warned'], (result) => {
+  const isEnabled = result.centralcontext_auto_inject_enabled === true;
+  autoInjectToggle.checked = isEnabled;
+  autoInjectStatus.textContent = `Status: ${isEnabled ? 'ON' : 'OFF'}`;
+  autoInjectStatus.style.color = isEnabled ? '#10b981' : '#94a3b8';
+});
+
+// Helper to update toggle state in storage and UI
+function updateAutoInjectState(enabled) {
+  chrome.storage.local.set({ centralcontext_auto_inject_enabled: enabled }, () => {
+    autoInjectToggle.checked = enabled;
+    autoInjectStatus.textContent = `Status: ${enabled ? 'ON' : 'OFF'}`;
+    autoInjectStatus.style.color = enabled ? '#10b981' : '#94a3b8';
+  });
+}
+
+// 2. Handle toggle changes
+autoInjectToggle.addEventListener('change', () => {
+  const isChecked = autoInjectToggle.checked;
+  
+  if (isChecked) {
+    // Check first-run warning
+    chrome.storage.local.get(['centralcontext_first_run_warned'], (result) => {
+      if (result.centralcontext_first_run_warned === true) {
+        updateAutoInjectState(true);
+      } else {
+        // Stay unchecked for now, display warning box
+        autoInjectToggle.checked = false;
+        autoInjectWarning.style.display = 'block';
+      }
+    });
+  } else {
+    updateAutoInjectState(false);
+  }
+});
+
+// 3. Confirm first-run warning
+confirmAutoInject.addEventListener('click', () => {
+  chrome.storage.local.set({ centralcontext_first_run_warned: true }, () => {
+    autoInjectWarning.style.display = 'none';
+    updateAutoInjectState(true);
+  });
+});
+
+// 4. Reset Inject State
+resetInjectStateBtn.addEventListener('click', () => {
+  chrome.storage.local.set({ centralcontext_injected_urls: {} }, () => {
+    showStatus('<div style="color: #38bdf8; font-weight: 600; text-align: center;">Injection history cleared!</div>');
+  });
+});
+
+// 5. Check API Availability on startup
+chrome.runtime.sendMessage({ action: 'get_context_pack' }, (response) => {
+  if (chrome.runtime.lastError || !response || !response.success) {
+    showStatus('<div style="color: #ef4444; font-weight: 700; text-align: center;">CentralContext API unavailable.</div>', true);
+  }
+});
+
 function showStatus(html, isError = false) {
+
   statusPanel.style.display = 'block';
   statusPanel.style.borderColor = isError ? 'rgba(239, 68, 68, 0.4)' : '#1e293b';
   statusPanel.style.background = isError ? 'rgba(239, 68, 68, 0.05)' : 'rgba(30, 41, 59, 0.5)';
