@@ -115,16 +115,18 @@ app.get('/api/context/decisions', authenticateApiKey, apiRateLimiter, (req, res)
 app.get('/api/context/pack', authenticateApiKey, apiRateLimiter, (req, res) => {
   try {
     const filesToPack = [
+      { name: 'SOURCE_PRIORITY.md', path: 'context/SOURCE_PRIORITY.md', limitLines: 0 },
       { name: 'CURRENT_STATE.md', path: 'context/CURRENT_STATE.md', limitLines: 0 },
-      { name: 'CENTRAL_CONTEXT.md', path: 'context/CENTRAL_CONTEXT.md', limitLines: 0 },
       { name: 'DECISIONS.md', path: 'context/DECISIONS.md', limitLines: 0 },
+      { name: 'CENTRAL_CONTEXT.md', path: 'context/CENTRAL_CONTEXT.md', limitLines: 0 },
       { name: 'ACTIVE_PROJECTS.md', path: 'context/ACTIVE_PROJECTS.md', limitLines: 0 },
+      { name: 'FOUNDER_INTENT.md', path: 'context/FOUNDER_INTENT.md', limitLines: 0 },
+      { name: 'AGENT_RULES.md', path: 'context/AGENT_RULES.md', limitLines: 0 },
       { name: 'WORK_LOG.md', path: 'context/WORK_LOG.md', limitLines: 30 },
       { name: 'OLD_STATE.md', path: 'context/OLD_STATE.md', limitLines: 0 },
-      { name: 'FOUNDER_INTENT.md', path: 'context/FOUNDER_INTENT.md', limitLines: 0 },
-      { name: 'ARCHIVE_STATE.md', path: 'context/ARCHIVE_STATE.md', limitLines: 0 },
-      { name: 'AGENT_RULES.md', path: 'context/AGENT_RULES.md', limitLines: 0 }
+      { name: 'ARCHIVE_STATE.md', path: 'context/ARCHIVE_STATE.md', limitLines: 0 }
     ];
+
 
 
     let output = '';
