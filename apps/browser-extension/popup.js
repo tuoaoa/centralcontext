@@ -8,12 +8,43 @@ const autoInjectWarning = document.getElementById('auto-inject-warning');
 const confirmAutoInject = document.getElementById('confirm-auto-inject');
 const resetInjectStateBtn = document.getElementById('reset-inject-state');
 
+const forceAutoInjectBtn = document.getElementById('force-auto-inject');
+const lastInjectDetails = document.getElementById('last-inject-details');
+const lastInjectHash = document.getElementById('last-inject-hash');
+const lastInjectLength = document.getElementById('last-inject-length');
+const lastInjectUrl = document.getElementById('last-inject-url');
+
+// Render metadata function
+function renderLastInjectionDetails() {
+  chrome.storage.local.get([
+    'centralcontext_last_injected_hash',
+    'centralcontext_last_injected_length',
+    'centralcontext_last_injected_url'
+  ], (result) => {
+    const hash = result.centralcontext_last_injected_hash;
+    const len = result.centralcontext_last_injected_length;
+    const url = result.centralcontext_last_injected_url;
+
+    if (hash && len && url) {
+      lastInjectDetails.style.display = 'block';
+      lastInjectHash.textContent = hash.substring(0, 16) + '...';
+      lastInjectHash.title = hash;
+      lastInjectLength.textContent = `${(len / 1024).toFixed(2)} KB (${len} chars)`;
+      lastInjectUrl.textContent = url;
+      lastInjectUrl.title = url;
+    } else {
+      lastInjectDetails.style.display = 'none';
+    }
+  });
+}
+
 // 1. Initialize UI states from chrome.storage.local
 chrome.storage.local.get(['centralcontext_auto_inject_enabled', 'centralcontext_first_run_warned'], (result) => {
   const isEnabled = result.centralcontext_auto_inject_enabled === true;
   autoInjectToggle.checked = isEnabled;
   autoInjectStatus.textContent = `Status: ${isEnabled ? 'ON' : 'OFF'}`;
   autoInjectStatus.style.color = isEnabled ? '#10b981' : '#94a3b8';
+  renderLastInjectionDetails();
 });
 
 // Helper to update toggle state in storage and UI
@@ -55,7 +86,13 @@ confirmAutoInject.addEventListener('click', () => {
 
 // 4. Reset Inject State
 resetInjectStateBtn.addEventListener('click', () => {
-  chrome.storage.local.set({ centralcontext_injected_urls: {} }, () => {
+  chrome.storage.local.set({ 
+    centralcontext_injected_urls: {},
+    centralcontext_last_injected_hash: null,
+    centralcontext_last_injected_length: null,
+    centralcontext_last_injected_url: null
+  }, () => {
+    renderLastInjectionDetails();
     showStatus('<div style="color: #38bdf8; font-weight: 600; text-align: center;">Injection history cleared!</div>');
   });
 });
@@ -68,7 +105,6 @@ chrome.runtime.sendMessage({ action: 'get_context_pack' }, (response) => {
 });
 
 function showStatus(html, isError = false) {
-
   statusPanel.style.display = 'block';
   statusPanel.style.borderColor = isError ? 'rgba(239, 68, 68, 0.4)' : '#1e293b';
   statusPanel.style.background = isError ? 'rgba(239, 68, 68, 0.05)' : 'rgba(30, 41, 59, 0.5)';
@@ -106,9 +142,14 @@ function sendActionToActiveTab(action) {
       if (response && response.success) {
         if (action === 'inject_context_pack') {
           showStatus('<div style="color: #34d399; font-weight: 600; text-align: center;">CentralContext Pack Injected!</div>');
+          setTimeout(renderLastInjectionDetails, 200);
+        } else if (action === 'force_auto_inject') {
+          showStatus('<div style="color: #34d399; font-weight: 600; text-align: center;">Fresh Context Forced!</div>');
+          setTimeout(renderLastInjectionDetails, 200);
         } else {
           showStatus('<div style="color: #38bdf8; font-weight: 600; text-align: center;">Scanning and capturing conversation...</div>');
         }
+
       } else {
         showStatus(`<div style="color: #fca5a5; font-weight: 600;">Failed: ${response ? response.error : 'Unknown response'}</div>`, true);
       }
@@ -132,6 +173,11 @@ document.getElementById('new-session').addEventListener('click', () => {
 document.getElementById('inject-pack').addEventListener('click', () => {
   sendActionToActiveTab('inject_context_pack');
 });
+
+forceAutoInjectBtn.addEventListener('click', () => {
+  sendActionToActiveTab('force_auto_inject');
+});
+
 
 document.getElementById('capture-current').addEventListener('click', () => {
   sendActionToActiveTab('capture_current_conversation');

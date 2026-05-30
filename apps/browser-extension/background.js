@@ -37,12 +37,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   
   if (message.action === 'get_context_pack') {
-    // Fetch CentralContext Pack from secure local endpoint
-    fetch(PACK_URL, {
+    // Fetch CentralContext Pack from secure local endpoint - strictly bypass cache
+    const bypassUrl = PACK_URL + '?_t=' + Date.now();
+    fetch(bypassUrl, {
       method: 'GET',
       headers: {
-        'x-api-key': API_KEY
-      }
+        'x-api-key': API_KEY,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      },
+      cache: 'no-store'
     })
     .then(response => {
       if (response.ok) {
@@ -59,6 +64,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     
     return true;
   }
+
   
   if (message.action === 'new_session_with_context') {
     // Open a new ChatGPT tab and schedule auto-inject on load

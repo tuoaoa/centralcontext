@@ -495,14 +495,97 @@ if (isContextValid()) {
           triggerDebugSnapshot();
           sendResponse({ success: true });
         } else if (request.action === 'inject_context_pack') {
-          chrome.runtime.sendMessage({ action: 'get_context_pack' }, (response) => {
+          chrome.runtime.sendMessage({ action: 'get_context_pack' }, async (response) => {
             if (!isContextValid()) {
               sendResponse({ success: false, error: 'Context invalidated' });
               return;
             }
             if (response && response.success) {
-              const success = injectPackText(response.pack);
-              sendResponse({ success: success });
+              const packText = response.pack;
+              const packHash = await sha256(packText);
+              const currentUrl = window.location.href;
+              const success = injectPackText(packText);
+              if (success) {
+                chrome.storage.local.set({
+                  centralcontext_last_injected_hash: packHash,
+                  centralcontext_last_injected_length: packText.length,
+                  centralcontext_last_injected_url: currentUrl
+                }, () => {
+                  sendResponse({ success: true });
+                });
+              } else {
+                sendResponse({ success: false, error: 'Inject execution failed' });
+              }
+            } else {
+              sendResponse({ success: false, error: response ? response.error : 'Failed to fetch pack' });
+            }
+          });
+          return true; // async
+        } else if (request.action === 'force_auto_inject') {
+          chrome.runtime.sendMessage({ action: 'get_context_pack' }, async (response) => {
+            if (!isContextValid()) {
+              sendResponse({ success: false, error: 'Context invalidated' });
+              return;
+            }
+            if (response && response.success) {
+              const packText = response.pack;
+              const packHash = await sha256(packText);
+              const currentUrl = window.location.href;
+              const platform = getPlatform();
+
+              let inputEl = null;
+              if (platform === 'chatgpt') {
+                inputEl = document.getElementById('prompt-textarea') || 
+                          document.querySelector('textarea[placeholder*="ChatGPT"]') || 
+                          document.querySelector('div[contenteditable="true"]');
+              } else if (platform === 'gemini') {
+                inputEl = document.querySelector('rich-textarea div[contenteditable="true"]') || 
+                          document.querySelector('div[role="textbox"]') || 
+                          document.querySelector('textarea');
+              } else if (platform === 'claude') {
+                inputEl = document.querySelector('div[role="textbox"]') || 
+                          document.querySelector('div[contenteditable="true"]') || 
+                          document.querySelector('textarea');
+              }
+
+              if (!inputEl) {
+                sendResponse({ success: false, error: 'Textbox not found' });
+                return;
+              }
+
+              let currentVal = '';
+              if (inputEl.tagName && (inputEl.tagName.toLowerCase() === 'textarea' || inputEl.tagName.toLowerCase() === 'input')) {
+                currentVal = inputEl.value || '';
+              } else {
+                currentVal = inputEl.innerText || '';
+              }
+              currentVal = currentVal.trim();
+
+              const isDirty = currentVal.length > 0 && currentVal !== packText.trim();
+              if (isDirty) {
+                sendResponse({ success: false, error: 'Textbox contains user typing' });
+                return;
+              }
+
+              const success = injectPackText(packText);
+              if (success) {
+                console.log(`[CentralContext] auto injected pack length=${packText.length} hash=${packHash}`);
+                
+                chrome.storage.local.get(['centralcontext_injected_urls'], (res) => {
+                  const injectedUrls = res.centralcontext_injected_urls || {};
+                  injectedUrls[currentUrl] = packHash;
+                  chrome.storage.local.set({
+                    centralcontext_injected_urls: injectedUrls,
+                    centralcontext_last_injected_hash: packHash,
+                    centralcontext_last_injected_length: packText.length,
+                    centralcontext_last_injected_url: currentUrl
+                  }, () => {
+                    sendResponse({ success: true });
+                  });
+                });
+              } else {
+                sendResponse({ success: false, error: 'Inject execution failed' });
+              }
             } else {
               sendResponse({ success: false, error: response ? response.error : 'Failed to fetch pack' });
             }
@@ -605,8 +688,14 @@ function checkAutoInjectTrigger() {
         // Inject pack text natively
         const success = injectPackText(packText);
         if (success) {
+          console.log(`[CentralContext] auto injected pack length=${packText.length} hash=${packHash}`);
           injectedUrls[currentUrl] = packHash;
-          chrome.storage.local.set({ centralcontext_injected_urls: injectedUrls }, () => {
+          chrome.storage.local.set({
+            centralcontext_injected_urls: injectedUrls,
+            centralcontext_last_injected_hash: packHash,
+            centralcontext_last_injected_length: packText.length,
+            centralcontext_last_injected_url: currentUrl
+          }, () => {
             console.log('[CentralContext] Auto-inject succeeded for:', currentUrl);
           });
         } else {
