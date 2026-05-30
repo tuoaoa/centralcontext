@@ -19,8 +19,10 @@ build/
 data/raw/*.jsonl
 data/daily/*.md
 data/memory/PENDING_UPDATES.md
+data/memory/*.json
 data/backups/
 .DS_Store
+
 
 # Temporary & Test files
 *.rtf
