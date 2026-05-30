@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Local configuration & Secrets
+.env
+*.env
+.env.local
+.env.production
+
+# SQLite Databases
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Log backups & Temp files
+data/raw/*.jsonl
+data/daily/*.md
+data/memory/PENDING_UPDATES.md
+data/backups/
+.DS_Store
+
+# Temporary & Test files
+*.rtf
+random_*.md
+test_plan.md
+

@@ -1,0 +1,12 @@
+{
+  "name": "telegram-listener",
+  "version": "1.0.0",
+  "description": "Live Telegram Bot Listener for CentralContext using native polling",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

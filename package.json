@@ -1,0 +1,31 @@
+{
+  "name": "centralcontext-root",
+  "version": "1.0.0",
+  "description": "Shared context and logging hub for AI Agents (ChatGPT, Gemini, Antigravity, OpenClaw, Hermes)",
+  "private": true,
+  "scripts": {
+    "setup": "node scripts/generate-token.js && npm run setup:server && npm run setup:cli && node scripts/init-folders.js",
+    "setup:server": "npm install --prefix apps/server",
+    "setup:cli": "npm install --prefix apps/cli",
+    "dev": "npm run dev --prefix apps/server",
+    "curate:daily": "npm run curate:daily --prefix apps/cli",
+    "sync:push": "npm run sync:push --prefix apps/cli",
+    "sync:pull": "npm run sync:pull --prefix apps/cli",
+    "capture:start": "node scripts/capture-start.js",
+    "capture:files": "npm run capture:files --prefix apps/cli",
+    "capture:clipboard": "npm run capture:clipboard --prefix apps/cli",
+    "cc:terminal": "npm run capture:terminal --prefix apps/cli --",
+    "capture:test": "node scripts/capture-test.js",
+    "context:pack": "node scripts/context-pack.js",
+    "context:copy": "node scripts/context-pack.js | pbcopy && echo 'CentralContext Pack copied to clipboard'"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "context",
+    "knowledge",
+    "synchronization"
+  ],
+  "author": "CentralContext Team",
+  "license": "MIT"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "centralcontext-cli",
+  "version": "1.0.0",
+  "description": "CLI utility for CentralContext Daily Curation and VPS Synchronization",
+  "main": "dist/index.js",
+  "scripts": {
+    "curate:daily": "ts-node src/curator.ts",
+    "sync:push": "ts-node src/sync.ts push",
+    "sync:pull": "ts-node src/sync.ts pull",
+    "capture:files": "ts-node src/capture/watcher.ts",
+    "capture:clipboard": "ts-node src/capture/clipboard.ts",
+    "capture:terminal": "ts-node src/capture/terminal.ts"
+  },
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

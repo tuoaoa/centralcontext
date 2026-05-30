@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CentralContext Dashboard</title>
+  <meta name="description" content="Unified shared context and logging dashboard for AI agents.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Modern Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Marked.js Markdown Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <span class="logo-icon">🧠</span>
+        <h1>CentralContext <span class="badge">MVP</span></h1>
+      </div>
+      <div class="token-config">
+        <label for="ui-api-key">API Key:</label>
+        <input type="password" id="ui-api-key" placeholder="Enter x-api-key to unlock..." value="">
+        <button id="btn-save-key" class="btn-primary">Unlock</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Toast -->
+  <div id="toast-notification" class="toast hidden"></div>
+
+  <!-- Main Grid Layout -->
+  <main class="dashboard-grid">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar-panel">
+      <nav class="nav-menu">
+        <button class="nav-tab active" id="tab-state" onclick="switchTab('state')">
+          <span class="icon">⚡</span> Current State
+        </button>
+        <button class="nav-tab" id="tab-central" onclick="switchTab('central')">
+          <span class="icon">📚</span> Central Context
+        </button>
+        <button class="nav-tab" id="tab-decisions" onclick="switchTab('decisions')">
+          <span class="icon">⚖️</span> Architecture Decisions
+        </button>
+        <button class="nav-tab" id="tab-logs" onclick="switchTab('logs')">
+          <span class="icon">📝</span> Raw Logs Feed
+        </button>
+      </nav>
+
+      <div class="action-box">
+        <h3>Agent Context Pack</h3>
+        <p class="description">Copy aggregated context (State, Central, Decisions, Memory Rules). Paste at the start of a session or before a major task (not every message) to conserve tokens.</p>
+        <button id="btn-copy-pack" class="btn-glow">⚡ Copy Context Pack</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Viewer Section -->
+    <section class="content-panel">
+      <!-- File viewer card -->
+      <div class="card viewer-card">
+        <div class="card-header">
+          <h2 id="viewer-title">CURRENT_STATE.md</h2>
+          <span class="status-indicator">Source of Truth</span>
+        </div>
+        <div class="card-body markdown-body" id="viewer-content">
+          <p class="loading">Loading context content, please configure API Key...</p>
+        </div>
+      </div>
+
+      <!-- Quick Note forms and logging area -->
+      <div class="card form-card">
+        <div class="card-header">
+          <h2>Quick Context Actions</h2>
+        </div>
+        
+        <!-- Tab specific forms -->
+        <div class="card-body">
+          <!-- Form 1: Add Raw Log -->
+          <form id="form-raw-log" class="action-form">
+            <h3>Add Raw Note / Log</h3>
+            <div class="form-group">
+              <label for="log-source">Source Agent / User:</label>
+              <select id="log-source" required>
+                <option value="manual">manual (User)</option>
+                <option value="chatgpt">chatgpt</option>
+                <option value="gemini">gemini</option>
+                <option value="antigravity">antigravity</option>
+                <option value="openclaw">openclaw</option>
+                <option value="hermes">hermes</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="log-project">Project (Optional):</label>
+                <input type="text" id="log-project" placeholder="e.g. CentralContext">
+              </div>
+              <div class="form-group">
+                <label for="log-type">Type:</label>
+                <select id="log-type" required>
+                  <option value="note">note</option>
+                  <option value="user">user</option>
+                  <option value="assistant">assistant</option>
+                  <option value="tool">tool</option>
+                  <option value="terminal">terminal</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="log-content">Content / Memo:</label>
+              <textarea id="log-content" rows="4" placeholder="Enter logs, commands, or details to cache..." required></textarea>
+            </div>
+            <button type="submit" id="btn-submit-log" class="btn-primary">Append Log Entry</button>
+          </form>
+
+          <!-- Form 2: Append Work Log Entry -->
+          <form id="form-work-log" class="action-form hidden">
+            <h3>Append Work Log Entry</h3>
+            <div class="form-group">
+              <label for="work-source">Source Writer:</label>
+              <input type="text" id="work-source" value="manual" required>
+            </div>
+            <div class="form-group">
+              <label for="work-entry">Chronological Entry:</label>
+              <textarea id="work-entry" rows="4" placeholder="Summarize your work done here (will append to WORK_LOG.md)..." required></textarea>
+            </div>
+            <button type="submit" id="btn-submit-work" class="btn-primary">Post to WORK_LOG.md</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>CentralContext MVP • Running in Local Caching Mode</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

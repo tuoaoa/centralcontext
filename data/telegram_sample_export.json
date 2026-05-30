@@ -1,0 +1,25 @@
+{
+  "name": "OpenClaw Staging Dev",
+  "type": "public_supergroup",
+  "id": 987654321,
+  "messages": [
+    {
+      "id": 1001,
+      "type": "message",
+      "date": "2026-05-30T16:00:00",
+      "date_unixtime": "1779817200",
+      "from": "Hermes Assistant",
+      "from_id": "user12345",
+      "text": "Starting live evaluation sequences for OpenClaw."
+    },
+    {
+      "id": 1002,
+      "type": "message",
+      "date": "2026-05-30T16:05:00",
+      "date_unixtime": "1779817500",
+      "from": "Tuoaoa",
+      "from_id": "user9999",
+      "text": "TELEGRAM_CAPTURE_TEST_001"
+    }
+  ]
+}

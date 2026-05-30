@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 320px;
+      padding: 16px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0b0f19;
+      color: #f8fafc;
+      margin: 0;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+    .logo {
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.1);
+      padding: 4px 8px;
+      border-radius: 20px;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: #34d399;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #34d399;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+    .desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin: 0 0 16px 0;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #1e293b;
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      border: none;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      box-sizing: border-box;
+    }
+    .btn-emerald {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+    .btn-emerald:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+    }
+    .btn-sky {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    .btn-sky:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+    }
+    .btn-slate {
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+    .btn-slate:hover {
+      background: #334155;
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+      transform: translateY(-1px);
+    }
+    .status-panel {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .footer-link {
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      color: #6366f1;
+      text-decoration: none;
+      margin-top: 16px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .footer-link:hover {
+      color: #818cf8;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">CentralContext</div>
+    <div class="status-badge">
+      <div class="dot"></div>
+      Active
+    </div>
+  </div>
+  
+  <p class="desc">
+    Synchronize and inject developer context into ChatGPT, Gemini, and Claude.
+  </p>
+
+  <div class="section-title">Auto Context Injection</div>
+  
+  <div class="btn-group">
+    <button id="inject-pack" class="btn btn-emerald">Inject CentralContext Pack</button>
+    <button id="new-session" class="btn btn-slate">New Session With Context</button>
+  </div>
+
+  <div class="section-title">Backfill & Debug</div>
+  
+  <div class="btn-group">
+    <button id="capture-current" class="btn btn-sky">Capture Current Conversation</button>
+    <button id="capture-visible" class="btn btn-slate">Capture Visible Messages</button>
+    <button id="capture-debug" class="btn btn-danger">Capture Debug Snapshot</button>
+  </div>
+
+  <div id="status-panel" class="status-panel"></div>
+
+  <a href="http://localhost:3000" target="_blank" class="footer-link">Open CentralContext Dashboard →</a>
+
+  <div style="text-align: center; margin-top: 12px; font-size: 10px; color: #64748b; border-top: 1px solid #1e293b; padding-top: 8px; font-family: sans-serif;">
+    Sponsor: <a href="https://chothuexemay.vn" target="_blank" style="color: #10b981; text-decoration: none; font-weight: 600;">chothuexemay.vn</a> - Thuê xe máy uy tín hàng đầu
+  </div>
+
+  <script src="popup.js"></script>
+
+</body>
+</html>
