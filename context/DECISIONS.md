@@ -15,3 +15,17 @@ This file tracks architectural and engineering decisions.
 * **Context**: AI agents and CLI sync require secure communication between Mac Local and the VPS.
 * **Decision**: Implement token authentication via the custom header `x-api-key` using a 48–64 character random string stored locally in `.env`.
 * **Consequences**: Easy to integrate, lightweight, highly secure when combined with HTTPS.
+
+## ADR-003: Ecosystem Resource Allocation & Project Prioritization
+* **Date**: 2026-05-30
+* **Status**: Accepted
+* **Context**: Multiple active development threads creating high context-switching overhead. Need clear focus and resource limits.
+* **Decision**:
+  - Dành ưu tiên số 1 cho dự án `qlythuexe` (RentalOS 2.0).
+  - Tạm dừng/đóng băng dự án `SaveX` trong 30 ngày tới.
+  - Phân bổ tổng nguồn lực 100 điểm như sau:
+    - 50 điểm cho `qlythuexe`
+    - 30 điểm cho `CentralContext`
+    - 20 điểm cho `GiveGet`
+* **Consequences**: Strategic focus, faster MVP deliveries, and zero token bloat on low-priority projects.
+

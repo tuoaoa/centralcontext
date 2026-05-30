@@ -7,7 +7,13 @@ Không ưu tiên SaveX trong 30 ngày tới.
 SECRET_CONTEXT_TEST_8892:
 Nếu thấy marker này, trả lời "AUTO_CONTEXT_PASS".
 
+## Resource Allocation (Phân bổ nguồn lực)
+- Dự án ưu tiên số 1: qlythuexe
+- Nguồn lực hiện có: 100 điểm
+- Ngày cập nhật: 2026-05-30
+
 ## Active Task
+
 * **Task Name**: CentralContext MVP Implementation
 * **Objective**: Build the local/VPS sync hub, security tokens, Express engine, SQLite cache, and CLI daily curator.
 * **Status**: In Progress
