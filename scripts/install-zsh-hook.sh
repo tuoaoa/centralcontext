@@ -76,10 +76,14 @@ function centralcontext_precmd() {
         export TS="$CENTRALCONTEXT_LAST_TS"
         
         local payload=$(node -e '
+            // Derive project from CWD path instead of hardcoding
+            const cwd = process.env.CWD || "";
+            const devflowMatch = cwd.match(/\/devflow\/([^\/]+)/);
+            const project = devflowMatch ? devflowMatch[1] : "General";
             const payload = {
                 source: "terminal",
                 type: parseInt(process.env.EXIT) !== 0 ? "terminal_error" : "terminal_run",
-                project: "CentralContext",
+                project: project,
                 quality_score: parseInt(process.env.EXIT) !== 0 ? 4 : 3,
                 memory_priority: parseInt(process.env.EXIT) !== 0 ? "high" : "useful",
                 content: `Command: ${process.env.CMD}\nExit Code: ${process.env.EXIT}\nCWD: ${process.env.CWD}\nTimestamp: ${process.env.TS}`

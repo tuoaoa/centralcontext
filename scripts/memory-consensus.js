@@ -66,6 +66,45 @@ if (fs.existsSync(aiJudgePath)) {
   }
 }
 
+// Load Reality Layer scores (Reality Check Layer integration)
+const realityScoresPath = path.join(rootDir, 'data/memory/reality/reality_scores.json');
+let realityScores = null;
+if (fs.existsSync(realityScoresPath)) {
+  try {
+    realityScores = JSON.parse(fs.readFileSync(realityScoresPath, 'utf8'));
+    const projectCount = Object.keys(realityScores.projects || {}).length;
+    console.log(`\x1b[32m✔ Loaded Reality Layer scores for ${projectCount} projects (window: ${realityScores.window_days}d)\x1b[0m`);
+  } catch (e) {
+    console.warn(`[Warning] Failed to load Reality Layer scores:`, e.message);
+    realityScores = null;
+  }
+} else {
+  console.log(`\x1b[33m⚠ Reality Layer scores not found. Run 'npm run reality:scan' first. Using neutral alignment.\x1b[0m`);
+}
+
+// Helper: extract project names mentioned in a candidate's proposed_memory
+function extractMentionedProjects(text, knownProjects) {
+  if (!text || !knownProjects.length) return [];
+  const lower = text.toLowerCase();
+  return knownProjects.filter(p => lower.includes(p.toLowerCase()));
+}
+
+// Helper: compute reality_alignment score for a candidate
+function computeRealityAlignment(cand, realityScores) {
+  if (!realityScores || !realityScores.projects) return 70; // neutral
+  const knownProjects = Object.keys(realityScores.projects);
+  const text = (cand.proposed_memory || '') + ' ' + (cand.raw_content || '') + ' ' + (cand.project || '');
+  const mentioned = extractMentionedProjects(text, knownProjects);
+  if (mentioned.length === 0) return 70; // no project reference, neutral
+  
+  // Average the activity scores of all mentioned projects
+  let totalScore = 0;
+  for (const p of mentioned) {
+    totalScore += realityScores.projects[p].activity_score;
+  }
+  return Math.round(totalScore / mentioned.length);
+}
+
 // Stats tracking
 let autoApprovedCount = 0;
 let autoRejectedCount = 0;
@@ -75,20 +114,35 @@ const approvedList = [];
 const rejectedList = [];
 const reviewQueueList = [];
 
-// Enforce Curation & Score calculation (Yêu cầu Consensus formula)
+// Enforce Curation & Score calculation (Reality-Aware Consensus v1.0)
 candidates.forEach((cand, idx) => {
   const distillerScore = cand.confidence || 80;
   const criticScore = cand.critic_score !== undefined ? cand.critic_score : 70;
   const founderFitScore = cand.founder_fit_score !== undefined ? cand.founder_fit_score : 70;
+  const realityAlignment = computeRealityAlignment(cand, realityScores);
 
-  // Formula: 0.4 * Distiller + 0.3 * Critic + 0.3 * Founder Fit (Yêu cầu Pass 4)
+  // Reality-Aware Formula: 0.35 * Distiller + 0.25 * Critic + 0.25 * Founder Fit + 0.15 * Reality Alignment
   let memoryScore = Math.round(
-    0.4 * distillerScore + 
-    0.3 * criticScore + 
-    0.3 * founderFitScore
+    0.35 * distillerScore + 
+    0.25 * criticScore + 
+    0.25 * founderFitScore +
+    0.15 * realityAlignment
   );
 
   cand.memory_score = memoryScore;
+  cand.reality_alignment = realityAlignment;
+
+  // Reality mismatch detection: if candidate mentions a project with very low activity
+  // but claims it's a priority, flag it
+  let realityMismatch = false;
+  if (realityAlignment < 20 && cand.proposed_memory) {
+    const lower = cand.proposed_memory.toLowerCase();
+    if (lower.includes('priority') || lower.includes('ưu tiên') || lower.includes('focus') || lower.includes('active')) {
+      realityMismatch = true;
+      cand.reality_mismatch = true;
+      cand.reality_mismatch_reason = `Candidate claims project priority but reality activity_score = ${realityAlignment} (dormant)`;
+    }
+  }
 
   // Classification Rules:
   // Rule A: Mandatory Founder Review for: decision, current_state_update, project priority, resource allocation
@@ -167,8 +221,22 @@ candidates.forEach((cand, idx) => {
 
   cand.status = status;
 
+  // Reality mismatch override: force review_queue if mismatch detected and not already rejected
+  if (realityMismatch && status !== 'auto_rejected') {
+    if (status === 'auto_approved') {
+      approvedList.pop(); // remove from approved
+      autoApprovedCount--;
+    }
+    status = 'review_queue';
+    cand.status = status;
+    reviewQueueCount++;
+    reviewQueueList.push(cand);
+    console.log(`  \x1b[33m⚠ REALITY MISMATCH: Forced to review_queue\x1b[0m`);
+  }
+
   const aiBadge = matchedAi ? ` [AI:${matchedAi.decision.toUpperCase()}]` : '';
-  console.log(`  Candidate ${String(idx + 1).padStart(3, '0')} [${cand.type}]: Score = \x1b[1m${memoryScore}\x1b[0m${aiBadge} $\\rightarrow$ \x1b[36m${status.toUpperCase()}\x1b[0m`);
+  const realityBadge = realityAlignment !== 70 ? ` [R:${realityAlignment}]` : '';
+  console.log(`  Candidate ${String(idx + 1).padStart(3, '0')} [${cand.type}]: Score = \x1b[1m${memoryScore}\x1b[0m${aiBadge}${realityBadge} $\\rightarrow$ \x1b[36m${status.toUpperCase()}\x1b[0m`);
 });
 
 // Compile and write approved/rejected stores to data/memory/
