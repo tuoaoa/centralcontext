@@ -20,7 +20,8 @@
       "critic_reason": "Criticism: This is an exit-code 1 or 2 from a 'grep' command. In Unix, grep returns 1 when no matches are found, which represents standard search mismatch rather than an actual compile or execution bug. This is pure logging noise.",
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
-      "memory_score": 73,
+      "memory_score": 63,
+      "reality_alignment": 4,
       "ai_decision": "reject",
       "ai_reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
       "status": "auto_rejected"
@@ -45,7 +46,8 @@
       "critic_reason": "Criticism: This is an exit-code 1 or 2 from a 'grep' command. In Unix, grep returns 1 when no matches are found, which represents standard search mismatch rather than an actual compile or execution bug. This is pure logging noise.",
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
-      "memory_score": 73,
+      "memory_score": 63,
+      "reality_alignment": 4,
       "ai_decision": "reject",
       "ai_reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
       "status": "auto_rejected"
@@ -70,7 +72,8 @@
       "critic_reason": "Criticism: This is an exit-code 1 or 2 from a 'grep' command. In Unix, grep returns 1 when no matches are found, which represents standard search mismatch rather than an actual compile or execution bug. This is pure logging noise.",
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
-      "memory_score": 73,
+      "memory_score": 63,
+      "reality_alignment": 4,
       "ai_decision": "reject",
       "ai_reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
       "status": "auto_rejected"
@@ -94,7 +97,10 @@
       "critic_reason": "Validation: High-value architectural or strategic choice. Substantial evidence of direct context configuration updates or manual ADR edits. Highly critical memory.",
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
-      "memory_score": 96,
+      "memory_score": 82,
+      "reality_alignment": 4,
+      "reality_mismatch": true,
+      "reality_mismatch_reason": "Candidate claims project priority but reality activity_score = 4 (dormant)",
       "ai_decision": "needs_review",
       "ai_reason": "[Dry-Run Skipped] Strategic priority modifications or credentials must undergo manual developer verification.",
       "status": "review_queue"
@@ -117,7 +123,8 @@
       "critic_reason": "This candidate represents high-fidelity work log progress or strategic planning with sufficient logged evidence.",
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
-      "memory_score": 92,
+      "memory_score": 79,
+      "reality_alignment": 4,
       "ai_decision": "needs_review",
       "ai_reason": "[Dry-Run Skipped] Strategic priority modifications or credentials must undergo manual developer verification.",
       "status": "review_queue"
@@ -142,7 +149,8 @@
       "critic_reason": "Criticism: This command consists solely of terminal directories traversing ('cd'). It contains no actual development output, build runs, or architectural decisions. Extremely low-value fact.",
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
-      "memory_score": 77,
+      "memory_score": 74,
+      "reality_alignment": 52,
       "ai_decision": "reject",
       "ai_reason": "[Dry-Run Skipped] Trivial directory traversing (cd) contains no active build runs or state milestones. Filtered as noise.",
       "status": "auto_rejected"
@@ -166,11 +174,14 @@
       "critic_reason": "Validation: High-value architectural or strategic choice. Substantial evidence of direct context configuration updates or manual ADR edits. Highly critical memory.",
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
-      "memory_score": 90,
+      "memory_score": 77,
+      "reality_alignment": 4,
+      "reality_mismatch": true,
+      "reality_mismatch_reason": "Candidate claims project priority but reality activity_score = 4 (dormant)",
       "ai_decision": "reject",
       "ai_reason": "[Dry-Run Skipped] Vague chat discussion lacks concrete architectural decisions or explicit commitments. Filtered as noise.",
       "status": "auto_rejected"
     }
   ],
-  "summary": "### Heuristic Observations\n- Reviewed **1272** browser chat interactions, **78** file watcher events, **45** clipboard snippets, and **24** terminal runs.\n- Detected \u001b[31m3 terminal run errors\u001b[0m. Flagged as bugs/blockers.\n- Strategic context files modified: **SOURCE_PRIORITY.md**. Flagged as architectural updates.\n- Detected founder code validation tokens. Extracted founder preferences.\n- Logged **21** successful terminal commands.\n- Strategic chat communications evaluated: **1272** high-quality entries. Flagged as decisions.\n\n\n*(Pass 4 Consensus run: Auto-approved 0, Auto-rejected 5, Review queue 2)*"
+  "summary": "### Heuristic Observations\n- Reviewed **1284** browser chat interactions, **143** file watcher events, **55** clipboard snippets, and **24** terminal runs.\n- Detected \u001b[31m3 terminal run errors\u001b[0m. Flagged as bugs/blockers.\n- Strategic context files modified: **SOURCE_PRIORITY.md**. Flagged as architectural updates.\n- Detected founder code validation tokens. Extracted founder preferences.\n- Logged **21** successful terminal commands.\n- Strategic chat communications evaluated: **1284** high-quality entries. Flagged as decisions.\n\n\n*(Pass 4 Consensus run: Auto-approved 0, Auto-rejected 5, Review queue 6)*"
 }

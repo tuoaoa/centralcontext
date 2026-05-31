@@ -1,0 +1,56 @@
+{
+  "scan_date": "2026-05-31",
+  "generated_at": "2026-05-31T07:17:24.488Z",
+  "principle": "ACTION > WORDS",
+  "note": "These alerts are generated because declared priorities in CURRENT_STATE.md do not match actual behavioral telemetry. Founder review required. CURRENT_STATE.md will NOT be auto-updated.",
+  "alerts": [
+    {
+      "type": "reality_mismatch_alert",
+      "project": "qlythuexe",
+      "source": "reality_scanner",
+      "proposed_memory": "REALITY MISMATCH: \"qlythuexe\" is declared in CURRENT_STATE.md but has activity_score = 20/100 (30d) and 20/100 (7d). Trend: low. No significant git commits, terminal activity, or file edits detected in the measurement window. This may indicate a stale priority declaration that no longer reflects actual Founder behavior.",
+      "confidence": 95,
+      "severity": "high",
+      "action_required": "Founder should review whether this project is still a real priority or if CURRENT_STATE.md needs updating.",
+      "evidence": {
+        "activity_score_30d": 20,
+        "activity_score_7d": 20,
+        "trend": "low",
+        "momentum": "stable"
+      },
+      "generated_at": "2026-05-31T07:17:24.488Z"
+    },
+    {
+      "type": "reality_mismatch_alert",
+      "project": "aipilot",
+      "source": "reality_scanner",
+      "proposed_memory": "REALITY MISMATCH: \"aipilot\" is declared in CURRENT_STATE.md but has activity_score = 10/100 (30d) and 10/100 (7d). Trend: dormant. No significant git commits, terminal activity, or file edits detected in the measurement window. This may indicate a stale priority declaration that no longer reflects actual Founder behavior.",
+      "confidence": 95,
+      "severity": "high",
+      "action_required": "Founder should review whether this project is still a real priority or if CURRENT_STATE.md needs updating.",
+      "evidence": {
+        "activity_score_30d": 10,
+        "activity_score_7d": 10,
+        "trend": "dormant",
+        "momentum": "stable"
+      },
+      "generated_at": "2026-05-31T07:17:24.488Z"
+    },
+    {
+      "type": "reality_mismatch_alert",
+      "project": "CentralContext",
+      "source": "reality_scanner",
+      "proposed_memory": "REALITY MISMATCH: \"CentralContext\" is declared in CURRENT_STATE.md but has activity_score = 4/100 (30d) and 4/100 (7d). Trend: dormant. No significant git commits, terminal activity, or file edits detected in the measurement window. This may indicate a stale priority declaration that no longer reflects actual Founder behavior.",
+      "confidence": 95,
+      "severity": "high",
+      "action_required": "Founder should review whether this project is still a real priority or if CURRENT_STATE.md needs updating.",
+      "evidence": {
+        "activity_score_30d": 4,
+        "activity_score_7d": 4,
+        "trend": "dormant",
+        "momentum": "stable"
+      },
+      "generated_at": "2026-05-31T07:17:24.488Z"
+    }
+  ]
+}

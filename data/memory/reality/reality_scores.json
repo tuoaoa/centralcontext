@@ -1,22 +1,1369 @@
 {
-  "generated_at": "2026-05-31T06:59:10.166Z",
-  "window_days": 30,
+  "generated_at": "2026-05-31T07:17:24.488Z",
+  "principle": "ACTION > WORDS",
   "scan_date": "2026-05-31",
+  "windows": {
+    "30d": {
+      "window_days": 30,
+      "projects": {
+        "centalcontext": {
+          "activity_score": 99,
+          "signals": {
+            "git_commits": {
+              "events": 16,
+              "score": 100,
+              "weight": 0.3,
+              "days_since_last": 0
+            },
+            "file_changes": {
+              "events": 265,
+              "score": 96,
+              "weight": 0.25,
+              "unique_files": 99
+            },
+            "terminal": {
+              "events": 25,
+              "score": 100,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 110,
+              "score": 100,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 3638,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-31T13:59:30+07:00",
+          "evidence_count": 4054,
+          "trend": "active"
+        },
+        "aimemory": {
+          "activity_score": 56,
+          "signals": {
+            "git_commits": {
+              "events": 20,
+              "score": 90,
+              "weight": 0.3,
+              "days_since_last": 5
+            },
+            "file_changes": {
+              "events": 43,
+              "score": 74,
+              "weight": 0.25,
+              "unique_files": 43
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 730,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-26T09:54:40+07:00",
+          "evidence_count": 793,
+          "trend": "moderate"
+        },
+        "GiveGet": {
+          "activity_score": 34,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 258,
+              "score": 95,
+              "weight": 0.25,
+              "unique_files": 160
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 903,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 1161,
+          "trend": "low"
+        },
+        "somieng": {
+          "activity_score": 32,
+          "signals": {
+            "git_commits": {
+              "events": 11,
+              "score": 100,
+              "weight": 0.3,
+              "days_since_last": 2
+            },
+            "file_changes": {
+              "events": 1,
+              "score": 5,
+              "weight": 0.25,
+              "unique_files": 1
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 2,
+              "score": 4,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-29T15:19:53+07:00",
+          "evidence_count": 14,
+          "trend": "low"
+        },
+        "SaveX": {
+          "activity_score": 28,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 14,
+              "score": 71,
+              "weight": 0.25,
+              "unique_files": 14
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 1184,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 1198,
+          "trend": "low"
+        },
+        "chothuexemay": {
+          "activity_score": 24,
+          "signals": {
+            "git_commits": {
+              "events": 1,
+              "score": 30,
+              "weight": 0.3,
+              "days_since_last": 3
+            },
+            "file_changes": {
+              "events": 4,
+              "score": 20,
+              "weight": 0.25,
+              "unique_files": 4
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 713,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-28T11:24:25+07:00",
+          "evidence_count": 718,
+          "trend": "low"
+        },
+        "codegalaxy": {
+          "activity_score": 24,
+          "signals": {
+            "git_commits": {
+              "events": 5,
+              "score": 70,
+              "weight": 0.3,
+              "days_since_last": 3
+            },
+            "file_changes": {
+              "events": 2,
+              "score": 10,
+              "weight": 0.25,
+              "unique_files": 2
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-28T15:33:15+07:00",
+          "evidence_count": 7,
+          "trend": "low"
+        },
+        "qlythuexe": {
+          "activity_score": 20,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 60
+            },
+            "file_changes": {
+              "events": 8,
+              "score": 40,
+              "weight": 0.25,
+              "unique_files": 8
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 1163,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-04-01T09:56:44+07:00",
+          "evidence_count": 1171,
+          "trend": "low"
+        },
+        "qlythuexe vscode": {
+          "activity_score": 20,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 8,
+              "score": 40,
+              "weight": 0.25,
+              "unique_files": 8
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 699,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 707,
+          "trend": "low"
+        },
+        "aipilot_open_source": {
+          "activity_score": 16,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 5,
+              "score": 25,
+              "weight": 0.25,
+              "unique_files": 5
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 699,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 704,
+          "trend": "dormant"
+        },
+        "everything-antigravity-code": {
+          "activity_score": 16,
+          "signals": {
+            "git_commits": {
+              "events": 4,
+              "score": 50,
+              "weight": 0.3,
+              "days_since_last": 6
+            },
+            "file_changes": {
+              "events": 1,
+              "score": 5,
+              "weight": 0.25,
+              "unique_files": 1
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-25T22:15:25+07:00",
+          "evidence_count": 5,
+          "trend": "dormant"
+        },
+        "qlynhatro": {
+          "activity_score": 15,
+          "signals": {
+            "git_commits": {
+              "events": 2,
+              "score": 40,
+              "weight": 0.3,
+              "days_since_last": 3
+            },
+            "file_changes": {
+              "events": 2,
+              "score": 10,
+              "weight": 0.25,
+              "unique_files": 2
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-28T12:02:40+07:00",
+          "evidence_count": 4,
+          "trend": "dormant"
+        },
+        "_archive_aifunnel-gateway": {
+          "activity_score": 14,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 3,
+              "score": 15,
+              "weight": 0.25,
+              "unique_files": 3
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 699,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 702,
+          "trend": "dormant"
+        },
+        "aipilot": {
+          "activity_score": 10,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.25,
+              "unique_files": 0
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 721,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 721,
+          "trend": "dormant"
+        },
+        "robot": {
+          "activity_score": 10,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.25,
+              "unique_files": 0
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 900,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 900,
+          "trend": "dormant"
+        },
+        "robotv13": {
+          "activity_score": 10,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.25,
+              "unique_files": 0
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 699,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 699,
+          "trend": "dormant"
+        },
+        "videorender": {
+          "activity_score": 5,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 4,
+              "score": 20,
+              "weight": 0.25,
+              "unique_files": 4
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 1,
+              "score": 2,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 5,
+          "trend": "dormant"
+        },
+        "CentralContext": {
+          "activity_score": 4,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 3,
+              "score": 15,
+              "weight": 0.25,
+              "unique_files": 3
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 3,
+          "trend": "dormant"
+        },
+        "OpenClaw": {
+          "activity_score": 0,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 30
+            },
+            "file_changes": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.25,
+              "unique_files": 0
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 2,
+              "score": 4,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 2,
+          "trend": "dormant"
+        }
+      }
+    },
+    "7d": {
+      "window_days": 7,
+      "projects": {
+        "centalcontext": {
+          "activity_score": 99,
+          "signals": {
+            "git_commits": {
+              "events": 16,
+              "score": 100,
+              "weight": 0.3,
+              "days_since_last": 0
+            },
+            "file_changes": {
+              "events": 265,
+              "score": 96,
+              "weight": 0.25,
+              "unique_files": 99
+            },
+            "terminal": {
+              "events": 25,
+              "score": 100,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 110,
+              "score": 100,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 3638,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-31T13:59:30+07:00",
+          "evidence_count": 4054,
+          "trend": "active"
+        },
+        "aimemory": {
+          "activity_score": 56,
+          "signals": {
+            "git_commits": {
+              "events": 17,
+              "score": 90,
+              "weight": 0.3,
+              "days_since_last": 5
+            },
+            "file_changes": {
+              "events": 43,
+              "score": 74,
+              "weight": 0.25,
+              "unique_files": 43
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 730,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-26T09:54:40+07:00",
+          "evidence_count": 790,
+          "trend": "moderate"
+        },
+        "GiveGet": {
+          "activity_score": 34,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 258,
+              "score": 95,
+              "weight": 0.25,
+              "unique_files": 160
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 903,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 1161,
+          "trend": "low"
+        },
+        "somieng": {
+          "activity_score": 32,
+          "signals": {
+            "git_commits": {
+              "events": 11,
+              "score": 100,
+              "weight": 0.3,
+              "days_since_last": 2
+            },
+            "file_changes": {
+              "events": 1,
+              "score": 5,
+              "weight": 0.25,
+              "unique_files": 1
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 2,
+              "score": 4,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-29T15:19:53+07:00",
+          "evidence_count": 14,
+          "trend": "low"
+        },
+        "SaveX": {
+          "activity_score": 28,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 14,
+              "score": 71,
+              "weight": 0.25,
+              "unique_files": 14
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 1184,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 1198,
+          "trend": "low"
+        },
+        "chothuexemay": {
+          "activity_score": 24,
+          "signals": {
+            "git_commits": {
+              "events": 1,
+              "score": 30,
+              "weight": 0.3,
+              "days_since_last": 3
+            },
+            "file_changes": {
+              "events": 4,
+              "score": 20,
+              "weight": 0.25,
+              "unique_files": 4
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 713,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-28T11:24:25+07:00",
+          "evidence_count": 718,
+          "trend": "low"
+        },
+        "codegalaxy": {
+          "activity_score": 24,
+          "signals": {
+            "git_commits": {
+              "events": 5,
+              "score": 70,
+              "weight": 0.3,
+              "days_since_last": 3
+            },
+            "file_changes": {
+              "events": 2,
+              "score": 10,
+              "weight": 0.25,
+              "unique_files": 2
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-28T15:33:15+07:00",
+          "evidence_count": 7,
+          "trend": "low"
+        },
+        "qlythuexe": {
+          "activity_score": 20,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 60
+            },
+            "file_changes": {
+              "events": 8,
+              "score": 40,
+              "weight": 0.25,
+              "unique_files": 8
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 1163,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-04-01T09:56:44+07:00",
+          "evidence_count": 1171,
+          "trend": "low"
+        },
+        "qlythuexe vscode": {
+          "activity_score": 20,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 8,
+              "score": 40,
+              "weight": 0.25,
+              "unique_files": 8
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 699,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 707,
+          "trend": "low"
+        },
+        "aipilot_open_source": {
+          "activity_score": 16,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 5,
+              "score": 25,
+              "weight": 0.25,
+              "unique_files": 5
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 699,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 704,
+          "trend": "dormant"
+        },
+        "everything-antigravity-code": {
+          "activity_score": 16,
+          "signals": {
+            "git_commits": {
+              "events": 4,
+              "score": 50,
+              "weight": 0.3,
+              "days_since_last": 6
+            },
+            "file_changes": {
+              "events": 1,
+              "score": 5,
+              "weight": 0.25,
+              "unique_files": 1
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-25T22:15:25+07:00",
+          "evidence_count": 5,
+          "trend": "dormant"
+        },
+        "qlynhatro": {
+          "activity_score": 15,
+          "signals": {
+            "git_commits": {
+              "events": 2,
+              "score": 40,
+              "weight": 0.3,
+              "days_since_last": 3
+            },
+            "file_changes": {
+              "events": 2,
+              "score": 10,
+              "weight": 0.25,
+              "unique_files": 2
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.1
+            }
+          },
+          "last_activity": "2026-05-28T12:02:40+07:00",
+          "evidence_count": 4,
+          "trend": "dormant"
+        },
+        "_archive_aifunnel-gateway": {
+          "activity_score": 14,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 3,
+              "score": 15,
+              "weight": 0.25,
+              "unique_files": 3
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 699,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 702,
+          "trend": "dormant"
+        },
+        "aipilot": {
+          "activity_score": 10,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.25,
+              "unique_files": 0
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 721,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 721,
+          "trend": "dormant"
+        },
+        "robot": {
+          "activity_score": 10,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.25,
+              "unique_files": 0
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 900,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 900,
+          "trend": "dormant"
+        },
+        "robotv13": {
+          "activity_score": 10,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.25,
+              "unique_files": 0
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 699,
+              "score": 100,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 699,
+          "trend": "dormant"
+        },
+        "videorender": {
+          "activity_score": 5,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 4,
+              "score": 20,
+              "weight": 0.25,
+              "unique_files": 4
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 1,
+              "score": 2,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 5,
+          "trend": "dormant"
+        },
+        "CentralContext": {
+          "activity_score": 4,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 3,
+              "score": 15,
+              "weight": 0.25,
+              "unique_files": 3
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 3,
+          "trend": "dormant"
+        },
+        "OpenClaw": {
+          "activity_score": 0,
+          "signals": {
+            "git_commits": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.3,
+              "days_since_last": 7
+            },
+            "file_changes": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.25,
+              "unique_files": 0
+            },
+            "terminal": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.2
+            },
+            "clipboard": {
+              "events": 0,
+              "score": 0,
+              "weight": 0.15
+            },
+            "browser_mentions": {
+              "events": 2,
+              "score": 4,
+              "weight": 0.1
+            }
+          },
+          "last_activity": null,
+          "evidence_count": 2,
+          "trend": "dormant"
+        }
+      }
+    }
+  },
+  "mismatch_alerts_count": 3,
   "projects": {
     "centalcontext": {
-      "activity_score": 98,
+      "activity_score": 99,
+      "score_7d": 99,
+      "trend_30d": "active",
+      "trend_7d": "active",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
-          "events": 15,
+          "events": 16,
           "score": 100,
           "weight": 0.3,
           "days_since_last": 0
         },
         "file_changes": {
-          "events": 225,
-          "score": 92,
+          "events": 265,
+          "score": 96,
           "weight": 0.25,
-          "unique_files": 98
+          "unique_files": 99
         },
         "terminal": {
           "events": 25,
@@ -24,22 +1371,25 @@
           "weight": 0.2
         },
         "clipboard": {
-          "events": 107,
+          "events": 110,
           "score": 100,
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 3632,
+          "events": 3638,
           "score": 100,
           "weight": 0.1
         }
       },
-      "last_activity": "2026-05-31T13:37:08+07:00",
-      "evidence_count": 4004,
-      "trend": "active"
+      "last_activity": "2026-05-31T13:59:30+07:00",
+      "evidence_count": 4054
     },
     "aimemory": {
-      "activity_score": 46,
+      "activity_score": 56,
+      "score_7d": 56,
+      "trend_30d": "moderate",
+      "trend_7d": "moderate",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 20,
@@ -64,52 +1414,20 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 0,
-          "score": 0,
+          "events": 730,
+          "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": "2026-05-26T09:54:40+07:00",
-      "evidence_count": 63,
-      "trend": "low"
-    },
-    "somieng": {
-      "activity_score": 31,
-      "signals": {
-        "git_commits": {
-          "events": 11,
-          "score": 100,
-          "weight": 0.3,
-          "days_since_last": 2
-        },
-        "file_changes": {
-          "events": 1,
-          "score": 5,
-          "weight": 0.25,
-          "unique_files": 1
-        },
-        "terminal": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.2
-        },
-        "clipboard": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.15
-        },
-        "browser_mentions": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.1
-        }
-      },
-      "last_activity": "2026-05-29T15:19:53+07:00",
-      "evidence_count": 12,
-      "trend": "low"
+      "evidence_count": 793
     },
     "GiveGet": {
-      "activity_score": 24,
+      "activity_score": 34,
+      "score_7d": 34,
+      "trend_30d": "low",
+      "trend_7d": "low",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 0,
@@ -134,17 +1452,134 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 0,
-          "score": 0,
+          "events": 903,
+          "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": null,
-      "evidence_count": 258,
-      "trend": "low"
+      "evidence_count": 1161
+    },
+    "somieng": {
+      "activity_score": 32,
+      "score_7d": 32,
+      "trend_30d": "low",
+      "trend_7d": "low",
+      "momentum": "stable",
+      "signals": {
+        "git_commits": {
+          "events": 11,
+          "score": 100,
+          "weight": 0.3,
+          "days_since_last": 2
+        },
+        "file_changes": {
+          "events": 1,
+          "score": 5,
+          "weight": 0.25,
+          "unique_files": 1
+        },
+        "terminal": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.2
+        },
+        "clipboard": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.15
+        },
+        "browser_mentions": {
+          "events": 2,
+          "score": 4,
+          "weight": 0.1
+        }
+      },
+      "last_activity": "2026-05-29T15:19:53+07:00",
+      "evidence_count": 14
+    },
+    "SaveX": {
+      "activity_score": 28,
+      "score_7d": 28,
+      "trend_30d": "low",
+      "trend_7d": "low",
+      "momentum": "stable",
+      "signals": {
+        "git_commits": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.3,
+          "days_since_last": 30
+        },
+        "file_changes": {
+          "events": 14,
+          "score": 71,
+          "weight": 0.25,
+          "unique_files": 14
+        },
+        "terminal": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.2
+        },
+        "clipboard": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.15
+        },
+        "browser_mentions": {
+          "events": 1184,
+          "score": 100,
+          "weight": 0.1
+        }
+      },
+      "last_activity": null,
+      "evidence_count": 1198
+    },
+    "chothuexemay": {
+      "activity_score": 24,
+      "score_7d": 24,
+      "trend_30d": "low",
+      "trend_7d": "low",
+      "momentum": "stable",
+      "signals": {
+        "git_commits": {
+          "events": 1,
+          "score": 30,
+          "weight": 0.3,
+          "days_since_last": 3
+        },
+        "file_changes": {
+          "events": 4,
+          "score": 20,
+          "weight": 0.25,
+          "unique_files": 4
+        },
+        "terminal": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.2
+        },
+        "clipboard": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.15
+        },
+        "browser_mentions": {
+          "events": 713,
+          "score": 100,
+          "weight": 0.1
+        }
+      },
+      "last_activity": "2026-05-28T11:24:25+07:00",
+      "evidence_count": 718
     },
     "codegalaxy": {
       "activity_score": 24,
+      "score_7d": 24,
+      "trend_30d": "low",
+      "trend_7d": "low",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 5,
@@ -175,23 +1610,26 @@
         }
       },
       "last_activity": "2026-05-28T15:33:15+07:00",
-      "evidence_count": 7,
-      "trend": "low"
+      "evidence_count": 7
     },
-    "SaveX": {
-      "activity_score": 18,
+    "qlythuexe": {
+      "activity_score": 20,
+      "score_7d": 20,
+      "trend_30d": "low",
+      "trend_7d": "low",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 0,
           "score": 0,
           "weight": 0.3,
-          "days_since_last": 30
+          "days_since_last": 60
         },
         "file_changes": {
-          "events": 14,
-          "score": 71,
+          "events": 8,
+          "score": 40,
           "weight": 0.25,
-          "unique_files": 14
+          "unique_files": 8
         },
         "terminal": {
           "events": 0,
@@ -204,17 +1642,96 @@
           "weight": 0.15
         },
         "browser_mentions": {
+          "events": 1163,
+          "score": 100,
+          "weight": 0.1
+        }
+      },
+      "last_activity": "2026-04-01T09:56:44+07:00",
+      "evidence_count": 1171
+    },
+    "qlythuexe vscode": {
+      "activity_score": 20,
+      "score_7d": 20,
+      "trend_30d": "low",
+      "trend_7d": "low",
+      "momentum": "stable",
+      "signals": {
+        "git_commits": {
           "events": 0,
           "score": 0,
+          "weight": 0.3,
+          "days_since_last": 30
+        },
+        "file_changes": {
+          "events": 8,
+          "score": 40,
+          "weight": 0.25,
+          "unique_files": 8
+        },
+        "terminal": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.2
+        },
+        "clipboard": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.15
+        },
+        "browser_mentions": {
+          "events": 699,
+          "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": null,
-      "evidence_count": 14,
-      "trend": "dormant"
+      "evidence_count": 707
+    },
+    "aipilot_open_source": {
+      "activity_score": 16,
+      "score_7d": 16,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
+      "signals": {
+        "git_commits": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.3,
+          "days_since_last": 30
+        },
+        "file_changes": {
+          "events": 5,
+          "score": 25,
+          "weight": 0.25,
+          "unique_files": 5
+        },
+        "terminal": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.2
+        },
+        "clipboard": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.15
+        },
+        "browser_mentions": {
+          "events": 699,
+          "score": 100,
+          "weight": 0.1
+        }
+      },
+      "last_activity": null,
+      "evidence_count": 704
     },
     "everything-antigravity-code": {
       "activity_score": 16,
+      "score_7d": 16,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 4,
@@ -245,11 +1762,14 @@
         }
       },
       "last_activity": "2026-05-25T22:15:25+07:00",
-      "evidence_count": 5,
-      "trend": "dormant"
+      "evidence_count": 5
     },
     "qlynhatro": {
       "activity_score": 15,
+      "score_7d": 15,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 2,
@@ -280,81 +1800,14 @@
         }
       },
       "last_activity": "2026-05-28T12:02:40+07:00",
-      "evidence_count": 4,
-      "trend": "dormant"
+      "evidence_count": 4
     },
-    "chothuexemay": {
+    "_archive_aifunnel-gateway": {
       "activity_score": 14,
-      "signals": {
-        "git_commits": {
-          "events": 1,
-          "score": 30,
-          "weight": 0.3,
-          "days_since_last": 3
-        },
-        "file_changes": {
-          "events": 4,
-          "score": 20,
-          "weight": 0.25,
-          "unique_files": 4
-        },
-        "terminal": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.2
-        },
-        "clipboard": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.15
-        },
-        "browser_mentions": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.1
-        }
-      },
-      "last_activity": "2026-05-28T11:24:25+07:00",
-      "evidence_count": 5,
-      "trend": "dormant"
-    },
-    "qlythuexe": {
-      "activity_score": 10,
-      "signals": {
-        "git_commits": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.3,
-          "days_since_last": 60
-        },
-        "file_changes": {
-          "events": 8,
-          "score": 40,
-          "weight": 0.25,
-          "unique_files": 8
-        },
-        "terminal": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.2
-        },
-        "clipboard": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.15
-        },
-        "browser_mentions": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.1
-        }
-      },
-      "last_activity": "2026-04-01T09:56:44+07:00",
-      "evidence_count": 8,
-      "trend": "dormant"
-    },
-    "qlythuexe vscode": {
-      "activity_score": 10,
+      "score_7d": 14,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 0,
@@ -363,10 +1816,10 @@
           "days_since_last": 30
         },
         "file_changes": {
-          "events": 8,
-          "score": 40,
+          "events": 3,
+          "score": 15,
           "weight": 0.25,
-          "unique_files": 8
+          "unique_files": 3
         },
         "terminal": {
           "events": 0,
@@ -379,17 +1832,20 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 0,
-          "score": 0,
+          "events": 699,
+          "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": null,
-      "evidence_count": 8,
-      "trend": "dormant"
+      "evidence_count": 702
     },
-    "aipilot_open_source": {
-      "activity_score": 6,
+    "aipilot": {
+      "activity_score": 10,
+      "score_7d": 10,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 0,
@@ -398,10 +1854,10 @@
           "days_since_last": 30
         },
         "file_changes": {
-          "events": 5,
-          "score": 25,
+          "events": 0,
+          "score": 0,
           "weight": 0.25,
-          "unique_files": 5
+          "unique_files": 0
         },
         "terminal": {
           "events": 0,
@@ -414,17 +1870,96 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 0,
-          "score": 0,
+          "events": 721,
+          "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": null,
-      "evidence_count": 5,
-      "trend": "dormant"
+      "evidence_count": 721
+    },
+    "robot": {
+      "activity_score": 10,
+      "score_7d": 10,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
+      "signals": {
+        "git_commits": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.3,
+          "days_since_last": 30
+        },
+        "file_changes": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.25,
+          "unique_files": 0
+        },
+        "terminal": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.2
+        },
+        "clipboard": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.15
+        },
+        "browser_mentions": {
+          "events": 900,
+          "score": 100,
+          "weight": 0.1
+        }
+      },
+      "last_activity": null,
+      "evidence_count": 900
+    },
+    "robotv13": {
+      "activity_score": 10,
+      "score_7d": 10,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
+      "signals": {
+        "git_commits": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.3,
+          "days_since_last": 30
+        },
+        "file_changes": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.25,
+          "unique_files": 0
+        },
+        "terminal": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.2
+        },
+        "clipboard": {
+          "events": 0,
+          "score": 0,
+          "weight": 0.15
+        },
+        "browser_mentions": {
+          "events": 699,
+          "score": 100,
+          "weight": 0.1
+        }
+      },
+      "last_activity": null,
+      "evidence_count": 699
     },
     "videorender": {
       "activity_score": 5,
+      "score_7d": 5,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 0,
@@ -449,17 +1984,20 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 0,
-          "score": 0,
+          "events": 1,
+          "score": 2,
           "weight": 0.1
         }
       },
       "last_activity": null,
-      "evidence_count": 4,
-      "trend": "dormant"
+      "evidence_count": 5
     },
     "CentralContext": {
       "activity_score": 4,
+      "score_7d": 4,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 0,
@@ -490,46 +2028,14 @@
         }
       },
       "last_activity": null,
-      "evidence_count": 3,
-      "trend": "dormant"
-    },
-    "_archive_aifunnel-gateway": {
-      "activity_score": 4,
-      "signals": {
-        "git_commits": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.3,
-          "days_since_last": 30
-        },
-        "file_changes": {
-          "events": 3,
-          "score": 15,
-          "weight": 0.25,
-          "unique_files": 3
-        },
-        "terminal": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.2
-        },
-        "clipboard": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.15
-        },
-        "browser_mentions": {
-          "events": 0,
-          "score": 0,
-          "weight": 0.1
-        }
-      },
-      "last_activity": null,
-      "evidence_count": 3,
-      "trend": "dormant"
+      "evidence_count": 3
     },
     "OpenClaw": {
       "activity_score": 0,
+      "score_7d": 0,
+      "trend_30d": "dormant",
+      "trend_7d": "dormant",
+      "momentum": "stable",
       "signals": {
         "git_commits": {
           "events": 0,
@@ -560,8 +2066,7 @@
         }
       },
       "last_activity": null,
-      "evidence_count": 2,
-      "trend": "dormant"
+      "evidence_count": 2
     }
   }
 }

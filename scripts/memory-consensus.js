@@ -66,20 +66,39 @@ if (fs.existsSync(aiJudgePath)) {
   }
 }
 
-// Load Reality Layer scores (Reality Check Layer integration)
+// Load Reality Layer scores v2.0 (Reality Check Layer integration)
 const realityScoresPath = path.join(rootDir, 'data/memory/reality/reality_scores.json');
 let realityScores = null;
 if (fs.existsSync(realityScoresPath)) {
   try {
     realityScores = JSON.parse(fs.readFileSync(realityScoresPath, 'utf8'));
     const projectCount = Object.keys(realityScores.projects || {}).length;
-    console.log(`\x1b[32m✔ Loaded Reality Layer scores for ${projectCount} projects (window: ${realityScores.window_days}d)\x1b[0m`);
+    const mismatchCount = realityScores.mismatch_alerts_count || 0;
+    console.log(`\x1b[32m✔ Loaded Reality Layer v2.0 scores for ${projectCount} projects (30d+7d)\x1b[0m`);
+    if (mismatchCount > 0) {
+      console.log(`\x1b[33m  ⚠ ${mismatchCount} reality mismatch alert(s) detected\x1b[0m`);
+    }
   } catch (e) {
     console.warn(`[Warning] Failed to load Reality Layer scores:`, e.message);
     realityScores = null;
   }
 } else {
   console.log(`\x1b[33m⚠ Reality Layer scores not found. Run 'npm run reality:scan' first. Using neutral alignment.\x1b[0m`);
+}
+
+// Load reality mismatch alert candidates (for injection into review queue)
+const mismatchAlertsPath = path.join(rootDir, 'data/memory/reality', `${targetDate}.reality_mismatch_alerts.json`);
+let mismatchAlertCandidates = [];
+if (fs.existsSync(mismatchAlertsPath)) {
+  try {
+    const alertPayload = JSON.parse(fs.readFileSync(mismatchAlertsPath, 'utf8'));
+    mismatchAlertCandidates = alertPayload.alerts || [];
+    if (mismatchAlertCandidates.length > 0) {
+      console.log(`\x1b[33m  📋 ${mismatchAlertCandidates.length} mismatch alert candidate(s) will be injected into review queue\x1b[0m`);
+    }
+  } catch (e) {
+    console.warn(`[Warning] Failed to load mismatch alerts:`, e.message);
+  }
 }
 
 // Helper: extract project names mentioned in a candidate's proposed_memory
@@ -97,7 +116,7 @@ function computeRealityAlignment(cand, realityScores) {
   const mentioned = extractMentionedProjects(text, knownProjects);
   if (mentioned.length === 0) return 70; // no project reference, neutral
   
-  // Average the activity scores of all mentioned projects
+  // Average the activity scores of all mentioned projects (use 30d primary score)
   let totalScore = 0;
   for (const p of mentioned) {
     totalScore += realityScores.projects[p].activity_score;
@@ -135,7 +154,7 @@ candidates.forEach((cand, idx) => {
   // Reality mismatch detection: if candidate mentions a project with very low activity
   // but claims it's a priority, flag it
   let realityMismatch = false;
-  if (realityAlignment < 20 && cand.proposed_memory) {
+  if (realityAlignment < 25 && cand.proposed_memory) {
     const lower = cand.proposed_memory.toLowerCase();
     if (lower.includes('priority') || lower.includes('ưu tiên') || lower.includes('focus') || lower.includes('active')) {
       realityMismatch = true;
@@ -239,6 +258,34 @@ candidates.forEach((cand, idx) => {
   console.log(`  Candidate ${String(idx + 1).padStart(3, '0')} [${cand.type}]: Score = \x1b[1m${memoryScore}\x1b[0m${aiBadge}${realityBadge} $\\rightarrow$ \x1b[36m${status.toUpperCase()}\x1b[0m`);
 });
 
+// ── Inject Reality Mismatch Alert Candidates into Review Queue ──
+if (mismatchAlertCandidates.length > 0) {
+  console.log(`\n  \x1b[35m── Reality Mismatch Alert Injection ──\x1b[0m`);
+  for (const alert of mismatchAlertCandidates) {
+    const alertCandidate = {
+      type: 'reality_mismatch_alert',
+      source: 'reality_scanner',
+      project: alert.project,
+      proposed_memory: alert.proposed_memory,
+      confidence: alert.confidence || 95,
+      severity: alert.severity || 'high',
+      action_required: alert.action_required,
+      evidence: alert.evidence,
+      reality_alignment: alert.evidence.activity_score_30d,
+      reality_mismatch: true,
+      reality_mismatch_reason: `ACTION > WORDS: ${alert.project} declared in CURRENT_STATE.md but activity_score = ${alert.evidence.activity_score_30d} (30d) / ${alert.evidence.activity_score_7d} (7d)`,
+      critic_reason: `Reality Layer detected a significant mismatch between declared status and active logs.`,
+      founder_reason: `Founder Profile strictly prioritizes real action over declared intentions (ACTION > WORDS).`,
+      memory_score: 95, // High score to ensure Founder sees it
+      status: 'review_queue',
+      generated_at: alert.generated_at,
+    };
+    reviewQueueList.push(alertCandidate);
+    reviewQueueCount++;
+    console.log(`  \x1b[33m⚠ ALERT:\x1b[0m ${alert.project} — score ${alert.evidence.activity_score_30d}/100 (30d) ${alert.evidence.activity_score_7d}/100 (7d) → \x1b[36mREVIEW_QUEUE\x1b[0m`);
+  }
+}
+
 // Compile and write approved/rejected stores to data/memory/
 const approvedStorePath = path.join(rootDir, 'data/memory/approved/approved_memories.json');
 const rejectedStorePath = path.join(rootDir, 'data/memory/rejected/rejected_memories.json');
@@ -291,6 +338,10 @@ if (reviewQueueList.length === 0) {
       cand.evidence.forEach(ev => {
         candidatesMd += `- ${ev}\n`;
       });
+    } else if (typeof cand.evidence === 'object' && cand.evidence !== null) {
+      for (const [key, val] of Object.entries(cand.evidence)) {
+        candidatesMd += `- ${key}: ${val}\n`;
+      }
     } else {
       candidatesMd += `- ${cand.evidence || 'Multiple logs trace'}\n`;
     }
@@ -303,8 +354,8 @@ if (reviewQueueList.length === 0) {
     } else {
       candidatesMd += `- ${cand.recommended_target || 'context/CURRENT_STATE.md'}\n`;
     }
-    candidatesMd += `\nCritic Review Reason:\n*${cand.critic_reason}*\n\n`;
-    candidatesMd += `Founder Fit Reason:\n*${cand.founder_reason}*\n\n`;
+    candidatesMd += `\nCritic Review Reason:\n*${cand.critic_reason || 'N/A'}*\n\n`;
+    candidatesMd += `Founder Fit Reason:\n*${cand.founder_reason || 'N/A'}*\n\n`;
     candidatesMd += `Review Action:\n[ ] approve\n[ ] reject\n[ ] needs_more_context\n\n`;
     candidatesMd += `---\n\n`;
   });
