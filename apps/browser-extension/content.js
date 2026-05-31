@@ -514,8 +514,8 @@ function injectPackText(packText) {
     currentVal = currentVal.trim();
 
     // Safety Guards (Yêu cầu 8)
-    if (currentVal.length > 1000) {
-      console.log('[CentralContext] Safety check: Textbox has more than 1000 characters. Injection skipped.');
+    if (currentVal.length > 0 && !currentVal.includes('CENTRALCONTEXT AGENT CONTEXT PACK')) {
+      console.log('[CentralContext] Safety check: Textbox already contains text. Injection skipped.');
       return true; // Return true to stop the retry loop since it is an intentional skip
     }
 
@@ -745,14 +745,14 @@ function checkAutoInjectTrigger() {
   if (hasAttemptedAutoInject) return;
 
   try {
-    chrome.storage.local.get(['centralcontext_auto_inject_mode', 'centralcontext_injected_urls'], async (result) => {
+    chrome.storage.local.get(['centralcontext_auto_inject_enabled', 'centralcontext_injected_urls'], async (result) => {
       if (!isContextValid()) return;
       if (hasAttemptedAutoInject) return; // double check inside callback
 
-      const mode = result.centralcontext_auto_inject_mode || 'off';
+      const autoInjectEnabled = result.centralcontext_auto_inject_enabled === true;
       
-      // Auto-inject is only supported when mode is 'new_chat_only' (Yêu cầu 1, 7)
-      if (mode !== 'new_chat_only') return;
+      // Auto-inject is only supported when enabled (Yêu cầu 1, 7)
+      if (!autoInjectEnabled) return;
 
       // Do not auto-inject on old conversations (Yêu cầu 2)
       if (!isNewChatUrl()) {
@@ -858,6 +858,26 @@ function throttledScrapeAll() {
   scrapeAll();
 }
 
+let isObservingMain = false;
+
+function setupObserver() {
+  if (!isContextValid()) return;
+  try {
+    const mainNode = document.querySelector('main');
+    const targetNode = mainNode || document.body;
+    
+    if (observer) {
+      observer.disconnect();
+    }
+    
+    observer.observe(targetNode, { childList: true, subtree: true });
+    isObservingMain = !!mainNode;
+    console.log(`[CentralContext] Observing chat flow on: ${targetNode.tagName.toLowerCase()}`);
+  } catch (e) {
+    console.error('[CentralContext] Observer setup failed:', e.message);
+  }
+}
+
 observer = new MutationObserver((mutations) => {
   if (!isContextValid()) return;
   
@@ -877,16 +897,20 @@ observer = new MutationObserver((mutations) => {
     if (hasNewNode) {
       throttledScrapeAll();
       checkAutoInjectTrigger(); // continuously check for textbox rendering
+      
+      // Transition from body to main container if it becomes available (Yêu cầu 6)
+      if (!isObservingMain && document.querySelector('main')) {
+        setupObserver();
+      }
     }
   } catch (e) {}
 });
 
 // Load sequence
 throttledScrapeAll();
+setupObserver();
 if (isContextValid()) {
   try {
-    observer.observe(document.body, { childList: true, subtree: true });
-    console.log('[CentralContext] active and observing chat flow.');
     // Check and run manual load triggers
     checkAndAutoInjectOnLoad();
     // Run automated trigger sequence

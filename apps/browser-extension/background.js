@@ -4,7 +4,7 @@ const API_KEY = '2578420fb040d51884e5c656b4bae6b2a2f594867749f24cefcaf01a95b683b
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log('CentralContext Browser Capture Service Worker Installed.');
-  chrome.storage.local.set({ centralcontext_auto_inject_mode: 'off' });
+  chrome.storage.local.set({ centralcontext_auto_inject_enabled: false });
 });
 
 // Listen for messages from content scripts or popup
