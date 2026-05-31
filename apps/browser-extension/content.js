@@ -477,79 +477,164 @@ async function triggerDebugSnapshot() {
   } catch (e) {}
 }
 
-// 3. Inject CentralContext Pack directly to active page textbox
-function injectPackText(packText) {
-  try {
-    const platform = getPlatform();
-    let inputEl = null;
+// 3. Find and Inject CentralContext Pack directly to active page textbox
 
-    if (platform === 'chatgpt') {
-      inputEl = document.getElementById('prompt-textarea') || 
-                document.querySelector('textarea[placeholder*="ChatGPT"]') || 
-                document.querySelector('div[contenteditable="true"]');
-    } else if (platform === 'gemini') {
-      inputEl = document.querySelector('rich-textarea div[contenteditable="true"]') || 
-                document.querySelector('div[role="textbox"]') || 
-                document.querySelector('textarea');
-    } else if (platform === 'claude') {
-      inputEl = document.querySelector('div[role="textbox"]') || 
-                document.querySelector('div[contenteditable="true"]') || 
-                document.querySelector('textarea');
+function findTextbox() {
+  const platform = getPlatform();
+  let inputEl = null;
+
+  if (platform === 'chatgpt') {
+    // Check all specified selectors for ChatGPT (Yêu cầu 2)
+    inputEl = document.getElementById('prompt-textarea') || 
+              document.querySelector('#prompt-textarea') ||
+              document.querySelector('textarea') || 
+              document.querySelector('div[contenteditable="true"]') ||
+              document.querySelector('div[role="textbox"]');
+    
+    if (inputEl) {
+      let matchedSelector = 'unknown';
+      if (inputEl.id === 'prompt-textarea') matchedSelector = 'id="prompt-textarea"';
+      else if (inputEl.tagName.toLowerCase() === 'textarea') matchedSelector = 'textarea';
+      else if (inputEl.getAttribute('role') === 'textbox') matchedSelector = 'div[role="textbox"]';
+      else if (inputEl.getAttribute('contenteditable') === 'true') matchedSelector = 'div[contenteditable="true"]';
+      console.log(`[CentralContext] textbox found (Matched: ${matchedSelector})`);
     } else {
-      inputEl = document.querySelector('textarea') || document.querySelector('[contenteditable="true"]');
+      console.log('[CentralContext] textbox NOT found');
     }
+  } else if (platform === 'gemini') {
+    inputEl = document.querySelector('rich-textarea div[contenteditable="true"]') || 
+              document.querySelector('div[role="textbox"]') || 
+              document.querySelector('textarea');
+    if (inputEl) {
+      console.log('[CentralContext] textbox found (gemini)');
+    } else {
+      console.log('[CentralContext] textbox NOT found');
+    }
+  } else if (platform === 'claude') {
+    inputEl = document.querySelector('div[role="textbox"]') || 
+              document.querySelector('div[contenteditable="true"]') || 
+              document.querySelector('textarea');
+    if (inputEl) {
+      console.log('[CentralContext] textbox found (claude)');
+    } else {
+      console.log('[CentralContext] textbox NOT found');
+    }
+  } else {
+    inputEl = document.querySelector('textarea') || 
+              document.querySelector('div[role="textbox"]') || 
+              document.querySelector('div[contenteditable="true"]');
+    if (inputEl) {
+      console.log('[CentralContext] textbox found (generic)');
+    } else {
+      console.log('[CentralContext] textbox NOT found');
+    }
+  }
+  return inputEl;
+}
 
+function injectPackText(packText, isForce = false) {
+  try {
+    console.log(`[CentralContext] pack fetched bytes=${packText ? packText.length : 0}`);
+
+    const inputEl = findTextbox();
     if (!inputEl) {
+      console.log('[CentralContext] inject failed');
       return false;
     }
 
-    // Get current textbox value/content
+    // Get current textbox value/content safely
     let currentVal = '';
     const isInputOrTextarea = inputEl.tagName.toLowerCase() === 'textarea' || inputEl.tagName.toLowerCase() === 'input';
     if (isInputOrTextarea) {
       currentVal = inputEl.value || '';
     } else {
-      currentVal = inputEl.innerText || '';
+      // Use textContent for contenteditable element (Yêu cầu 4)
+      currentVal = inputEl.textContent || '';
     }
     currentVal = currentVal.trim();
 
-    // Safety Guards (Yêu cầu 8)
-    if (currentVal.length > 0 && !currentVal.includes('CENTRALCONTEXT AGENT CONTEXT PACK')) {
-      console.log('[CentralContext] Safety check: Textbox already contains text. Injection skipped.');
-      return true; // Return true to stop the retry loop since it is an intentional skip
+    // Check if the textbox already contains user typing
+    const hasUserTyping = currentVal.length > 0 && 
+                          !currentVal.includes('CENTRALCONTEXT AGENT CONTEXT PACK') && 
+                          !currentVal.includes('--- CONTEXT PACK CONTENT ---');
+    if (hasUserTyping) {
+      console.log('[CentralContext] Safety check: Textbox already contains user text. Injection skipped.');
+      console.log('[CentralContext] inject failed');
+      return true; // Stop retry loops since it is an intentional skip
     }
 
-    if (currentVal.includes('CENTRALCONTEXT AGENT CONTEXT PACK') || currentVal.includes('--- CONTEXT PACK CONTENT ---')) {
+    // If it already has the Context Pack and we are not forcing it, skip to avoid double injection
+    const hasContextPack = currentVal.includes('CENTRALCONTEXT AGENT CONTEXT PACK') || 
+                           currentVal.includes('--- CONTEXT PACK CONTENT ---');
+    if (hasContextPack && !isForce) {
       console.log('[CentralContext] Safety check: Context Pack already exists in textbox. Injection skipped.');
-      return true; // Return true to stop the retry loop
+      console.log('[CentralContext] inject success');
+      return true; 
     }
 
-    // Set reentrancy lock (Yêu cầu 3)
+    // Set reentrancy lock
     isExtensionMutating = true;
 
-    // Populate textbox once and dispatch input event once (Yêu cầu 5)
+    // Populate textbox
     if (isInputOrTextarea) {
       inputEl.value = packText;
       inputEl.dispatchEvent(new Event('input', { bubbles: true }));
     } else {
-      inputEl.innerText = packText;
+      // contenteditable element: use textContent + InputEvent (Yêu cầu 4)
+      inputEl.textContent = packText;
+      
+      // Dispatch both InputEvent and Event for bulletproof React synthetic updates
+      inputEl.dispatchEvent(new InputEvent('input', { bubbles: true, cancelable: true }));
       inputEl.dispatchEvent(new Event('input', { bubbles: true }));
       inputEl.focus();
     }
 
-    // Release lock after 500ms cooldown (Yêu cầu 3)
+    // Release lock after 500ms cooldown
     setTimeout(() => {
       isExtensionMutating = false;
     }, 500);
 
-    console.log('[CentralContext] Successfully injected pack into active prompt input.');
+    console.log('[CentralContext] inject success');
     return true;
   } catch (err) {
     isExtensionMutating = false;
-    console.error('[CentralContext] Ingestion populate failed:', err.message);
+    console.log('[CentralContext] inject failed');
+    console.error('[CentralContext] inject error:', err.message);
     return false;
   }
 }
+
+// Expose debugInject to the page context via injection (Yêu cầu 3)
+try {
+  const script = document.createElement('script');
+  script.textContent = `
+    window.debugInject = function(customText) {
+      console.log('[CentralContext] [DEBUG] debugInject() triggered from page console.');
+      const event = new CustomEvent('CentralContextDebugInject', { detail: { text: customText } });
+      window.dispatchEvent(event);
+      return "Debug inject event dispatched to content script!";
+    };
+  `;
+  (document.head || document.documentElement).appendChild(script);
+  script.remove();
+} catch (e) {
+  console.error('[CentralContext] Failed to expose debugInject to page context:', e);
+}
+
+// Listen for the custom event from the page context
+window.addEventListener('CentralContextDebugInject', (event) => {
+  const customText = event.detail && event.detail.text;
+  const text = customText || "================================================================================\nCENTRALCONTEXT AGENT CONTEXT PACK\n================================================================================\nThis is a manual console debug injection test pack.\nSECRET_CONTEXT_TEST_7791: qlythuexe\n================================================================================\n";
+  console.log('[CentralContext] [DEBUG] CustomEvent received, injecting...');
+  injectPackText(text, true); // Force overwrite when manually triggered via debugInject
+});
+
+// Also define it in the content script sandbox just in case
+window.debugInject = function(customText) {
+  const text = customText || "================================================================================\nCENTRALCONTEXT AGENT CONTEXT PACK\n================================================================================\nThis is a manual console debug injection test pack.\nSECRET_CONTEXT_TEST_7791: qlythuexe\n================================================================================\n";
+  console.log('[CentralContext] [DEBUG] Calling debugInject() in sandbox...');
+  return injectPackText(text, true);
+};
 
 // Retry loop to search for textbox as page renders
 function retryInjectPackText(packText, retriesLeft = 20) {
@@ -614,7 +699,7 @@ if (isContextValid()) {
               const packText = response.pack;
               const packHash = await sha256(packText);
               const currentUrl = window.location.href;
-              const success = injectPackText(packText);
+              const success = injectPackText(packText, false);
               if (success) {
                 chrome.storage.local.set({
                   centralcontext_last_injected_hash: packHash,
@@ -641,43 +726,7 @@ if (isContextValid()) {
               const packText = response.pack;
               const packHash = await sha256(packText);
               const currentUrl = window.location.href;
-              const platform = getPlatform();
-
-              let inputEl = null;
-              if (platform === 'chatgpt') {
-                inputEl = document.getElementById('prompt-textarea') || 
-                          document.querySelector('textarea[placeholder*="ChatGPT"]') || 
-                          document.querySelector('div[contenteditable="true"]');
-              } else if (platform === 'gemini') {
-                inputEl = document.querySelector('rich-textarea div[contenteditable="true"]') || 
-                          document.querySelector('div[role="textbox"]') || 
-                          document.querySelector('textarea');
-              } else if (platform === 'claude') {
-                inputEl = document.querySelector('div[role="textbox"]') || 
-                          document.querySelector('div[contenteditable="true"]') || 
-                          document.querySelector('textarea');
-              }
-
-              if (!inputEl) {
-                sendResponse({ success: false, error: 'Textbox not found' });
-                return;
-              }
-
-              let currentVal = '';
-              if (inputEl.tagName && (inputEl.tagName.toLowerCase() === 'textarea' || inputEl.tagName.toLowerCase() === 'input')) {
-                currentVal = inputEl.value || '';
-              } else {
-                currentVal = inputEl.innerText || '';
-              }
-              currentVal = currentVal.trim();
-
-              const isDirty = currentVal.length > 0 && currentVal !== packText.trim();
-              if (isDirty) {
-                sendResponse({ success: false, error: 'Textbox contains user typing' });
-                return;
-              }
-
-              const success = injectPackText(packText);
+              const success = injectPackText(packText, true); // Force overwrite!
               if (success) {
                 console.log(`[CentralContext] auto injected pack length=${packText.length} hash=${packHash}`);
                 
@@ -780,20 +829,7 @@ function checkAutoInjectTrigger() {
         }
 
         // Locate prompt textarea element
-        let inputEl = null;
-        if (platform === 'chatgpt') {
-          inputEl = document.getElementById('prompt-textarea') || 
-                    document.querySelector('textarea[placeholder*="ChatGPT"]') || 
-                    document.querySelector('div[contenteditable="true"]');
-        } else if (platform === 'gemini') {
-          inputEl = document.querySelector('rich-textarea div[contenteditable="true"]') || 
-                    document.querySelector('div[role="textbox"]') || 
-                    document.querySelector('textarea');
-        } else if (platform === 'claude') {
-          inputEl = document.querySelector('div[role="textbox"]') || 
-                    document.querySelector('div[contenteditable="true"]') || 
-                    document.querySelector('textarea');
-        }
+        const inputEl = findTextbox();
 
         if (!inputEl) {
           // Element not rendered yet, reset flag so MutationObserver retries when DOM renders it
@@ -806,19 +842,21 @@ function checkAutoInjectTrigger() {
         if (inputEl.tagName && (inputEl.tagName.toLowerCase() === 'textarea' || inputEl.tagName.toLowerCase() === 'input')) {
           currentVal = inputEl.value || '';
         } else {
-          currentVal = inputEl.innerText || '';
+          currentVal = inputEl.textContent || '';
         }
         currentVal = currentVal.trim();
 
         // Safe to inject if textbox is empty OR already populated with identical pack text
-        const isDirty = currentVal.length > 0 && currentVal !== packText.trim();
-        if (isDirty) {
+        const hasUserTyping = currentVal.length > 0 && 
+                              !currentVal.includes('CENTRALCONTEXT AGENT CONTEXT PACK') && 
+                              !currentVal.includes('--- CONTEXT PACK CONTENT ---');
+        if (hasUserTyping) {
           console.log('[CentralContext] Auto-inject skipped: Textbox contains user typing.');
           return;
         }
 
         // Inject pack text natively
-        const success = injectPackText(packText);
+        const success = injectPackText(packText, false);
         if (success) {
           console.log(`[CentralContext] auto injected pack length=${packText.length} hash=${packHash}`);
           injectedUrls[currentUrl] = packHash;
