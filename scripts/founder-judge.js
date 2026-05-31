@@ -51,6 +51,23 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
+// Fail closed if API key missing for OpenRouter
+if (provider === 'openrouter') {
+  const key = process.env.OPENROUTER_API_KEY;
+  if (!key || key.trim() === '') {
+    console.error(`\n\x1b[31m[Error] Provider is set to 'openrouter' but OPENROUTER_API_KEY is missing or empty in .env!\x1b[0m`);
+    console.error(`\x1b[31mFailing closed to prevent partial heuristics execution when AI curation was requested.\x1b[0m\n`);
+    process.exit(1);
+  }
+}
+
+let activeModel = '';
+if (provider === 'openrouter') {
+  activeModel = customModel || process.env.OPENROUTER_MODEL || 'google/gemini-2.5-pro';
+} else if (provider === 'ollama') {
+  activeModel = customModel || process.env.OLLAMA_MODEL || 'qwen2.5-coder';
+}
+
 const candidateJsonPath = path.join(rootDir, 'data/memory/candidates', `${targetDate}.candidates.json`);
 const founderProfilePath = path.join(rootDir, 'data/founder/founder_profile.md');
 
@@ -60,6 +77,9 @@ console.log(`\x1b[35m==================================================\x1b[0m`)
 console.log(`Target Date: \x1b[36m${targetDate}\x1b[0m`);
 console.log(`Profile:     \x1b[36m${path.relative(rootDir, founderProfilePath)}\x1b[0m`);
 console.log(`Provider:    \x1b[36m${provider.toUpperCase()}\x1b[0m`);
+if (activeModel) {
+  console.log(`Model:       \x1b[36m${activeModel}\x1b[0m`);
+}
 console.log(`\x1b[35m--------------------------------------------------\x1b[0m\n`);
 
 if (!fs.existsSync(candidateJsonPath)) {

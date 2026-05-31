@@ -327,6 +327,11 @@ async function main() {
       isAborted = true;
       abortReason = "Skipped (Dry run mode by default. Run with --execute to call API)";
     } else if (!OPENROUTER_API_KEY || OPENROUTER_API_KEY.length < 10) {
+      if (executeMode) {
+        console.error(`\n\x1b[31m[Error] Execute mode requested but OPENROUTER_API_KEY is missing or invalid!\x1b[0m`);
+        console.error(`\x1b[31mFailing closed to prevent unverified memories from bypassing Pass 5 curation.\x1b[0m\n`);
+        process.exit(1);
+      }
       isAborted = true;
       abortReason = "Aborted (OpenRouter API Key is missing or invalid)";
     }
