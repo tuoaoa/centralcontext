@@ -1,0 +1,37 @@
+{
+  "date": "2026-05-31",
+  "total_requests": 0,
+  "estimated_cost_usd": 0,
+  "actual_cost_usd": 0,
+  "models_used": {},
+  "runs": [
+    {
+      "run_id": "run_1780209388253",
+      "timestamp": "2026-05-31T06:36:28.253Z",
+      "model": "qwen/qwen3.5-coder:free",
+      "candidates_total": 7,
+      "candidates_skipped_cache": 0,
+      "candidates_evaluated": 7,
+      "estimated_input_tokens": 1698,
+      "estimated_output_tokens": 1050,
+      "estimated_cost_usd": 0,
+      "actual_cost_usd": 0,
+      "status": "aborted",
+      "abort_reason": "Skipped (Dry run mode by default. Run with --execute to call API)"
+    },
+    {
+      "run_id": "run_1780209403932",
+      "timestamp": "2026-05-31T06:36:43.933Z",
+      "model": "qwen/qwen3.5-coder:free",
+      "candidates_total": 7,
+      "candidates_skipped_cache": 0,
+      "candidates_evaluated": 7,
+      "estimated_input_tokens": 1698,
+      "estimated_output_tokens": 1050,
+      "estimated_cost_usd": 0,
+      "actual_cost_usd": 0,
+      "status": "aborted",
+      "abort_reason": "Skipped (Dry run mode by default. Run with --execute to call API)"
+    }
+  ]
+}

@@ -21,7 +21,9 @@
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
       "memory_score": 73,
-      "status": "review_queue"
+      "ai_decision": "reject",
+      "ai_reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
+      "status": "auto_rejected"
     },
     {
       "type": "bug",
@@ -44,7 +46,9 @@
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
       "memory_score": 73,
-      "status": "review_queue"
+      "ai_decision": "reject",
+      "ai_reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
+      "status": "auto_rejected"
     },
     {
       "type": "bug",
@@ -67,7 +71,9 @@
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
       "memory_score": 73,
-      "status": "review_queue"
+      "ai_decision": "reject",
+      "ai_reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
+      "status": "auto_rejected"
     },
     {
       "type": "architecture_note",
@@ -89,6 +95,8 @@
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
       "memory_score": 96,
+      "ai_decision": "needs_review",
+      "ai_reason": "[Dry-Run Skipped] Strategic priority modifications or credentials must undergo manual developer verification.",
       "status": "review_queue"
     },
     {
@@ -110,6 +118,8 @@
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
       "memory_score": 92,
+      "ai_decision": "needs_review",
+      "ai_reason": "[Dry-Run Skipped] Strategic priority modifications or credentials must undergo manual developer verification.",
       "status": "review_queue"
     },
     {
@@ -133,7 +143,9 @@
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
       "memory_score": 77,
-      "status": "review_queue"
+      "ai_decision": "reject",
+      "ai_reason": "[Dry-Run Skipped] Trivial directory traversing (cd) contains no active build runs or state milestones. Filtered as noise.",
+      "status": "auto_rejected"
     },
     {
       "type": "decision",
@@ -155,8 +167,10 @@
       "founder_fit_score": 92,
       "founder_reason": "Validation: Aligns with Ecosystem Priority #2 (centralcontext) dynamic profile. Core cognitive productivity leverage and context gateway optimization.",
       "memory_score": 90,
-      "status": "review_queue"
+      "ai_decision": "reject",
+      "ai_reason": "[Dry-Run Skipped] Vague chat discussion lacks concrete architectural decisions or explicit commitments. Filtered as noise.",
+      "status": "auto_rejected"
     }
   ],
-  "summary": "### Heuristic Observations\n- Reviewed **1255** browser chat interactions, **52** file watcher events, **42** clipboard snippets, and **24** terminal runs.\n- Detected \u001b[31m3 terminal run errors\u001b[0m. Flagged as bugs/blockers.\n- Strategic context files modified: **SOURCE_PRIORITY.md**. Flagged as architectural updates.\n- Detected founder code validation tokens. Extracted founder preferences.\n- Logged **21** successful terminal commands.\n- Strategic chat communications evaluated: **1255** high-quality entries. Flagged as decisions.\n\n\n*(Pass 4 Consensus run: Auto-approved 0, Auto-rejected 0, Review queue 7)*"
+  "summary": "### Heuristic Observations\n- Reviewed **1272** browser chat interactions, **78** file watcher events, **45** clipboard snippets, and **24** terminal runs.\n- Detected \u001b[31m3 terminal run errors\u001b[0m. Flagged as bugs/blockers.\n- Strategic context files modified: **SOURCE_PRIORITY.md**. Flagged as architectural updates.\n- Detected founder code validation tokens. Extracted founder preferences.\n- Logged **21** successful terminal commands.\n- Strategic chat communications evaluated: **1272** high-quality entries. Flagged as decisions.\n\n\n*(Pass 4 Consensus run: Auto-approved 0, Auto-rejected 5, Review queue 2)*"
 }

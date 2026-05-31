@@ -267,6 +267,49 @@ app.get('/api/logs', authenticateApiKey, apiRateLimiter, (req, res) => {
   }
 });
 
+// POST /api/config/openrouter - Hot-sync OpenRouter credentials to .env and process memory (Yêu cầu Cấu hình Giao diện)
+app.post('/api/config/openrouter', authenticateApiKey, apiRateLimiter, (req, res) => {
+  const { apiKey, model } = req.body;
+
+  if (typeof apiKey !== 'string' || typeof model !== 'string') {
+    res.status(400).json({ error: 'Invalid payload: apiKey and model must be strings.' });
+    return;
+  }
+
+  try {
+    const envPath = path.join(rootDir, '.env');
+    let envContent = '';
+    if (fs.existsSync(envPath)) {
+      envContent = fs.readFileSync(envPath, 'utf8');
+    }
+
+    // Replace or add OPENROUTER_API_KEY
+    if (envContent.includes('OPENROUTER_API_KEY=')) {
+      envContent = envContent.replace(/OPENROUTER_API_KEY=.*/, `OPENROUTER_API_KEY="${apiKey}"`);
+    } else {
+      envContent += `\nOPENROUTER_API_KEY="${apiKey}"`;
+    }
+
+    // Replace or add OPENROUTER_MODEL
+    if (envContent.includes('OPENROUTER_MODEL=')) {
+      envContent = envContent.replace(/OPENROUTER_MODEL=.*/, `OPENROUTER_MODEL="${model}"`);
+    } else {
+      envContent += `\nOPENROUTER_MODEL="${model}"`;
+    }
+
+    fs.writeFileSync(envPath, envContent.trim() + '\n', 'utf8');
+
+    // Hot-reload into current process memory immediately
+    process.env.OPENROUTER_API_KEY = apiKey;
+    process.env.OPENROUTER_MODEL = model;
+
+    console.log(`[CentralContext Server] Successfully hot-synced OpenRouter credentials to .env and memory`);
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to save OpenRouter configuration: ' + error.message });
+  }
+});
+
 // POST /api/worklog - Append worklog to context/WORK_LOG.md
 app.post('/api/worklog', authenticateApiKey, apiRateLimiter, (req, res) => {
   const { source, entry } = req.body;

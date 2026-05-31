@@ -53,6 +53,19 @@ if (candidates.length === 0) {
   process.exit(0);
 }
 
+// Load Pass 5 OpenRouter AI Judgement if it exists (Yêu cầu Integrate with Consensus)
+const aiJudgePath = path.join(rootDir, 'data/memory/ai_judge', `${targetDate}.ai_judgements.json`);
+let aiJudgements = [];
+if (fs.existsSync(aiJudgePath)) {
+  try {
+    const aiPayload = JSON.parse(fs.readFileSync(aiJudgePath, 'utf8'));
+    aiJudgements = aiPayload.judgements || [];
+    console.log(`\x1b[32m✔ Loaded ${aiJudgements.length} AI peer-review judgements from Pass 5!\x1b[0m`);
+  } catch (e) {
+    console.warn(`[Warning] Failed to load Pass 5 judgements:`, e.message);
+  }
+}
+
 // Stats tracking
 let autoApprovedCount = 0;
 let autoRejectedCount = 0;
@@ -69,7 +82,7 @@ candidates.forEach((cand, idx) => {
   const founderFitScore = cand.founder_fit_score !== undefined ? cand.founder_fit_score : 70;
 
   // Formula: 0.4 * Distiller + 0.3 * Critic + 0.3 * Founder Fit (Yêu cầu Pass 4)
-  const memoryScore = Math.round(
+  let memoryScore = Math.round(
     0.4 * distillerScore + 
     0.3 * criticScore + 
     0.3 * founderFitScore
@@ -84,7 +97,10 @@ candidates.forEach((cand, idx) => {
                          cand.type === 'founder_preference' ||
                          (cand.proposed_memory && (
                            cand.proposed_memory.toLowerCase().includes('priority') || 
-                           cand.proposed_memory.toLowerCase().includes('resource allocation')
+                           cand.proposed_memory.toLowerCase().includes('resource allocation') ||
+                           cand.proposed_memory.toLowerCase().includes('freeze') ||
+                           cand.proposed_memory.toLowerCase().includes('paused') ||
+                           cand.proposed_memory.toLowerCase().includes('reactivate')
                          ));
 
   // Rule B: Auto-Approval candidates
@@ -95,25 +111,64 @@ candidates.forEach((cand, idx) => {
 
   let status = 'review_queue';
 
-  if (memoryScore < 70) {
-    status = 'auto_rejected';
-    autoRejectedCount++;
-    rejectedList.push(cand);
-  } else if (memoryScore >= 90 && isAutoApprovableType && !isCriticalType) {
-    // Auto-approve if high score, safe type, has evidence, and no conflicts (Yêu cầu Auto-Approval rules)
-    status = 'auto_approved';
-    autoApprovedCount++;
-    approvedList.push(cand);
+  // Find corresponding AI Curation Peer-Review (Yêu cầu Integrate with Consensus)
+  const uniqueId = `candidate_${String(idx + 1).padStart(3, '0')}`;
+  const matchedAi = aiJudgements.find(j => j.id === uniqueId);
+  
+  if (matchedAi) {
+    cand.ai_decision = matchedAi.decision;
+    cand.ai_reason = matchedAi.reason;
+    if (matchedAi.clean_memory) {
+      cand.proposed_memory = matchedAi.clean_memory;
+    }
+  }
+
+  // Consensus Routing Logic taking Pass 5 judgements as strict overrides
+  if (matchedAi) {
+    if (matchedAi.decision === 'reject') {
+      // AI reject overrides all other scores (Yêu cầu: AI reject must be respected. Founder fit cannot rescue it)
+      status = 'auto_rejected';
+      autoRejectedCount++;
+      rejectedList.push(cand);
+    } else if (matchedAi.decision === 'keep') {
+      // AI keep increases confidence only if local critic_score >= 60 (Yêu cầu Integrate with Consensus)
+      if (criticScore >= 60 && !isCriticalType && isAutoApprovableType) {
+        status = 'auto_approved';
+        autoApprovedCount++;
+        approvedList.push(cand);
+      } else {
+        // Critical types or weak critic score forced to review queue
+        status = 'review_queue';
+        reviewQueueCount++;
+        reviewQueueList.push(cand);
+      }
+    } else if (matchedAi.decision === 'needs_review') {
+      // AI needs_review routes straight to review queue
+      status = 'review_queue';
+      reviewQueueCount++;
+      reviewQueueList.push(cand);
+    }
   } else {
-    // Everything else or critical types go to review queue
-    status = 'review_queue';
-    reviewQueueCount++;
-    reviewQueueList.push(cand);
+    // Fallback traditional local heuristics (v0.2)
+    if (memoryScore < 70) {
+      status = 'auto_rejected';
+      autoRejectedCount++;
+      rejectedList.push(cand);
+    } else if (memoryScore >= 90 && isAutoApprovableType && !isCriticalType) {
+      status = 'auto_approved';
+      autoApprovedCount++;
+      approvedList.push(cand);
+    } else {
+      status = 'review_queue';
+      reviewQueueCount++;
+      reviewQueueList.push(cand);
+    }
   }
 
   cand.status = status;
 
-  console.log(`  Candidate ${String(idx + 1).padStart(3, '0')} [${cand.type}]: Score = \x1b[1m${memoryScore}\x1b[0m $\\rightarrow$ \x1b[36m${status.toUpperCase()}\x1b[0m`);
+  const aiBadge = matchedAi ? ` [AI:${matchedAi.decision.toUpperCase()}]` : '';
+  console.log(`  Candidate ${String(idx + 1).padStart(3, '0')} [${cand.type}]: Score = \x1b[1m${memoryScore}\x1b[0m${aiBadge} $\\rightarrow$ \x1b[36m${status.toUpperCase()}\x1b[0m`);
 });
 
 // Compile and write approved/rejected stores to data/memory/

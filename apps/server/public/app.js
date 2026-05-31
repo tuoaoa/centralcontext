@@ -32,6 +32,78 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('form-raw-log').addEventListener('submit', submitRawLog);
   document.getElementById('form-work-log').addEventListener('submit', submitWorkLog);
 
+  // --- OpenRouter Dynamic UI Config Logic (Yêu cầu Cấu hình Giao diện) ---
+  const modelSelect = document.getElementById('ui-openrouter-model');
+  const customModelDiv = document.getElementById('div-custom-model');
+  
+  if (modelSelect && customModelDiv) {
+    modelSelect.addEventListener('change', () => {
+      if (modelSelect.value === 'custom') {
+        customModelDiv.classList.remove('hidden');
+      } else {
+        customModelDiv.classList.add('hidden');
+      }
+    });
+  }
+
+  // Load settings from LocalStorage
+  const savedOrKey = localStorage.getItem('openrouter_api_key');
+  const savedOrModel = localStorage.getItem('openrouter_model') || 'qwen/qwen3.5-coder:free';
+  const savedCustomModel = localStorage.getItem('custom_openrouter_model') || '';
+
+  if (savedOrKey && document.getElementById('ui-openrouter-key')) {
+    document.getElementById('ui-openrouter-key').value = savedOrKey;
+  }
+  if (modelSelect) {
+    modelSelect.value = savedOrModel;
+    if (savedOrModel === 'custom' && customModelDiv) {
+      customModelDiv.classList.remove('hidden');
+    }
+  }
+  if (savedCustomModel && document.getElementById('ui-custom-model')) {
+    document.getElementById('ui-custom-model').value = savedCustomModel;
+  }
+
+  // Bind Save Button
+  const btnSaveOr = document.getElementById('btn-save-openrouter');
+  if (btnSaveOr) {
+    btnSaveOr.addEventListener('click', async () => {
+      const orKey = document.getElementById('ui-openrouter-key').value.trim();
+      const orModel = document.getElementById('ui-openrouter-model').value;
+      const customModelVal = document.getElementById('ui-custom-model').value.trim();
+      
+      localStorage.setItem('openrouter_api_key', orKey);
+      localStorage.setItem('openrouter_model', orModel);
+      localStorage.setItem('custom_openrouter_model', customModelVal);
+      
+      showToast('OpenRouter Local Settings Saved!');
+      
+      // Dynamic Hot-Syncing to Server Env
+      const activeModel = orModel === 'custom' ? customModelVal : orModel;
+      try {
+        const response = await fetch('/api/config/openrouter', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': getApiKey()
+          },
+          body: JSON.stringify({
+            apiKey: orKey,
+            model: activeModel
+          })
+        });
+        if (response.ok) {
+          showToast('⚡ Dynamic Configuration Synced to Central Server!');
+        } else {
+          showToast('Settings saved locally, but server sync returned failure.', true);
+        }
+      } catch (err) {
+        console.warn('Failed to sync to server config API:', err);
+        showToast('Settings saved locally. (Server sync failed: offline or no x-api-key)', true);
+      }
+    });
+  }
+
   // Load first tab
   loadActiveTab();
 });

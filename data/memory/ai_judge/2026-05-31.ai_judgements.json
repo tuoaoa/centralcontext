@@ -1,0 +1,81 @@
+{
+  "judgements": [
+    {
+      "id": "candidate_001",
+      "decision": "reject",
+      "memory_type": "bug",
+      "confidence": 95,
+      "reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
+      "clean_memory": "A terminal execution error occurred when running command `grep -Ri '\"source\":\"browser_chat\"' data/raw/2026-05-31.jsonl | grep \"CENTRALCONTEXT AGENT CONTEXT PACK\"` (Exit Code: 1). This indicates potential issues in build processes, configuration discrepancies, or runtime failures that require inspection.",
+      "risk": "low"
+    },
+    {
+      "id": "candidate_002",
+      "decision": "reject",
+      "memory_type": "bug",
+      "confidence": 95,
+      "reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
+      "clean_memory": "A terminal execution error occurred when running command `grep -Ri '\"role\":\"user\"' data/raw/2026-05-31.jsonl | grep \"CENTRALCONTEXT AGENT CONTEXT PACK\"` (Exit Code: 1). This indicates potential issues in build processes, configuration discrepancies, or runtime failures that require inspection.",
+      "risk": "low"
+    },
+    {
+      "id": "candidate_003",
+      "decision": "reject",
+      "memory_type": "bug",
+      "confidence": 95,
+      "reason": "[Dry-Run Skipped] Grep search exit-code mismatch is standard unix behavior, not a runtime bug. Filtered as telemetry noise.",
+      "clean_memory": "A terminal execution error occurred when running command `grep -Ri '\"role\":\"user\"' data/raw/2026-05-31.jsonl | grep \"CENTRALCONTEXT AGENT CONTEXT PACK\"` (Exit Code: 1). This indicates potential issues in build processes, configuration discrepancies, or runtime failures that require inspection.",
+      "risk": "low"
+    },
+    {
+      "id": "candidate_004",
+      "decision": "needs_review",
+      "memory_type": "architecture_note",
+      "confidence": 100,
+      "reason": "[Dry-Run Skipped] Strategic priority modifications or credentials must undergo manual developer verification.",
+      "clean_memory": "Strategic files (`SOURCE_PRIORITY.md`) were updated in the workspace. These revisions redefine source prioritization, project directives, or architectural structures that form the absolute Source of Truth for all active agents.",
+      "risk": "medium"
+    },
+    {
+      "id": "candidate_005",
+      "decision": "needs_review",
+      "memory_type": "founder_preference",
+      "confidence": 98,
+      "reason": "[Dry-Run Skipped] Strategic priority modifications or credentials must undergo manual developer verification.",
+      "clean_memory": "Verification of direct Founder credentials (specifically token 'FOUNDER_CODE_8827' from FOUNDER_INTENT.md) was processed in the context layer. Always strictly protect and retrieve strategic founder authentication keys natively from dedicated intent stores.",
+      "risk": "medium"
+    },
+    {
+      "id": "candidate_006",
+      "decision": "reject",
+      "memory_type": "current_state_update",
+      "confidence": 90,
+      "reason": "[Dry-Run Skipped] Trivial directory traversing (cd) contains no active build runs or state milestones. Filtered as noise.",
+      "clean_memory": "Development progress recorded. Successful shell executions verified: `[REDACTED SENSITIVE COMMAND]`, `cd ~/Tuoaoa/devflow/centalcontext`, `grep -Ri \"Central Brain\" data/raw/*.jsonl | head -20`, `grep -Ri \"browser_chat_backfill\" data/raw/*.jsonl | tail -20`, `grep -Ri \"Khởi tạo Central Brain\" data/raw/*.jsonl | grep browser_chat`, `grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `tail -100 data/raw/2026-05-31.jsonl`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `USER1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `tail -500 data/raw/2026-05-31.jsonl | \\`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U0=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `cd ~/Tuoaoa/devflow/centalcontext`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`. Use these verified terminal commands to update the active progress state of ecosystem milestones in the next iteration.",
+      "risk": "low"
+    },
+    {
+      "id": "candidate_007",
+      "decision": "reject",
+      "memory_type": "decision",
+      "confidence": 85,
+      "reason": "[Dry-Run Skipped] Vague chat discussion lacks concrete architectural decisions or explicit commitments. Filtered as noise.",
+      "clean_memory": "High-value project discussion captured in active chat interface. Important decisions related to system behaviors, React element textContent updates, and safe extension hooks were negotiated and concluded.",
+      "risk": "low"
+    }
+  ],
+  "run_report": {
+    "run_id": "run_1780209403932",
+    "timestamp": "2026-05-31T06:36:43.933Z",
+    "model": "qwen/qwen3.5-coder:free",
+    "candidates_total": 7,
+    "candidates_skipped_cache": 0,
+    "candidates_evaluated": 7,
+    "estimated_input_tokens": 1698,
+    "estimated_output_tokens": 1050,
+    "estimated_cost_usd": 0,
+    "actual_cost_usd": 0,
+    "status": "aborted",
+    "abort_reason": "Skipped (Dry run mode by default. Run with --execute to call API)"
+  }
+}
