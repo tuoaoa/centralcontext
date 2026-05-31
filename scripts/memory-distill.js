@@ -210,6 +210,10 @@ async function runDistillery() {
   fs.writeFileSync(candidateFilePath, candidatesMd, 'utf8');
   console.log(`\x1b[32m✔ Curated Candidates written to: ${path.relative(rootDir, candidateFilePath)}\x1b[0m`);
   
+  const candidateJsonPath = path.join(rootDir, 'data/memory/candidates', `${targetDate}.candidates.json`);
+  fs.writeFileSync(candidateJsonPath, JSON.stringify({ candidates, summary: summaryNotes }, null, 2), 'utf8');
+  console.log(`\x1b[32m✔ JSON Candidates written to:    ${path.relative(rootDir, candidateJsonPath)}\x1b[0m`);
+  
   // 7. Write Run Report File
   const reportFilePath = path.join(rootDir, 'data/memory/distillery_runs', `${targetDate}.report.md`);
   let reportMd = `# Memory Distillery Run Report - ${targetDate}\n\n`;

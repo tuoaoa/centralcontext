@@ -1,0 +1,12 @@
+[
+  {
+    "type": "lesson_learned",
+    "project": "qlythuexe",
+    "proposed_memory": "Always use PostGIS queries for donation map calculations in GiveGet.",
+    "confidence": 90,
+    "last_seen": "2025-10-01T12:00:00.000Z",
+    "timestamp": "2025-10-01T12:00:00.000Z",
+    "archived_at": "2026-05-31T04:39:41.797Z",
+    "status": "archived"
+  }
+]

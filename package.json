@@ -18,7 +18,12 @@
     "capture:test": "node scripts/capture-test.js",
     "context:pack": "node scripts/context-pack.js",
     "context:copy": "node scripts/context-pack.js | pbcopy && echo 'CentralContext Pack copied to clipboard'",
-    "memory:distill": "node scripts/memory-distill.js"
+    "memory:distill": "node scripts/memory-distill.js",
+    "memory:critic": "node scripts/memory-critic.js",
+    "memory:judge": "node scripts/founder-judge.js",
+    "memory:consensus": "node scripts/memory-consensus.js",
+    "memory:decay": "node scripts/memory-decay.js",
+    "memory:pipeline": "node scripts/memory-distill.js && node scripts/memory-critic.js && node scripts/founder-judge.js && node scripts/memory-consensus.js"
   },
   "keywords": [
     "ai",
