@@ -3,6 +3,11 @@ console.log(`[CentralContext] content script loaded on ${window.location.href}`)
 const sentHashes = new Set();
 let observer;
 
+// In-memory states for streaming message debouncing
+const assistantDebounceTimers = {};
+const pendingAssistantMessages = {};
+const lastPostedMessageHashes = {};
+
 // Bulletproof check to see if extension context has been invalidated (e.g. extension was reloaded)
 function isContextValid() {
   try {
@@ -322,10 +327,83 @@ async function scrapeAll() {
 
     console.log(`[CentralContext] scanning stream messages on ${platform}`);
     const messages = parseMessages(false);
-    
+    const convId = window.location.pathname.split('/').pop() || 'main';
+
+    // Find the maximum user index in parsed messages
+    const maxUserIndex = messages.reduce((max, msg, idx) => {
+      return msg.role === 'user' ? Math.max(max, idx) : max;
+    }, -1);
+
     for (let i = 0; i < messages.length; i++) {
       if (!isContextValid()) return;
-      await postSingleMessage(messages[i], i, 'browser_chat');
+      const msg = messages[i];
+      const key = `${platform}_${convId}_${i}_${msg.role}`;
+      const contentHash = await sha256(msg.content);
+
+      if (lastPostedMessageHashes[key] === contentHash) {
+        // Already successfully posted this exact message state
+        continue;
+      }
+
+      if (msg.role === 'user') {
+        // User message: POST immediately
+        const result = await postSingleMessage(msg, i, 'browser_chat');
+        if (result.success || result.skipped) {
+          lastPostedMessageHashes[key] = contentHash;
+        }
+      } else if (msg.role === 'assistant') {
+        // Assistant message: Debounce during streaming
+        const hasUserMessageAfter = maxUserIndex > i;
+
+        if (hasUserMessageAfter) {
+          // If a new user message exists after this assistant response, flush immediately
+          if (assistantDebounceTimers[key]) {
+            clearTimeout(assistantDebounceTimers[key]);
+            delete assistantDebounceTimers[key];
+          }
+          delete pendingAssistantMessages[key];
+
+          const result = await postSingleMessage(msg, i, 'browser_chat');
+          if (result.success || result.skipped) {
+            lastPostedMessageHashes[key] = contentHash;
+          }
+        } else {
+          // Debounce logic for assistant message
+          const currentPending = pendingAssistantMessages[key];
+          
+          if (!currentPending || currentPending.content !== msg.content) {
+            pendingAssistantMessages[key] = {
+              content: msg.content,
+              hash: contentHash,
+              index: i,
+              lastUpdated: Date.now()
+            };
+
+            if (assistantDebounceTimers[key]) {
+              clearTimeout(assistantDebounceTimers[key]);
+            }
+
+            assistantDebounceTimers[key] = setTimeout(async () => {
+              if (!isContextValid()) return;
+              const latestPending = pendingAssistantMessages[key];
+              if (latestPending) {
+                const result = await postSingleMessage({ role: 'assistant', content: latestPending.content }, latestPending.index, 'browser_chat');
+                if (result.success || result.skipped) {
+                  lastPostedMessageHashes[key] = latestPending.hash;
+                }
+                delete pendingAssistantMessages[key];
+                delete assistantDebounceTimers[key];
+              }
+            }, 3000); // 3 seconds debounce
+          }
+        }
+      } else {
+        // General fallback roles
+        const result = await postSingleMessage(msg, i, 'browser_chat');
+        if (result.success || result.skipped) {
+          lastPostedMessageHashes[key] = contentHash;
+        }
+      }
     }
     
     runBodyFallbackScan();

@@ -9,8 +9,9 @@ This document reports the implementation, architecture, and verification of the 
 | Metric | Result |
 | :--- | :--- |
 | **Model Ingestion Type** | Native Cognitive Gateway (Automated loop, no paste/inject) |
-| **Ingested Verification Token** | **FOUNDER_CODE_8827** |
-| **Target Project Priorities** | **qlythuexe** (#1) & **SaveX** (Frozen for 30 days) |
+| **Ingested Verification Token** | **FOUNDER_CODE_8827** (Resolved from `context/FOUNDER_INTENT.md`) |
+| **Target Project Priorities** | **qlythuexe** (#1 priority) & **SaveX** (Frozen for 30 days) |
+| **Conflict Resolution Engine** | Strict generic source priorities (**NO hardcoding in directives**) |
 | **Observability Status** | Fully operational (All cache hit/miss logs active) |
 | **Verdict** | 🌟 **PASS** |
 
@@ -36,9 +37,10 @@ flowchart TD
     M --> O[Print: context loaded & hash/bytes]
     N --> O
     F --> O
-    O --> P[Inject Context to Internal Memory]
-    P --> Q[Formulate Strategic AI Response]
-    Q --> R[Return response to User]
+    O --> P[Parse Query Keywords & Prepend Resolution Directives]
+    P --> Q[Inject Pack Content to Internal Memory]
+    Q --> R[Formulate Strategic AI Response using Priorities]
+    R --> S[Return response to User]
 ```
 
 ---
@@ -61,6 +63,22 @@ flowchart TD
 
 ---
 
+## ⚖️ Source Precedence & Resolving Logic
+
+The Operational Truth resolves strictly based on the hierarchy defined in `context/SOURCE_PRIORITY.md`:
+```text
+SOURCE_PRIORITY.md > CURRENT_STATE.md > DECISIONS.md > FOUNDER_INTENT.md > ACTIVE_PROJECTS.md > WORK_LOG.md > reports/audits/archive
+```
+
+### Cognitive Gateway Interceptors (Prepend Directives)
+Based on active keyword parsing in the user query, the `context-gateway.js` prepend directives are dynamically activated:
+- **Temporal Query (`hiện tại`, `current`, `now`, `ưu tiên số 1`)**: Instructs the agent to resolve priorities strictly from `CURRENT_STATE.md` first. Folder structures or general intelligence reports cannot override it.
+- **Decision/ADR Query (`quyết định`, `decision`, `adr`, `trạng thái`)**: Directs the agent to extract decisions from `DECISIONS.md` or `CURRENT_STATE.md`.
+- **Founder Identity/Code Query (`mã`, `code`, `founder`, `xác thực`)**: Directs the agent to retrieve internal keys strictly from `FOUNDER_INTENT.md`.
+- **Historical Limit**: Strictly forbids the agent from using `OLD_STATE.md` or `ARCHIVE_STATE.md` to determine current active status.
+
+---
+
 ## 🔬 Observability & Logging Outputs
 
 During execution, the gateway prints the following structured logs natively:
@@ -69,23 +87,17 @@ During execution, the gateway prints the following structured logs natively:
 ```text
 [CentralContext] cache miss
 [CentralContext] loading context
-[CentralContext] hash=9be8dea239aa25ec4fe3cb19373d277234db33027c5ed97c42390a27b6a264c0
-[CentralContext] bytes=8817
+[CentralContext] hash=99382e4ed7d103a466649a2adbd09863157fcef6a1d0b508828a49558b9fafba
+[CentralContext] bytes=10895
 [CentralContext] context loaded
 ```
 
 ### Scenario B: Cache Hit (Subsequent calls within 5 minutes)
 ```text
 [CentralContext] cache hit
-[CentralContext] hash=9be8dea239aa25ec4fe3cb19373d277234db33027c5ed97c42390a27b6a264c0
-[CentralContext] bytes=8817
+[CentralContext] hash=99382e4ed7d103a466649a2adbd09863157fcef6a1d0b508828a49558b9fafba
+[CentralContext] bytes=10895
 [CentralContext] context loaded
-```
-
-### Scenario C: Failsafe (API is down)
-```text
-Không thể truy cập CentralContext hiện tại.
-Vui lòng khởi động CentralContext API hoặc cung cấp Context Pack.
 ```
 
 ---
@@ -102,15 +114,15 @@ The AI agent automatically recognizes the strategic project prompt:
 The agent internally calls `node scripts/context-gateway.js`, displaying the following diagnostic log:
 ```text
 [CentralContext] cache hit
-[CentralContext] hash=9be8dea239aa25ec4fe3cb19373d277234db33027c5ed97c42390a27b6a264c0
-[CentralContext] bytes=8817
+[CentralContext] hash=99382e4ed7d103a466649a2adbd09863157fcef6a1d0b508828a49558b9fafba
+[CentralContext] bytes=10895
 [CentralContext] context loaded
 ```
 
 ### Step 3: Verify output correctness
 Based on the dynamically ingested Context Pack:
 1.  **Dự án ưu tiên số 1**: `qlythuexe` (RentalOS 2.0).
-2.  **Trạng thái của SaveX**: Tạm dừng/đóng băng (`frozen/paused`) trong vòng 30 ngày tới theo quyết định của **ADR-003** để dồn lực cho `qlythuexe`.
+2.  **Trạng thái của SaveX**: Tạm dừng/đóng băng (`frozen/paused`) trong vòng 30 ngày tới theo quyết định của **ADR-003** to prioritize `qlythuexe`.
 3.  **Mã xác thực nội bộ Founder**: **`FOUNDER_CODE_8827`**.
 
 **Result**: **PASS** (100% correct, zero human-action required).
