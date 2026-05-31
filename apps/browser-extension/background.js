@@ -76,4 +76,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
     return true;
   }
+
+  if (message.action === 'get_ai_status') {
+    const settingsUrl = 'http://localhost:3000/api/settings/ai-provider';
+    const usageUrl = 'http://localhost:3000/api/settings/ai-provider/usage';
+    
+    Promise.all([
+      fetch(settingsUrl, { headers: { 'x-api-key': API_KEY } }).then(r => {
+        if (!r.ok) throw new Error(`Settings status ${r.status}`);
+        return r.json();
+      }),
+      fetch(usageUrl, { headers: { 'x-api-key': API_KEY } }).then(r => {
+        if (!r.ok) throw new Error(`Usage status ${r.status}`);
+        return r.json();
+      })
+    ])
+    .then(([settings, usage]) => {
+      sendResponse({ success: true, settings, usage });
+    })
+    .catch(err => {
+      sendResponse({ success: false, error: err.message });
+    });
+    
+    return true; // Keep message channel open for async response
+  }
 });

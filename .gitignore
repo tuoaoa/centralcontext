@@ -29,3 +29,8 @@ data/backups/
 random_*.md
 test_plan.md
 
+# AI Provider Configurations & Cache/Budget ledgers
+data/config/ai_provider.json
+data/memory/budget/*.json
+data/memory/cache/*.json
+

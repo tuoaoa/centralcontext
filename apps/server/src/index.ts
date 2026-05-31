@@ -267,46 +267,246 @@ app.get('/api/logs', authenticateApiKey, apiRateLimiter, (req, res) => {
   }
 });
 
-// POST /api/config/openrouter - Hot-sync OpenRouter credentials to .env and process memory (Yêu cầu Cấu hình Giao diện)
-app.post('/api/config/openrouter', authenticateApiKey, apiRateLimiter, (req, res) => {
-  const { apiKey, model } = req.body;
+// GET /api/settings/ai-provider - Get sanitized AI provider configuration
+app.get('/api/settings/ai-provider', authenticateApiKey, apiRateLimiter, (req, res) => {
+  try {
+    const { loadAIProviderConfig, getSanitizedAIProviderConfig } = require('../../../scripts/lib/ai-provider-config');
+    const config = loadAIProviderConfig();
+    const sanitized = getSanitizedAIProviderConfig(config);
+    res.json(sanitized);
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to retrieve AI provider settings: ' + error.message });
+  }
+});
 
-  if (typeof apiKey !== 'string' || typeof model !== 'string') {
-    res.status(400).json({ error: 'Invalid payload: apiKey and model must be strings.' });
+// POST /api/settings/ai-provider - Save AI provider configuration
+app.post('/api/settings/ai-provider', authenticateApiKey, apiRateLimiter, (req, res) => {
+  const { provider, openrouter, confirm_over_1_usd, confirm_over_0_10_usd } = req.body;
+
+  if (!provider) {
+    res.status(400).json({ error: 'Provider is required.' });
+    return;
+  }
+
+  const allowedProviders = ['local_heuristics', 'ollama', 'openrouter'];
+  if (!allowedProviders.includes(provider)) {
+    res.status(400).json({ error: `Unsupported provider: ${provider}` });
     return;
   }
 
   try {
-    const envPath = path.join(rootDir, '.env');
-    let envContent = '';
-    if (fs.existsSync(envPath)) {
-      envContent = fs.readFileSync(envPath, 'utf8');
+    const { saveAIProviderConfig, getSanitizedAIProviderConfig } = require('../../../scripts/lib/ai-provider-config');
+    
+    // Sanity checks on costs
+    if (openrouter) {
+      const dailyCost = parseFloat(openrouter.max_daily_cost_usd);
+      const runCost = parseFloat(openrouter.max_run_cost_usd);
+      
+      if (isNaN(dailyCost) || dailyCost < 0 || isNaN(runCost) || runCost < 0) {
+        res.status(400).json({ error: 'Budget limits must be positive numeric values.' });
+        return;
+      }
+
+      if (dailyCost > 1.0 && !confirm_over_1_usd) {
+        res.status(400).json({ 
+          error: 'Daily budget exceeds $1.00 USD. Please confirm this high daily spending limit.',
+          requires_confirm_daily: true 
+        });
+        return;
+      }
+
+      if (runCost > 0.10 && !confirm_over_0_10_usd) {
+        res.status(400).json({ 
+          error: 'Max run budget exceeds $0.10 USD. Please confirm this high execution spending limit.',
+          requires_confirm_run: true 
+        });
+        return;
+      }
+      
+      if (openrouter.api_key && openrouter.api_key.trim().length > 0 && !openrouter.api_key.includes('****')) {
+        // Validate OpenRouter key format minimally (should start with sk-or-)
+        if (!openrouter.api_key.trim().startsWith('sk-or-')) {
+          res.status(400).json({ error: 'Invalid API Key format. OpenRouter keys should start with sk-or-' });
+          return;
+        }
+      }
     }
 
-    // Replace or add OPENROUTER_API_KEY
-    if (envContent.includes('OPENROUTER_API_KEY=')) {
-      envContent = envContent.replace(/OPENROUTER_API_KEY=.*/, `OPENROUTER_API_KEY="${apiKey}"`);
-    } else {
-      envContent += `\nOPENROUTER_API_KEY="${apiKey}"`;
-    }
-
-    // Replace or add OPENROUTER_MODEL
-    if (envContent.includes('OPENROUTER_MODEL=')) {
-      envContent = envContent.replace(/OPENROUTER_MODEL=.*/, `OPENROUTER_MODEL="${model}"`);
-    } else {
-      envContent += `\nOPENROUTER_MODEL="${model}"`;
-    }
-
-    fs.writeFileSync(envPath, envContent.trim() + '\n', 'utf8');
-
-    // Hot-reload into current process memory immediately
-    process.env.OPENROUTER_API_KEY = apiKey;
-    process.env.OPENROUTER_MODEL = model;
-
-    console.log(`[CentralContext Server] Successfully hot-synced OpenRouter credentials to .env and memory`);
-    res.json({ success: true });
+    const savedConfig = saveAIProviderConfig(req.body);
+    const sanitized = getSanitizedAIProviderConfig(savedConfig);
+    res.json({ success: true, config: sanitized });
   } catch (error: any) {
-    res.status(500).json({ error: 'Failed to save OpenRouter configuration: ' + error.message });
+    res.status(500).json({ error: 'Failed to save AI provider configuration: ' + error.message });
+  }
+});
+
+// POST /api/settings/ai-provider/test - Dry test OpenRouter connection
+app.post('/api/settings/ai-provider/test', authenticateApiKey, apiRateLimiter, async (req, res) => {
+  const { provider, model, api_key } = req.body;
+
+  if (provider !== 'openrouter') {
+    res.json({ success: true, message: 'Provider is not OpenRouter. Skipping active test.' });
+    return;
+  }
+
+  // Determine real API key to use
+  let keyToUse = api_key || '';
+  if (keyToUse.includes('****')) {
+    const { loadAIProviderConfig } = require('../../../scripts/lib/ai-provider-config');
+    const current = loadAIProviderConfig();
+    keyToUse = current.openrouter.api_key;
+  }
+
+  if (!keyToUse || keyToUse.trim().length < 10) {
+    res.status(400).json({ error: 'OpenRouter API Key is missing or invalid.' });
+    return;
+  }
+
+  const modelToUse = model || 'qwen/qwen3.5-coder:free';
+  const startTs = Date.now();
+
+  try {
+    const { estimateOpenRouterCost, assertBudgetAllowed } = require('../../../scripts/lib/ai-provider-config');
+    
+    const testPrompt = 'Return exactly: OK';
+    const costEstimate = estimateOpenRouterCost(testPrompt, 'OK', modelToUse);
+    
+    // Check budget
+    const todayStr = new Date().toISOString().split('T')[0];
+    const budgetCheck = assertBudgetAllowed(todayStr, costEstimate.estimated_cost_usd);
+    if (!budgetCheck.allowed) {
+      res.status(400).json({ error: budgetCheck.error });
+      return;
+    }
+
+    // Call OpenRouter API
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
+    const apiResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${keyToUse}`,
+        'HTTP-Referer': 'https://github.com/tuoaoa/centralcontext',
+        'X-Title': 'CentralContext AI Manager Test'
+      },
+      body: JSON.stringify({
+        model: modelToUse,
+        messages: [{ role: 'user', content: testPrompt }],
+        max_tokens: 5
+      }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+    const latency = Date.now() - startTs;
+
+    if (!apiResponse.ok) {
+      const text = await apiResponse.text();
+      res.json({
+        success: false,
+        model: modelToUse,
+        latency_ms: latency,
+        error: `OpenRouter returned ${apiResponse.status}: ${text}`
+      });
+      return;
+    }
+
+    const data: any = await apiResponse.json();
+    const outputText = data.choices?.[0]?.message?.content?.trim() || '';
+
+    // Record to today usage ledger
+    const usageFilePath = path.join(rootDir, `data/memory/budget/openrouter_usage_${todayStr}.json`);
+    let budgetRecord = {
+      date: todayStr,
+      total_requests: 0,
+      estimated_cost_usd: 0,
+      actual_cost_usd: 0,
+      models_used: {} as Record<string, number>,
+      runs: [] as any[]
+    };
+
+    if (fs.existsSync(usageFilePath)) {
+      try {
+        budgetRecord = JSON.parse(fs.readFileSync(usageFilePath, 'utf8'));
+      } catch (e) {}
+    }
+
+    budgetRecord.total_requests++;
+    budgetRecord.estimated_cost_usd += costEstimate.estimated_cost_usd;
+    budgetRecord.models_used[modelToUse] = (budgetRecord.models_used[modelToUse] || 0) + 1;
+    
+    // Add run report for this test connection run
+    budgetRecord.runs.push({
+      run_id: 'test_connection_' + startTs,
+      timestamp: new Date().toISOString(),
+      model: modelToUse,
+      candidates_total: 0,
+      candidates_evaluated: 1,
+      estimated_cost_usd: costEstimate.estimated_cost_usd,
+      actual_cost_usd: 0,
+      status: 'completed'
+    });
+
+    fs.writeFileSync(usageFilePath, JSON.stringify(budgetRecord, null, 2), 'utf8');
+
+    res.json({
+      success: (outputText.toLowerCase().includes('ok') || outputText.length > 0),
+      model: modelToUse,
+      latency_ms: latency,
+      estimated_cost: costEstimate.estimated_cost_usd,
+      actual_cost: 0,
+      response: outputText
+    });
+  } catch (error: any) {
+    const latency = Date.now() - startTs;
+    res.json({
+      success: false,
+      model: modelToUse,
+      latency_ms: latency,
+      error: `Connection test error: ${error.message}`
+    });
+  }
+});
+
+// GET /api/settings/ai-provider/usage - Fetch daily spend metrics
+app.get('/api/settings/ai-provider/usage', authenticateApiKey, apiRateLimiter, (req, res) => {
+  try {
+    const { loadAIProviderConfig } = require('../../../scripts/lib/ai-provider-config');
+    const config = loadAIProviderConfig();
+    const maxDaily = config.openrouter.max_daily_cost_usd;
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const usageFilePath = path.join(rootDir, `data/memory/budget/openrouter_usage_${todayStr}.json`);
+
+    let budgetRecord = {
+      date: todayStr,
+      total_requests: 0,
+      estimated_cost_usd: 0,
+      actual_cost_usd: 0,
+      models_used: {} as Record<string, number>,
+      runs: [] as any[]
+    };
+
+    if (fs.existsSync(usageFilePath)) {
+      try {
+        budgetRecord = JSON.parse(fs.readFileSync(usageFilePath, 'utf8'));
+      } catch (e) {}
+    }
+
+    const remaining = Math.max(0, maxDaily - budgetRecord.estimated_cost_usd);
+
+    res.json({
+      total_requests: budgetRecord.total_requests,
+      estimated_cost_usd: budgetRecord.estimated_cost_usd,
+      actual_cost_usd: budgetRecord.actual_cost_usd,
+      daily_limit: maxDaily,
+      remaining_budget: remaining,
+      last_runs: budgetRecord.runs ? budgetRecord.runs.slice(-5) : []
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to load usage ledger: ' + error.message });
   }
 });
 

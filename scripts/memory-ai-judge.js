@@ -64,16 +64,19 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
-// 3. Provider Configuration Defaults (Yêu cầu Provider Config)
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
-const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || 'qwen/qwen3.5-coder:free';
-const OPENROUTER_FALLBACK_MODEL = process.env.OPENROUTER_FALLBACK_MODEL || 'deepseek/deepseek-chat';
-const OPENROUTER_MAX_DAILY_COST_USD = parseFloat(process.env.OPENROUTER_MAX_DAILY_COST_USD || '0.10');
-const OPENROUTER_MAX_RUN_COST_USD = parseFloat(process.env.OPENROUTER_MAX_RUN_COST_USD || '0.02');
-const OPENROUTER_MAX_REQUESTS_PER_RUN = parseInt(process.env.OPENROUTER_MAX_REQUESTS_PER_RUN || '10');
-const OPENROUTER_MAX_CANDIDATES_PER_RUN = parseInt(process.env.OPENROUTER_MAX_CANDIDATES_PER_RUN || '30');
-const OPENROUTER_TIMEOUT_MS = parseInt(process.env.OPENROUTER_TIMEOUT_MS || '30000');
-const OPENROUTER_ENABLED = (process.env.OPENROUTER_ENABLED !== 'false');
+// 3. Provider Configuration via Shared Loader
+const { loadAIProviderConfig } = require('./lib/ai-provider-config');
+const aiConfig = loadAIProviderConfig();
+
+const OPENROUTER_API_KEY = aiConfig.openrouter.api_key;
+const OPENROUTER_MODEL = aiConfig.openrouter.model;
+const OPENROUTER_FALLBACK_MODEL = aiConfig.openrouter.fallback_model;
+const OPENROUTER_MAX_DAILY_COST_USD = aiConfig.openrouter.max_daily_cost_usd;
+const OPENROUTER_MAX_RUN_COST_USD = aiConfig.openrouter.max_run_cost_usd;
+const OPENROUTER_MAX_REQUESTS_PER_RUN = aiConfig.openrouter.max_requests_per_run;
+const OPENROUTER_MAX_CANDIDATES_PER_RUN = aiConfig.openrouter.max_candidates_per_run;
+const OPENROUTER_TIMEOUT_MS = aiConfig.openrouter.timeout_ms;
+const OPENROUTER_ENABLED = aiConfig.openrouter.enabled;
 
 console.log(`\n\x1b[35m==================================================\x1b[0m`);
 console.log(`\x1b[35m🤖 OPENROUTER AI CURATION JUDGE (v0.3)\x1b[0m`);

@@ -213,3 +213,87 @@ chrome.runtime.onMessage.addListener((message) => {
     showStatus(`<div style="color: ${isError ? '#fca5a5' : '#38bdf8'}; font-weight: 600; font-size: 12px;">${statusText}</div>`, isError);
   }
 });
+
+// Load and display AI Judge status
+function loadAIJudgeStatus() {
+  const providerVal = document.getElementById('ai-provider-val');
+  const modelVal = document.getElementById('ai-model-val');
+  const costVal = document.getElementById('ai-cost-val');
+  const statusVal = document.getElementById('ai-status-val');
+
+  if (!providerVal) return;
+
+  chrome.runtime.sendMessage({ action: 'get_ai_status' }, (response) => {
+    if (chrome.runtime.lastError || !response || !response.success) {
+      providerVal.textContent = 'OFFLINE';
+      providerVal.style.color = '#ef4444';
+      modelVal.textContent = 'API Unavailable';
+      costVal.textContent = '-';
+      statusVal.textContent = 'OFFLINE';
+      statusVal.style.background = 'rgba(239, 68, 68, 0.15)';
+      statusVal.style.color = '#fca5a5';
+      return;
+    }
+
+    const settings = response.settings;
+    const usage = response.usage;
+
+    // 1. Provider
+    const providerName = settings.provider || 'local_heuristics';
+    providerVal.textContent = providerName.replace('_', ' ');
+    if (providerName === 'openrouter') {
+      providerVal.style.color = '#38bdf8';
+    } else if (providerName === 'ollama') {
+      providerVal.style.color = '#818cf8';
+    } else {
+      providerVal.style.color = '#94a3b8';
+    }
+
+    // 2. Model
+    modelVal.textContent = (providerName === 'openrouter' ? settings.openrouter.model : 'Local Heuristics/Ollama');
+
+    // 3. Today Cost
+    const spent = usage.estimated_cost_usd || 0;
+    const limit = usage.daily_limit || 0;
+    costVal.textContent = `$${spent.toFixed(4)} / $${limit.toFixed(2)}`;
+
+    // 4. Status Badge
+    let modeText = 'LOCAL RULE';
+    let bg = 'rgba(148, 163, 184, 0.15)';
+    let fg = '#94a3b8';
+
+    if (providerName === 'openrouter') {
+      if (!settings.openrouter.enabled) {
+        modeText = 'DISABLED';
+        bg = 'rgba(239, 68, 68, 0.15)';
+        fg = '#fca5a5';
+      } else if (settings.openrouter.dry_run_default) {
+        modeText = 'DRY-RUN';
+        bg = 'rgba(245, 158, 11, 0.15)';
+        fg = '#fbbf24';
+      } else {
+        modeText = 'ACTIVE';
+        bg = 'rgba(16, 185, 129, 0.15)';
+        fg = '#34d399';
+      }
+    } else if (providerName === 'ollama') {
+      modeText = 'LOCAL OLLAMA';
+      bg = 'rgba(99, 102, 241, 0.15)';
+      fg = '#a5b4fc';
+    }
+
+    statusVal.textContent = modeText;
+    statusVal.style.background = bg;
+    statusVal.style.color = fg;
+  });
+}
+
+// Open dashboard settings panel tab
+document.getElementById('open-settings-btn').addEventListener('click', () => {
+  chrome.tabs.create({ url: 'http://localhost:3000/#ai-settings' });
+});
+
+// Load AI status on load
+document.addEventListener('DOMContentLoaded', loadAIJudgeStatus);
+loadAIJudgeStatus();
+

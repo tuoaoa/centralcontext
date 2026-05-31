@@ -211,6 +211,30 @@
     Synchronize and inject developer context into ChatGPT, Gemini, and Claude.
   </p>
 
+  <div class="section-title">AI Judge Status</div>
+  
+  <div id="ai-status-panel" style="background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: #94a3b8; font-weight: 500;">Provider:</span>
+        <span id="ai-provider-val" style="font-weight: 700; color: #38bdf8; font-family: monospace; text-transform: uppercase;">Loading...</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: #94a3b8; font-weight: 500;">Model:</span>
+        <span id="ai-model-val" style="font-weight: 600; color: #e2e8f0; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">-</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: #94a3b8; font-weight: 500;">Today Cost:</span>
+        <span id="ai-cost-val" style="font-weight: 700; color: #10b981; font-family: monospace;">$0.00 / $0.00</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: #94a3b8; font-weight: 500;">Curation Mode:</span>
+        <span id="ai-status-val" style="font-weight: 700; padding: 2px 6px; border-radius: 4px; font-size: 10px; text-transform: uppercase;">-</span>
+      </div>
+      <button id="open-settings-btn" class="btn btn-slate" style="font-size: 11px; padding: 6px 0; margin-top: 4px; border-radius: 4px; cursor: pointer;">Open Settings Panel</button>
+    </div>
+  </div>
+
   <div class="section-title">Auto Context Injection</div>
   
   <!-- Auto Inject Toggle Block -->

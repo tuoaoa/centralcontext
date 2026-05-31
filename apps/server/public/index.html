@@ -51,6 +51,9 @@
         <button class="nav-tab" id="tab-logs" onclick="switchTab('logs')">
           <span class="icon">📝</span> Raw Logs Feed
         </button>
+        <button class="nav-tab" id="tab-ai-settings" onclick="switchTab('ai-settings')">
+          <span class="icon">🤖</span> AI Settings
+        </button>
       </nav>
 
       <div class="action-box">
@@ -59,28 +62,11 @@
         <button id="btn-copy-pack" class="btn-glow">⚡ Copy Context Pack</button>
       </div>
 
-      <!-- OpenRouter AI Judge Config (Yêu cầu Cấu hình Giao diện) -->
+      <!-- AI Settings Shortcut -->
       <div class="action-box">
-        <h3>OpenRouter AI Judge</h3>
-        <p class="description">Configure your OpenRouter API Key and model for Pass 5 strategic memory analysis.</p>
-        <div class="form-group" style="margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem;">
-          <label for="ui-openrouter-key" style="font-size: 0.75rem; font-weight:500; color: var(--text-muted);">OpenRouter Key:</label>
-          <input type="password" id="ui-openrouter-key" placeholder="sk-or-..." style="width: 100%; padding: 0.4rem 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">
-        </div>
-        <div class="form-group" style="margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem;">
-          <label for="ui-openrouter-model" style="font-size: 0.75rem; font-weight:500; color: var(--text-muted);">AI Model:</label>
-          <select id="ui-openrouter-model" style="width: 100%; padding: 0.4rem 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-main); font-size: 0.8rem;">
-            <option value="qwen/qwen3.5-coder:free">qwen3.5-coder:free (Recommended)</option>
-            <option value="deepseek/deepseek-chat">deepseek-chat</option>
-            <option value="google/gemini-2.5-pro">gemini-2.5-pro</option>
-            <option value="custom">-- Custom Model --</option>
-          </select>
-        </div>
-        <div id="div-custom-model" class="form-group hidden" style="margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem;">
-          <label for="ui-custom-model" style="font-size: 0.75rem; font-weight:500; color: var(--text-muted);">Custom Model ID:</label>
-          <input type="text" id="ui-custom-model" placeholder="e.g. meta-llama/llama-3..." style="width: 100%; padding: 0.4rem 0.6rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-dark); color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">
-        </div>
-        <button id="btn-save-openrouter" class="btn-primary" style="width: 100%; padding: 0.5rem; font-size: 0.8rem; border-radius: 6px; background-color: var(--secondary-color); cursor: pointer;">Save Settings</button>
+        <h3>AI Judge Settings</h3>
+        <p class="description">Active provider, model presets, and daily budgets are managed centrally from the settings page.</p>
+        <button onclick="switchTab('ai-settings')" class="btn-primary" style="width: 100%; padding: 0.5rem; font-size: 0.8rem; border-radius: 6px; background-color: var(--secondary-color); cursor: pointer;">⚙️ Open AI Settings</button>
       </div>
     </aside>
 
