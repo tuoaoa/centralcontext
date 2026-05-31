@@ -17,7 +17,8 @@
     "cc:terminal": "npm run capture:terminal --prefix apps/cli --",
     "capture:test": "node scripts/capture-test.js",
     "context:pack": "node scripts/context-pack.js",
-    "context:copy": "node scripts/context-pack.js | pbcopy && echo 'CentralContext Pack copied to clipboard'"
+    "context:copy": "node scripts/context-pack.js | pbcopy && echo 'CentralContext Pack copied to clipboard'",
+    "memory:distill": "node scripts/memory-distill.js"
   },
   "keywords": [
     "ai",
