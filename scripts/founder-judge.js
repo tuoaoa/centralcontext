@@ -101,35 +101,92 @@ async function runJudge() {
   console.log(`\n\x1b[32m✔ Founder fit review updated in JSON candidates file successfully.\x1b[0m\n`);
 }
 
+// Helper to dynamically parse the Founder Profile Markdown file (Yêu cầu Digital Twin / Không hardcode)
+function parseFounderProfile(profileText) {
+  const projects = {};
+  const corePrefs = {};
+  
+  let currentSection = '';
+  const lines = profileText.split('\n');
+  
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('## ')) {
+      currentSection = trimmed.replace('## ', '').toLowerCase().trim();
+      continue;
+    }
+    
+    if (currentSection === 'project preferences' && trimmed.startsWith('- **')) {
+      // Parse project line: - **qlythuexe** (RentalOS 2.0): **Ecosystem Priority #1**...
+      const nameMatch = trimmed.match(/^-\s+\*\*([^*]+)\*\*/);
+      if (nameMatch) {
+        const projName = nameMatch[1].toLowerCase().trim();
+        let priority = 'medium';
+        let score = 70;
+        
+        if (trimmed.toLowerCase().includes('priority #1')) {
+          priority = 'high_priority_1';
+          score = 96;
+        } else if (trimmed.toLowerCase().includes('priority #2')) {
+          priority = 'high_priority_2';
+          score = 92;
+        } else if (trimmed.toLowerCase().includes('priority #3')) {
+          priority = 'high_priority_3';
+          score = 75;
+        } else if (trimmed.toLowerCase().includes('frozen') || trimmed.toLowerCase().includes('paused')) {
+          priority = 'frozen';
+          score = 25;
+        }
+        
+        projects[projName] = { name: projName, priority, score, lineText: trimmed };
+      }
+    } else if (currentSection === 'core preferences' && trimmed.startsWith('- **')) {
+      // Parse core preferences line: - **local-first**: description
+      const prefMatch = trimmed.match(/^-\s+\*\*([^*]+)\*\*:\s*(.*)/);
+      if (prefMatch) {
+        const prefName = prefMatch[1].toLowerCase().trim();
+        const prefDesc = prefMatch[2].toLowerCase().trim();
+        corePrefs[prefName] = prefDesc;
+      }
+    }
+  }
+  return { projects, corePrefs };
+}
+
 // 1. Heuristic Digital Twin Judge (Always works, robust fallback)
 function runHeuristicsJudge(candidatesList) {
+  const profileData = parseFounderProfile(founderProfileText);
+  const projects = profileData.projects;
+  const corePrefs = profileData.corePrefs;
+
   candidatesList.forEach((cand, idx) => {
     let score = 70;
     let reason = "Candidate represents useful progress aligned with active MVP-first development preferences.";
 
-    const project = (cand.project || '').toLowerCase();
+    const project = (cand.project || '').toLowerCase().trim();
     const contentLower = (cand.proposed_memory || '').toLowerCase();
     const evidenceStr = JSON.stringify(cand.evidence || '').toLowerCase();
 
-    // qlythuexe: Ecosystem Priority #1 (Strategic Priority)
-    if (project.includes('qlythuexe') || contentLower.includes('qlythuexe')) {
-      score = 96;
-      reason = "Validation: Aligns perfectly with Ecosystem Priority #1 (qlythuexe). Founder is extremely concerned with RentalOS SaaS metrics, fine deposit reminders, and eKYC integration.";
+    // Dynamically match project preference
+    let matchedProj = null;
+    for (const projKey of Object.keys(projects)) {
+      if (project === projKey || project.includes(projKey) || contentLower.includes(projKey)) {
+        matchedProj = projects[projKey];
+        break;
+      }
     }
-    // CentralContext: Ecosystem Priority #2 (Strategic leverage)
-    else if (project.includes('centralcontext') || project.includes('centalcontext') || contentLower.includes('centralcontext')) {
-      score = 92;
-      reason = "Validation: Aligns with Ecosystem Priority #2 (CentralContext). Core cognitive productivity leverage and context gateway optimization. High developer utility.";
-    }
-    // GiveGet: Ecosystem Priority #3 (Moderate priority)
-    else if (project.includes('giveget') || contentLower.includes('giveget')) {
-      score = 75;
-      reason = "Validation: Aligns with Ecosystem Priority #3 (GiveGet). Map-based social donation platform. Moderate operational concern for immediate milestones.";
-    }
-    // SaveX & aimemory: Frozen or paused R&D (Low priority)
-    else if (project.includes('savex') || project.includes('aimemory') || contentLower.includes('savex') || contentLower.includes('aimemory')) {
-      score = 25;
-      reason = "Criticism: Low core fit. Project is currently frozen/paused (ADR-003, SaveX frozen to prevent R&D IoT R&D traps, aimemory Android app frozen). Non-strategic.";
+
+    if (matchedProj) {
+      score = matchedProj.score;
+      if (matchedProj.priority === 'high_priority_1') {
+        reason = `Validation: Aligns perfectly with Ecosystem Priority #1 (${matchedProj.name}) dynamic profile. Founder is extremely concerned with its milestones and delivery.`;
+      } else if (matchedProj.priority === 'high_priority_2') {
+        reason = `Validation: Aligns with Ecosystem Priority #2 (${matchedProj.name}) dynamic profile. Core cognitive productivity leverage and context gateway optimization.`;
+      } else if (matchedProj.priority === 'high_priority_3') {
+        reason = `Validation: Aligns with Ecosystem Priority #3 (${matchedProj.name}) dynamic profile. Moderate operational concern for immediate milestones.`;
+      } else if (matchedProj.priority === 'frozen') {
+        reason = `Criticism: Low core fit. Project ${matchedProj.name} is currently FROZEN/PAUSED in founder profile to prevent R&D traps.`;
+      }
     }
     // Check for Founder Credentials
     else if (cand.type === 'founder_preference' && evidenceStr.includes('founder_code')) {
@@ -141,10 +198,22 @@ function runHeuristicsJudge(candidatesList) {
       score = 15;
       reason = "Criticism: Fails cost-conscious and MVP-first preferences. Telemetry records of grep searches or file CD traverses are low-value noise and token-waste.";
     }
-    // Check for general tool bugs
-    else if (cand.type === 'bug') {
-      score = 65;
-      reason = "Validation: Useful bug report, but fits practical execution slightly. Non-strategic compile errors have moderate immediate relevance.";
+    // Check for dynamic match of core preferences keywords
+    else {
+      let matchedPref = null;
+      for (const prefName of Object.keys(corePrefs)) {
+        if (contentLower.includes(prefName) || contentLower.includes(prefName.replace('-', ' '))) {
+          matchedPref = prefName;
+          break;
+        }
+      }
+      if (matchedPref) {
+        score = 88;
+        reason = `Validation: Strongly aligns with Founder's core preference: '${matchedPref}' (${corePrefs[matchedPref].substring(0, 60)}...).`;
+      } else if (cand.type === 'bug') {
+        score = 65;
+        reason = "Validation: Useful bug report, but fits practical execution slightly. Non-strategic compile errors have moderate immediate relevance.";
+      }
     }
 
     cand.founder_fit_score = score;

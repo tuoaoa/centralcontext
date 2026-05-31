@@ -229,3 +229,172 @@ console.log(`\x1b[35m==================================================\x1b[0m\n
 payload.candidates = candidates;
 payload.summary = payload.summary + `\n\n*(Pass 4 Consensus run: Auto-approved ${autoApprovedCount}, Auto-rejected ${autoRejectedCount}, Review queue ${reviewQueueCount})*`;
 fs.writeFileSync(candidateJsonPath, JSON.stringify(payload, null, 2), 'utf8');
+
+// Dynamic learning loop from approved memories (Yêu cầu Tự học)
+try {
+  console.log(`\n\x1b[35m🔄 STARTING FOUNDER PROFILE DYNAMIC LEARNING LOOP...\x1b[0m`);
+  learnPreferencesFromApproved();
+} catch (learnErr) {
+  console.error(`\x1b[31m[Auto-Learning Warning] Failed to update founder profile:\x1b[0m`, learnErr.message);
+}
+
+// Dynamic Profile Learning Engine (zero-dependency heuristic auto-learning)
+function learnPreferencesFromApproved() {
+  const founderProfilePath = path.join(rootDir, 'data/founder/founder_profile.md');
+  if (!fs.existsSync(approvedStorePath)) return;
+  
+  let approvedMemories = [];
+  try {
+    approvedMemories = JSON.parse(fs.readFileSync(approvedStorePath, 'utf8'));
+  } catch (e) {
+    console.log(`  [Auto-Learning] Could not parse approved memories: ${e.message}`);
+    return;
+  }
+  
+  if (approvedMemories.length === 0) return;
+  
+  let profileText = '';
+  if (fs.existsSync(founderProfilePath)) {
+    profileText = fs.readFileSync(founderProfilePath, 'utf8');
+  } else {
+    console.log(`  [Auto-Learning] founder_profile.md not found.`);
+    return;
+  }
+  
+  // 1. Analyze approved memories for project status updates
+  let lines = profileText.split('\n');
+  
+  // Check if memories contain instructions to pause/freeze/unfreeze projects
+  let projectStatusChanges = {}; // e.g. { savex: 'PAUSED', giveget: 'FROZEN' }
+  let learnedPatterns = [];
+  
+  approvedMemories.forEach(mem => {
+    const text = (mem.proposed_memory || '').toLowerCase();
+    
+    // Look for project priority/status changes
+    const projectsToCheck = ['savex', 'aimemory', 'qlythuexe', 'giveget', 'centralcontext'];
+    projectsToCheck.forEach(proj => {
+      if (text.includes(proj)) {
+        if (text.includes('freeze') || text.includes('frozen') || text.includes('pause') || text.includes('paused')) {
+          projectStatusChanges[proj] = 'FROZEN (Paused via auto-learning)';
+        } else if (text.includes('unfreeze') || text.includes('resume') || text.includes('activate') || text.includes('active')) {
+          projectStatusChanges[proj] = 'ACTIVE';
+        }
+      }
+    });
+    
+    // Extract general preferences / decision patterns
+    if (mem.type === 'founder_preference' || mem.type === 'decision' || text.includes('founder prefers') || text.includes('founder decided')) {
+      let cleanText = mem.proposed_memory.trim();
+      if (!cleanText.endsWith('.')) cleanText += '.';
+      learnedPatterns.push(cleanText);
+    }
+  });
+  
+  // Let's rebuild the lines while applying project status changes
+  let updatedLines = [];
+  let currentSection = '';
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    
+    if (trimmed.startsWith('## ')) {
+      currentSection = trimmed.replace('## ', '').toLowerCase().trim();
+      updatedLines.push(line);
+      continue;
+    }
+    
+    if (currentSection === 'project preferences' && trimmed.startsWith('- **')) {
+      const match = trimmed.match(/^-\s+\*\*([^*]+)\*\*/);
+      if (match) {
+        const projName = match[1].toLowerCase().trim();
+        if (projectStatusChanges[projName]) {
+          const newStatus = projectStatusChanges[projName];
+          if (newStatus === 'ACTIVE') {
+            // Restore priority
+            let basePriority = 'Priority';
+            if (projName === 'qlythuexe') basePriority = 'Ecosystem Priority #1';
+            else if (projName === 'centralcontext') basePriority = 'Ecosystem Priority #2';
+            else if (projName === 'giveget') basePriority = 'Ecosystem Priority #3';
+            
+            // Replace pause/frozen tags with priority
+            const updatedLine = line.replace(/\*\*FROZEN.*?\*\*|\*\*PAUSED.*?\*\*/g, `**${basePriority}**`);
+            updatedLines.push(updatedLine);
+            console.log(`\x1b[32m  [Auto-Learning] Updated ${projName} status to ACTIVE in founder profile.\x1b[0m`);
+            continue;
+          } else {
+            // Replace priority or other status with FROZEN/PAUSED
+            let updatedLine = line;
+            if (line.includes('Priority')) {
+              updatedLine = line.replace(/\*\*Ecosystem Priority.*?\*\*|\*\*Priority.*?\*\*/g, `**${newStatus}**`);
+            } else if (line.includes('PAUSED') || line.includes('FROZEN')) {
+              updatedLine = line.replace(/\*\*FROZEN.*?\*\*|\*\*PAUSED.*?\*\*/g, `**${newStatus}**`);
+            } else {
+              updatedLine = line.replace(/:\s*/, `: **${newStatus}**. `);
+            }
+            updatedLines.push(updatedLine);
+            console.log(`\x1b[32m  [Auto-Learning] Updated ${projName} status to ${newStatus} in founder profile.\x1b[0m`);
+            continue;
+          }
+        }
+      }
+    }
+    
+    // Ignore any existing Auto-Learned section because we'll regenerate it
+    if (currentSection === 'auto-learned decision patterns & preferences') {
+      continue; // skip the old lines, we'll append the fresh ones
+    }
+    
+    updatedLines.push(line);
+  }
+  
+  // Filter out duplicate learned patterns already in core preferences
+  const existingProfileText = updatedLines.join('\n');
+  const uniqueLearned = [];
+  const seenPatterns = new Set();
+  
+  learnedPatterns.forEach(pattern => {
+    const normalized = pattern.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (seenPatterns.has(normalized)) return;
+    seenPatterns.add(normalized);
+    
+    if (!existingProfileText.toLowerCase().includes(pattern.toLowerCase().substring(0, 30))) {
+      uniqueLearned.push(pattern);
+    }
+  });
+  
+  // Now rebuild the profile text and insert the dynamic learned preferences section before the footer/note
+  let newProfileText = '';
+  let footerSeparatorIndex = -1;
+  
+  for (let i = 0; i < updatedLines.length; i++) {
+    if (updatedLines[i].trim() === '---') {
+      footerSeparatorIndex = i;
+      break;
+    }
+  }
+  
+  // Construct the new learned preferences section
+  let learnedSectionText = '';
+  if (uniqueLearned.length > 0) {
+    learnedSectionText = `\n## Auto-Learned Decision Patterns & Preferences\n`;
+    uniqueLearned.forEach(pattern => {
+      const cleanPattern = pattern.replace(/^-\s*/, '');
+      const words = cleanPattern.split(' ');
+      const title = words.slice(0, 2).join('-').toLowerCase().replace(/[^a-z\-]/g, '');
+      learnedSectionText += `- **learned-${title}**: ${cleanPattern}\n`;
+    });
+    learnedSectionText += `\n`;
+  }
+  
+  if (footerSeparatorIndex !== -1) {
+    const beforeFooter = updatedLines.slice(0, footerSeparatorIndex).join('\n').trim();
+    const afterFooter = updatedLines.slice(footerSeparatorIndex).join('\n').trim();
+    newProfileText = beforeFooter + '\n' + learnedSectionText + '\n' + afterFooter;
+  } else {
+    newProfileText = updatedLines.join('\n').trim() + '\n' + learnedSectionText;
+  }
+  
+  fs.writeFileSync(founderProfilePath, newProfileText, 'utf8');
+  console.log(`\x1b[32m  [Auto-Learning] Successfully reinforced Founder Profile from approved memories.\x1b[0m`);
+}

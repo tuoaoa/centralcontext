@@ -25,5 +25,9 @@
 - **Irreversible changes**: Requires high-confidence safeguards and manual developer/founder sign-off.
 - **Bug/Terminal logs**: Trivial shell/compile errors are low-priority; build blocks or system crashes are high-priority.
 
+## Auto-Learned Decision Patterns & Preferences
+- **learned-founder-prefers**: Founder prefers local-first databases to prevent token bloat.
+
+
 ---
 *Note: This profile dynamically models the Digital Twin of the Founder. Updates must reflect real-world decision patterns and strategic alignments.*
