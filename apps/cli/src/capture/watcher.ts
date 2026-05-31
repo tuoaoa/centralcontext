@@ -161,7 +161,14 @@ function initFileWatcher() {
       '**/*.tar.gz',
       '**/db-wal',
       '**/db-shm',
-      '**/*.db'
+      '**/*.db',
+      '**/.env',
+      '**/*.env',
+      '**/data/config/ai_provider.json',
+      '**/data/memory/cache/**',
+      '**/data/memory/budget/**',
+      '**/*.pem',
+      '**/*.key'
     ],
     persistent: true,
     ignoreInitial: true, // Only watch real-time modifications

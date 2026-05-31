@@ -204,6 +204,10 @@ app.post('/api/context/update', authenticateApiKey, apiRateLimiter, (req, res) =
 
 // POST /api/log/raw - Append log to JSONL (First) and SQLite (Second)
 app.post('/api/log/raw', authenticateApiKey, apiRateLimiter, (req, res) => {
+  // Secret Redaction Firewall: Scan and redact req.body in-place before any parsing/writing
+  const { scanObject } = require('../../../scripts/lib/secret-redactor');
+  scanObject(req.body);
+
   const { source, project, type, content, quality_score, memory_priority, file_name, file_path, extension, content_hash } = req.body;
 
   if (!source || !type || typeof content !== 'string') {

@@ -185,6 +185,39 @@ async function runDistillery() {
     }
   }
   
+  // 5.5. Scan logs for secrets and append a critical security event if found
+  const secretRedactor = require('./lib/secret-redactor');
+  let secretDetected = false;
+  let secretEvidence = [];
+  
+  curatedLogs.forEach(log => {
+    if (secretRedactor.containsSecrets(log.content) || 
+        log.content.includes('[REDACTED_OPENROUTER_KEY]') || 
+        log.content.includes('[REDACTED_OPENAI_KEY]') || 
+        log.content.includes('[REDACTED_GEMINI_KEY]') || 
+        log.content.includes('[REDACTED_GITHUB_TOKEN]')) {
+      secretDetected = true;
+      secretEvidence.push(`Timestamp: ${log.timestamp} - Source: ${log.source}`);
+      log.content = secretRedactor.redactSecrets(log.content);
+    }
+  });
+
+  if (secretDetected) {
+    console.log(`\x1b[31m⚠️  [Security Firewall] Secrets detected in logs. Generating security_event candidate...\x1b[0m`);
+    candidates.unshift({
+      type: 'security_event',
+      project: 'CentralContext',
+      source: 'ingest',
+      confidence: 100,
+      priority: 'critical',
+      evidence: secretEvidence.slice(0, 5),
+      proposed_memory: 'Founder entered OpenRouter API key.',
+      recommended_target: [
+        'context/CURRENT_STATE.md'
+      ]
+    });
+  }
+  
   // 6. Write Candidates File (Yêu cầu 2, 3)
   const candidateFilePath = path.join(rootDir, 'data/memory/candidates', `${targetDate}.candidates.md`);
   let candidatesMd = `# Curated Memory Candidates - ${targetDate}\n\n`;
