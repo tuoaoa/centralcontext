@@ -172,6 +172,7 @@ function parseMessages(onlyVisible = false) {
           messages.push({ role, content: text });
         }
       });
+    }
   } catch (e) {
     console.log('[CentralContext] Error parsing messages:', e.message);
   }
