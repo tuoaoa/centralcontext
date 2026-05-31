@@ -7,6 +7,7 @@ let observer;
 const assistantDebounceTimers = {};
 const pendingAssistantMessages = {};
 const lastPostedMessageHashes = {};
+let isExtensionMutating = false;
 
 // Bulletproof check to see if extension context has been invalidated (e.g. extension was reloaded)
 function isContextValid() {
@@ -171,12 +172,14 @@ function parseMessages(onlyVisible = false) {
           messages.push({ role, content: text });
         }
       });
-    }
   } catch (e) {
     console.log('[CentralContext] Error parsing messages:', e.message);
   }
 
-  return messages;
+  return messages.filter(msg => {
+    return !msg.content.includes('CENTRALCONTEXT AGENT CONTEXT PACK') && 
+           !msg.content.includes('--- CONTEXT PACK CONTENT ---');
+  });
 }
 
 // Post single message with full metadata and persistent deduplication
@@ -500,20 +503,49 @@ function injectPackText(packText) {
       return false;
     }
 
-    // Populate and dispatch standard inputs
-    if (inputEl.tagName.toLowerCase() === 'textarea' || inputEl.tagName.toLowerCase() === 'input') {
+    // Get current textbox value/content
+    let currentVal = '';
+    const isInputOrTextarea = inputEl.tagName.toLowerCase() === 'textarea' || inputEl.tagName.toLowerCase() === 'input';
+    if (isInputOrTextarea) {
+      currentVal = inputEl.value || '';
+    } else {
+      currentVal = inputEl.innerText || '';
+    }
+    currentVal = currentVal.trim();
+
+    // Safety Guards (Yêu cầu 8)
+    if (currentVal.length > 1000) {
+      console.log('[CentralContext] Safety check: Textbox has more than 1000 characters. Injection skipped.');
+      return true; // Return true to stop the retry loop since it is an intentional skip
+    }
+
+    if (currentVal.includes('CENTRALCONTEXT AGENT CONTEXT PACK') || currentVal.includes('--- CONTEXT PACK CONTENT ---')) {
+      console.log('[CentralContext] Safety check: Context Pack already exists in textbox. Injection skipped.');
+      return true; // Return true to stop the retry loop
+    }
+
+    // Set reentrancy lock (Yêu cầu 3)
+    isExtensionMutating = true;
+
+    // Populate textbox once and dispatch input event once (Yêu cầu 5)
+    if (isInputOrTextarea) {
       inputEl.value = packText;
       inputEl.dispatchEvent(new Event('input', { bubbles: true }));
-      inputEl.dispatchEvent(new Event('change', { bubbles: true }));
     } else {
       inputEl.innerText = packText;
       inputEl.dispatchEvent(new Event('input', { bubbles: true }));
-      inputEl.dispatchEvent(new Event('change', { bubbles: true }));
       inputEl.focus();
     }
+
+    // Release lock after 500ms cooldown (Yêu cầu 3)
+    setTimeout(() => {
+      isExtensionMutating = false;
+    }, 500);
+
     console.log('[CentralContext] Successfully injected pack into active prompt input.');
     return true;
   } catch (err) {
+    isExtensionMutating = false;
     console.error('[CentralContext] Ingestion populate failed:', err.message);
     return false;
   }
@@ -678,6 +710,21 @@ if (isContextValid()) {
   } catch (e) {}
 }
 
+function isNewChatUrl() {
+  try {
+    const pathname = window.location.pathname;
+    const platform = getPlatform();
+    if (platform === 'chatgpt') {
+      return pathname === '/' || pathname.startsWith('/?');
+    } else if (platform === 'gemini') {
+      return pathname === '/app' || pathname === '/app/';
+    } else if (platform === 'claude') {
+      return pathname === '/new' || pathname === '/new/' || pathname === '/chat' || pathname === '/chats';
+    }
+  } catch (e) {}
+  return false;
+}
+
 // MutationObserver configuration for automatic logging and auto-injection checks
 let lastCheckedUrl = '';
 let hasAttemptedAutoInject = false;
@@ -698,12 +745,19 @@ function checkAutoInjectTrigger() {
   if (hasAttemptedAutoInject) return;
 
   try {
-    chrome.storage.local.get(['centralcontext_auto_inject_enabled', 'centralcontext_injected_urls'], async (result) => {
+    chrome.storage.local.get(['centralcontext_auto_inject_mode', 'centralcontext_injected_urls'], async (result) => {
       if (!isContextValid()) return;
       if (hasAttemptedAutoInject) return; // double check inside callback
 
-      const autoInjectEnabled = result.centralcontext_auto_inject_enabled === true;
-      if (!autoInjectEnabled) return;
+      const mode = result.centralcontext_auto_inject_mode || 'off';
+      
+      // Auto-inject is only supported when mode is 'new_chat_only' (Yêu cầu 1, 7)
+      if (mode !== 'new_chat_only') return;
+
+      // Do not auto-inject on old conversations (Yêu cầu 2)
+      if (!isNewChatUrl()) {
+        return;
+      }
 
       hasAttemptedAutoInject = true; // prevent duplicate parallel calls
 
@@ -786,8 +840,32 @@ function checkAutoInjectTrigger() {
   }
 }
 
+// Throttled scrapeAll function to rate limit log capturing to once every 2 seconds (Yêu cầu 6)
+let lastScrapeTime = 0;
+let scrapeTimeout = null;
+
+function throttledScrapeAll() {
+  const now = Date.now();
+  if (now - lastScrapeTime < 2000) {
+    if (scrapeTimeout) clearTimeout(scrapeTimeout);
+    scrapeTimeout = setTimeout(() => {
+      lastScrapeTime = Date.now();
+      scrapeAll();
+    }, 2000 - (now - lastScrapeTime));
+    return;
+  }
+  lastScrapeTime = now;
+  scrapeAll();
+}
+
 observer = new MutationObserver((mutations) => {
   if (!isContextValid()) return;
+  
+  // Reentrancy lock check: ignore DOM changes caused by extension itself (Yêu cầu 3)
+  if (isExtensionMutating) {
+    return;
+  }
+
   try {
     let hasNewNode = false;
     for (const m of mutations) {
@@ -797,14 +875,14 @@ observer = new MutationObserver((mutations) => {
       }
     }
     if (hasNewNode) {
-      scrapeAll();
+      throttledScrapeAll();
       checkAutoInjectTrigger(); // continuously check for textbox rendering
     }
   } catch (e) {}
 });
 
 // Load sequence
-scrapeAll();
+throttledScrapeAll();
 if (isContextValid()) {
   try {
     observer.observe(document.body, { childList: true, subtree: true });

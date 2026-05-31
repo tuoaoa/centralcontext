@@ -213,16 +213,17 @@
 
   <div class="section-title">Auto Context Injection</div>
   
-  <!-- Auto Inject Toggle Block -->
-  <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 8px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
-    <div style="display: flex; flex-direction: column; gap: 2px;">
-      <span style="font-size: 12px; font-weight: 600; color: #f8fafc;">Auto Inject Context</span>
-      <span id="auto-inject-status" style="font-size: 10px; color: #94a3b8; font-weight: 600;">Status: OFF</span>
+  <!-- Auto Inject Mode Selector -->
+  <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 8px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-size: 12px; font-weight: 600; color: #f8fafc;">Auto Inject Mode</span>
+      <span id="auto-inject-status" style="font-size: 10px; color: #94a3b8; font-weight: 600;">OFF</span>
     </div>
-    <label class="switch">
-      <input type="checkbox" id="auto-inject-toggle">
-      <span class="slider"></span>
-    </label>
+    <select id="auto-inject-mode" style="background: #1e293b; border: 1px solid #334155; color: #f8fafc; border-radius: 6px; padding: 8px; font-size: 12px; outline: none; width: 100%; cursor: pointer; box-sizing: border-box; font-family: inherit;">
+      <option value="off">OFF</option>
+      <option value="new_chat_only">New Chat Only</option>
+      <option value="manual_only">Manual Only</option>
+    </select>
   </div>
 
   <!-- First-run Warning Alert -->

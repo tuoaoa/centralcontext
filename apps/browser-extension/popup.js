@@ -2,7 +2,7 @@ console.log('[CentralContext] Popup script loaded.');
 
 const statusPanel = document.getElementById('status-panel');
 
-const autoInjectToggle = document.getElementById('auto-inject-toggle');
+const autoInjectModeSelect = document.getElementById('auto-inject-mode');
 const autoInjectStatus = document.getElementById('auto-inject-status');
 const autoInjectWarning = document.getElementById('auto-inject-warning');
 const confirmAutoInject = document.getElementById('confirm-auto-inject');
@@ -39,48 +39,63 @@ function renderLastInjectionDetails() {
 }
 
 // 1. Initialize UI states from chrome.storage.local
-chrome.storage.local.get(['centralcontext_auto_inject_enabled', 'centralcontext_first_run_warned'], (result) => {
-  const isEnabled = result.centralcontext_auto_inject_enabled === true;
-  autoInjectToggle.checked = isEnabled;
-  autoInjectStatus.textContent = `Status: ${isEnabled ? 'ON' : 'OFF'}`;
-  autoInjectStatus.style.color = isEnabled ? '#10b981' : '#94a3b8';
+chrome.storage.local.get(['centralcontext_auto_inject_mode', 'centralcontext_first_run_warned'], (result) => {
+  const mode = result.centralcontext_auto_inject_mode || 'off';
+  autoInjectModeSelect.value = mode;
+  updateStatusLabel(mode);
   renderLastInjectionDetails();
 });
 
-// Helper to update toggle state in storage and UI
-function updateAutoInjectState(enabled) {
-  chrome.storage.local.set({ centralcontext_auto_inject_enabled: enabled }, () => {
-    autoInjectToggle.checked = enabled;
-    autoInjectStatus.textContent = `Status: ${enabled ? 'ON' : 'OFF'}`;
-    autoInjectStatus.style.color = enabled ? '#10b981' : '#94a3b8';
+// Helper to update status label color and text
+function updateStatusLabel(mode) {
+  if (mode === 'off') {
+    autoInjectStatus.textContent = 'OFF';
+    autoInjectStatus.style.color = '#94a3b8';
+  } else if (mode === 'new_chat_only') {
+    autoInjectStatus.textContent = 'NEW CHAT ONLY';
+    autoInjectStatus.style.color = '#10b981';
+  } else if (mode === 'manual_only') {
+    autoInjectStatus.textContent = 'MANUAL ONLY';
+    autoInjectStatus.style.color = '#38bdf8';
+  }
+}
+
+// Helper to update state in storage and UI
+function updateAutoInjectMode(mode) {
+  chrome.storage.local.set({ centralcontext_auto_inject_mode: mode }, () => {
+    autoInjectModeSelect.value = mode;
+    updateStatusLabel(mode);
   });
 }
 
-// 2. Handle toggle changes
-autoInjectToggle.addEventListener('change', () => {
-  const isChecked = autoInjectToggle.checked;
+// 2. Handle dropdown changes
+autoInjectModeSelect.addEventListener('change', () => {
+  const selectedMode = autoInjectModeSelect.value;
   
-  if (isChecked) {
+  if (selectedMode !== 'off') {
     // Check first-run warning
     chrome.storage.local.get(['centralcontext_first_run_warned'], (result) => {
       if (result.centralcontext_first_run_warned === true) {
-        updateAutoInjectState(true);
+        updateAutoInjectMode(selectedMode);
       } else {
-        // Stay unchecked for now, display warning box
-        autoInjectToggle.checked = false;
+        // Stay off for now, display warning box
+        autoInjectModeSelect.value = 'off';
+        updateStatusLabel('off');
         autoInjectWarning.style.display = 'block';
+        autoInjectWarning.setAttribute('data-pending-mode', selectedMode);
       }
     });
   } else {
-    updateAutoInjectState(false);
+    updateAutoInjectMode('off');
   }
 });
 
 // 3. Confirm first-run warning
 confirmAutoInject.addEventListener('click', () => {
+  const pendingMode = autoInjectWarning.getAttribute('data-pending-mode') || 'new_chat_only';
   chrome.storage.local.set({ centralcontext_first_run_warned: true }, () => {
     autoInjectWarning.style.display = 'none';
-    updateAutoInjectState(true);
+    updateAutoInjectMode(pendingMode);
   });
 });
 
