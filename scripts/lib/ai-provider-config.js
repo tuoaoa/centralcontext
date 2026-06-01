@@ -60,8 +60,8 @@ function loadAIProviderConfig() {
     provider: 'heuristics',
     openrouter: {
       api_key: '',
-      model: 'qwen/qwen3.5-coder:free',
-      fallback_model: 'deepseek/deepseek-chat',
+      model: 'deepseek/deepseek-v4-flash',
+      fallback_model: 'qwen/qwen3.5-flash-02-23',
       max_daily_cost_usd: 0.10,
       max_run_cost_usd: 0.02,
       max_requests_per_run: 10,

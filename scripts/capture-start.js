@@ -20,6 +20,20 @@ const clipboardWatcher = spawn('npm', ['run', 'capture:clipboard'], {
   shell: true
 });
 
+// 3. Spawn VSCode Cline Watcher
+const clineWatcher = spawn('npm', ['run', 'capture:cline'], {
+  cwd: path.join(rootDir, 'apps/cli'),
+  stdio: 'inherit',
+  shell: true
+});
+
+// 4. Spawn Codex Watcher
+const codexWatcher = spawn('npm', ['run', 'capture:codex'], {
+  cwd: path.join(rootDir, 'apps/cli'),
+  stdio: 'inherit',
+  shell: true
+});
+
 // Handle graceful exit and propagate SIGINT to child processes
 process.on('SIGINT', () => {
   console.log('\n\x1b[31m[Supervisor] Shutting down capture daemons...\x1b[0m');
@@ -30,6 +44,14 @@ process.on('SIGINT', () => {
   
   try {
     clipboardWatcher.kill('SIGINT');
+  } catch (e) {}
+
+  try {
+    clineWatcher.kill('SIGINT');
+  } catch (e) {}
+
+  try {
+    codexWatcher.kill('SIGINT');
   } catch (e) {}
 
   setTimeout(() => {
@@ -43,4 +65,12 @@ fileWatcher.on('exit', (code) => {
 
 clipboardWatcher.on('exit', (code) => {
   console.log(`\x1b[33m[Clipboard Process] Exited with code ${code}\x1b[0m`);
+});
+
+clineWatcher.on('exit', (code) => {
+  console.log(`\x1b[33m[Cline Watcher Process] Exited with code ${code}\x1b[0m`);
+});
+
+codexWatcher.on('exit', (code) => {
+  console.log(`\x1b[33m[Codex Watcher Process] Exited with code ${code}\x1b[0m`);
 });

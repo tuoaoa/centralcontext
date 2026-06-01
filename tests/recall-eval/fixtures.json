@@ -1,0 +1,586 @@
+{
+  "memories": [
+    {
+      "memory_id": "cc_01",
+      "summary": "FTS5 Search Indexing",
+      "content": "Recall Engine uses SQLite FTS5 index to search memories, providing fast bm25 keyword rank sorting over approved memories and candidates.",
+      "project": "CentralContext",
+      "type": "architecture",
+      "importance": 90,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_02",
+      "summary": "Hybrid Search Formula",
+      "content": "Hybrid recall search scoring combines tiered FTS keyword score (60%) and semantic similarity (25%) with project relevance (5%), recency (5%), and importance (5%).",
+      "project": "CentralContext",
+      "type": "architecture",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_03",
+      "summary": "Memory Promotion Rollback",
+      "content": "Memory Promotion V1.1 wraps promote/archive memory update, FTS refresh, and audit log insert in one SQLite transaction to ensure database safety and rollback on failure.",
+      "project": "CentralContext",
+      "type": "architecture",
+      "importance": 95,
+      "confidence": 98,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_04",
+      "summary": "Secret Redactor Firewall",
+      "content": "Secret Redactor filters out sensitive keys such as OpenRouter sk-or-v1- keys, AWS keys, passwords, and tokens before they enter memory raw logs or embedding pipelines.",
+      "project": "CentralContext",
+      "type": "security",
+      "importance": 98,
+      "confidence": 99,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_05",
+      "summary": "Daily Curation Routine",
+      "content": "Daily curation cron job aggregates raw telemetry logs into candidate memories, filtering out redundant watcher spams.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 70,
+      "confidence": 80,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_06",
+      "summary": "Reality Scanner Metrics",
+      "content": "Reality scanner computes alignment scores between actual workspace files (git state, .env configs) and CentralContext brain declarations to detect mismatches.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_07",
+      "summary": "Clipboard Telemetry Watcher",
+      "content": "Clipboard telemetry watcher runs a background interval loop that intercepts copied prompt templates and parses user instructions with active telemetry.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 75,
+      "confidence": 80,
+      "tier": "SHORT_TERM"
+    },
+    {
+      "memory_id": "cc_08",
+      "summary": "Terminal Command Hook",
+      "content": "Zsh terminal hook captures active command invocations, exit codes, and duration times directly from the interactive developer shell shell_snapshots.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 75,
+      "confidence": 85,
+      "tier": "SHORT_TERM"
+    },
+    {
+      "memory_id": "cc_09",
+      "summary": "SQLite WAL Journal Mode",
+      "content": "Server db connection enables write-ahead logging (WAL) mode to allow concurrent read and write operations, reducing database lock contentions.",
+      "project": "CentralContext",
+      "type": "database",
+      "importance": 80,
+      "confidence": 90,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_10",
+      "summary": "SQLite Busy Timeout Safeguard",
+      "content": "Setting a database connection busy timeout of 5000 milliseconds prevents instant SQLITE_BUSY crashes when concurrent threads update logs.",
+      "project": "CentralContext",
+      "type": "database",
+      "importance": 85,
+      "confidence": 95,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_11",
+      "summary": "Memory Decay Engine",
+      "content": "Stale memories with low importance and no recent recall counts are flagged as decay candidates, moving to quarantined archival tiers over time.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_12",
+      "summary": "Consensus Weighting Framework",
+      "content": "Consensus layer weights model judgements from critic, founder judge, and AI judge models to filter out low-confidence memories.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_13",
+      "summary": "Chokidar File Watcher Debounce",
+      "content": "File watcher implements a 3-second debounce to avoid spams of writes during rapid sequential file saving operations.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 75,
+      "confidence": 80,
+      "tier": "SHORT_TERM"
+    },
+    {
+      "memory_id": "cc_14",
+      "summary": "SHA-256 File Change Verification",
+      "content": "File watcher computes SHA-256 hashes of text snapshots to verify if the file content has actually changed before invoking API payloads.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_15",
+      "summary": "Priority 5 Critical File Scoring",
+      "content": "File watcher assigns Quality Score 5 (Critical) to memories and snapshots originating from planning, rules, decisions, and README files.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 90,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_16",
+      "summary": "Priority 4 High Value Configs",
+      "content": "Configuration files such as package.json, tsconfig.json, and .env.example are scored as Quality Score 4 (High Value) snapshots.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_17",
+      "summary": "Express API Server Security Key",
+      "content": "All capture layer daemons authenticate with the CentralContext server using a secure API authorization token in x-api-key header.",
+      "project": "CentralContext",
+      "type": "security",
+      "importance": 95,
+      "confidence": 98,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_18",
+      "summary": "JSONL Raw Log Storage",
+      "content": "Raw logs are written into daily date-stamped JSONL files, preserving an append-only absolute source of truth.",
+      "project": "CentralContext",
+      "type": "database",
+      "importance": 90,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_19",
+      "summary": "ONNX Runtime Embedding pipeline",
+      "content": "Local semantic embeddings are calculated using ONNX Runtime and the Xenova MiniLM sentence transformer model directly inside apps/server.",
+      "project": "CentralContext",
+      "type": "embeddings",
+      "importance": 90,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_20",
+      "summary": "Embedding Vector Normalization",
+      "content": "Embeddings computed by MiniLM are mean pooled and normalized to unit length so that cosine similarity can be calculated via simple dot product.",
+      "project": "CentralContext",
+      "type": "embeddings",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_21",
+      "summary": "Text Token Chunking Budget",
+      "content": "Inputs exceeding the 256 token limit of the local MiniLM embedding model are chunked into smaller overlap windows before embedding.",
+      "project": "CentralContext",
+      "type": "embeddings",
+      "importance": 75,
+      "confidence": 80,
+      "tier": "SHORT_TERM"
+    },
+    {
+      "memory_id": "cc_22",
+      "summary": "Vector Cosine Similarity function",
+      "content": "Cosine similarity maps text semantic closeness by computing the dot product of two normalized unit vectors, scoring from 0.0 to 1.0.",
+      "project": "CentralContext",
+      "type": "embeddings",
+      "importance": 85,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_23",
+      "summary": "Context Injection Token Sizing",
+      "content": "Context Injection computes a compact startup pack selecting top memories from recall and fits them within a 2000-token budget to avoid LLM context bloat.",
+      "project": "CentralContext",
+      "type": "injection",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_24",
+      "summary": "Startup Pack Copy Clipboard",
+      "content": "Sidebar button copies a highly condensed, monospaced startup packet containing rules, state, active decisions, and top 3 parsed candidates.",
+      "project": "CentralContext",
+      "type": "injection",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "SHORT_TERM"
+    },
+    {
+      "memory_id": "cc_25",
+      "summary": "OpenRouter Model Presets",
+      "content": "Settings panel configures DeepSeek V4 Flash for final curation reviews and Qwen 3.5 Flash for classification, stored in ai_provider.json.",
+      "project": "CentralContext",
+      "type": "settings",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_26",
+      "summary": "Token Cost Estimation billing",
+      "content": "Token cost estimator calculates prompt expenses before making live OpenRouter API calls, enforcing strict daily budget safeguards.",
+      "project": "CentralContext",
+      "type": "settings",
+      "importance": 90,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_27",
+      "summary": "Daily Spend ledger",
+      "content": "All paid OpenRouter invocations write details to a daily spend ledger file, tracking actual budget consumption.",
+      "project": "CentralContext",
+      "type": "settings",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_28",
+      "summary": "Heuristic local fallback",
+      "content": "When OpenRouter API is disabled or daily budget is exhausted, curation falls back to local heuristic rules to prevent pipeline stalls.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_29",
+      "summary": "Deduplication Log Hashes",
+      "content": "Raw logs ingest endpoint uses content hash checks to skip writing duplicate telemetries that represent no structural changes.",
+      "project": "CentralContext",
+      "type": "database",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_30",
+      "summary": "Checkpoints Context Policy",
+      "content": "Agent rules mandate context loading only during new session boots, major file edits, or architectural changes to avoid redundant loads.",
+      "project": "CentralContext",
+      "type": "rules",
+      "importance": 90,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_31",
+      "summary": "Work Log Append Rule",
+      "content": "AI agents must append a concise chronological work log under today's date in WORK_LOG.md upon milestone completions.",
+      "project": "CentralContext",
+      "type": "rules",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_32",
+      "summary": "Current State Authority",
+      "content": "CURRENT_STATE.md serves as the ultimate spawner authority on active priority tasks and project status records.",
+      "project": "CentralContext",
+      "type": "rules",
+      "importance": 95,
+      "confidence": 98,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_33",
+      "summary": "Decay Quarantine Vault",
+      "content": "Decay candidates are automatically tagged and archived in a low-priority quarantine vault, keeping the recall search space clean.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 75,
+      "confidence": 80,
+      "tier": "SHORT_TERM"
+    },
+    {
+      "memory_id": "cc_34",
+      "summary": "CLI Sync Push Pull",
+      "content": "CLI sync utility transfers daily curated reports, approved memories, and audit logs cleanly between local machine and VPS nodes.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_35",
+      "summary": "VSCode Cline Telemetry Watcher",
+      "content": "VSCode Cline capture daemon recursively monitors VSCode's globalStorage task folders to stream messages, command executions, and progress in real-time.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_36",
+      "summary": "Codex Rollout Session Watcher",
+      "content": "Codex capture daemon recursively watches session rollout JSONL files inside ~/.codex/sessions/ to parse prompts, tools outputs, and outputs in real-time.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_37",
+      "summary": "Redaction Report Auditing",
+      "content": "Ingestion pipeline outputs redaction audits, counting scrubbed keys and passwords to document compliance statistics.",
+      "project": "CentralContext",
+      "type": "security",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_38",
+      "summary": "FTS Rebuild command script",
+      "content": "Command script recall:rebuild drops existing FTS tables and performs a complete re-indexing of all approved and candidate memories.",
+      "project": "CentralContext",
+      "type": "database",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_39",
+      "summary": "Reality alignment warnings",
+      "content": "Reality layer outputs descriptive alignment warnings on the Dashboard if it flags inconsistencies between brain declarations and physical files.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 80,
+      "confidence": 90,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_40",
+      "summary": "Memory promotion boost factor",
+      "content": "Long-term memories located in LONG_TERM tier receive a 1.20x multiplier boost during hybrid recall search rankings.",
+      "project": "CentralContext",
+      "type": "architecture",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_41",
+      "summary": "Memory decay candidate mark",
+      "content": "Memories are marked as decay candidates when their promotion scores fall below 35 and have not been recalled for over 30 days.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_42",
+      "summary": "Telemetry logs API endpoint",
+      "content": "Telemetry ingestion maps raw payload records to raw_logs table inside centralcontext.db, logging source, project, type, and content.",
+      "project": "CentralContext",
+      "type": "database",
+      "importance": 90,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_43",
+      "summary": "Critic Evaluation Rules",
+      "content": "Critic rules evaluate proposed candidate memories, flagging logic duplicates and formatting syntax before AI curation stages.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_44",
+      "summary": "Founder Judge Control Queue",
+      "content": "Dashboard displays a review queue for candidate memories, allowing manual approval, rejection, or context addition by the founder.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 90,
+      "confidence": 95,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_45",
+      "summary": "Express API payload limit size",
+      "content": "Server Express json configuration increases payload size limit to 20MB, preventing PayloadTooLargeError crashes during large log syncs.",
+      "project": "CentralContext",
+      "type": "database",
+      "importance": 85,
+      "confidence": 95,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_46",
+      "summary": "Project relevance ranking multiplier",
+      "content": "Memories matching the requested query project receive a full project boost score of 1.0, outranking unrelated projects during search.",
+      "project": "CentralContext",
+      "type": "architecture",
+      "importance": 80,
+      "confidence": 85,
+      "tier": "MID_TERM"
+    },
+    {
+      "memory_id": "cc_47",
+      "summary": "ONNX sentence transformer MiniLM file size",
+      "content": "The default MiniLM L6 sentence transformer model ONNX file occupies approximately 90MB of storage resources.",
+      "project": "CentralContext",
+      "type": "embeddings",
+      "importance": 70,
+      "confidence": 85,
+      "tier": "SHORT_TERM"
+    },
+    {
+      "memory_id": "cc_48",
+      "summary": "Database schema migration checks",
+      "content": "Database initialization performs automatic column verification and alters raw_logs table to add content_hash, dedupe_key, and task_id if missing.",
+      "project": "CentralContext",
+      "type": "database",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "LONG_TERM"
+    },
+    {
+      "memory_id": "cc_49",
+      "summary": "Zsh Shell Hook Installer",
+      "content": "Shell installer injects centralcontext_preexec hooks into .zshrc to record interactive terminal history logs securely.",
+      "project": "CentralContext",
+      "type": "capture",
+      "importance": 75,
+      "confidence": 80,
+      "tier": "SHORT_TERM"
+    },
+    {
+      "memory_id": "cc_50",
+      "summary": "Memory promotion score calculation",
+      "content": "Promotion score compiles memory confidence, importance, and historical recall frequency to decide LONG_TERM upgrades.",
+      "project": "CentralContext",
+      "type": "pipeline",
+      "importance": 85,
+      "confidence": 90,
+      "tier": "LONG_TERM"
+    }
+  ],
+  "queries": [
+    {
+      "query_id": "q_fts_search",
+      "query": "sqlite fts5 index search bm25",
+      "expected_top_ids": ["cc_01"]
+    },
+    {
+      "query_id": "q_rollback_trans",
+      "query": "memory promotion database rollback transaction safety",
+      "expected_top_ids": ["cc_03"]
+    },
+    {
+      "query_id": "q_secret_redact",
+      "query": "scrub secrets API keys passwords in logs",
+      "expected_top_ids": ["cc_04"]
+    },
+    {
+      "query_id": "q_wal_mode",
+      "query": "sqlite write-ahead logging wal concurrent reads database locks",
+      "expected_top_ids": ["cc_09"]
+    },
+    {
+      "query_id": "q_busy_timeout",
+      "query": "database connection busy timeout prevent SQLITE_BUSY crashes",
+      "expected_top_ids": ["cc_10"]
+    },
+    {
+      "query_id": "q_file_watcher_debounce",
+      "query": "chokidar file watcher debounce interval 3 seconds write spams",
+      "expected_top_ids": ["cc_13"]
+    },
+    {
+      "query_id": "q_onnx_embeddings",
+      "query": "onnx runtime local sentence transformer MiniLM embeddings pipeline",
+      "expected_top_ids": ["cc_19"]
+    },
+    {
+      "query_id": "q_cosine_similarity",
+      "query": "cosine similarity dot product normalized vectors closeness",
+      "expected_top_ids": ["cc_22"]
+    },
+    {
+      "query_id": "q_startup_pack",
+      "query": "startup packet copy clipboard monospaced recall briefing",
+      "expected_top_ids": ["cc_24"]
+    },
+    {
+      "query_id": "q_express_payload_size",
+      "query": "express json payload limit size 20MB PayloadTooLargeError",
+      "expected_top_ids": ["cc_45"]
+    },
+    {
+      "query_id": "q_zsh_shell_hook",
+      "query": "zsh terminal preexec shell hooks installation",
+      "expected_top_ids": ["cc_49"]
+    },
+    {
+      "query_id": "q_cline_storage_watcher",
+      "query": "vscode cline globalstorage task folder telemetry watcher",
+      "expected_top_ids": ["cc_35"]
+    },
+    {
+      "query_id": "q_paraphrase_debounce",
+      "query": "avoid sequential file saving write spams via debouncing",
+      "expected_top_ids": ["cc_13"]
+    },
+    {
+      "query_id": "q_paraphrase_redact",
+      "query": "cleaning sensitive credentials and openrouter keys from ingested data",
+      "expected_top_ids": ["cc_04"]
+    },
+    {
+      "query_id": "q_paraphrase_wal",
+      "query": "enabling concurrent database read and write access in sqlite",
+      "expected_top_ids": ["cc_09"]
+    },
+    {
+      "query_id": "q_overlap_hybrid",
+      "query": "how keyword FTS score and semantic similarity embeddings are weighted together",
+      "expected_top_ids": ["cc_02"]
+    }
+  ]
+}

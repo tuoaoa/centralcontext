@@ -14,6 +14,7 @@ const secretRedactor = require('./lib/secret-redactor');
 
 const rootDir = path.resolve(__dirname, '..');
 const scanDirs = [
+  path.join(rootDir, 'data/config'),
   path.join(rootDir, 'data/raw'),
   path.join(rootDir, 'data/memory'),
   path.join(rootDir, 'data/daily')
@@ -22,6 +23,7 @@ const scanDirs = [
 let totalScanned = 0;
 const redactedFiles = [];
 let totalRedactionsCount = 0;
+let sqliteRowsRedacted = 0;
 
 function walkDir(dir) {
   let files = [];
@@ -94,6 +96,57 @@ allFiles.forEach(filePath => {
   }
 });
 
+function quoteIdent(name) {
+  return `"${String(name).replace(/"/g, '""')}"`;
+}
+
+function redactSqliteCache() {
+  const dbPath = path.join(rootDir, 'data/centralcontext.db');
+  if (!fs.existsSync(dbPath)) return;
+
+  try {
+    const Database = require(path.join(rootDir, 'apps/server/node_modules/better-sqlite3'));
+    const db = new Database(dbPath);
+    const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all().map(row => row.name);
+
+    tables.forEach(table => {
+      const columns = db.prepare(`PRAGMA table_info(${quoteIdent(table)})`).all();
+      const textColumns = columns.filter(col => String(col.type || '').toUpperCase().includes('TEXT')).map(col => col.name);
+      const pk = (columns.find(col => col.pk) || {}).name || 'rowid';
+      if (!textColumns.length) return;
+
+      const selectedColumns = [pk, ...textColumns].map(quoteIdent).join(', ');
+      const rows = db.prepare(`SELECT ${selectedColumns} FROM ${quoteIdent(table)}`).all();
+      rows.forEach(row => {
+        const changes = [];
+        const values = [];
+
+        textColumns.forEach(col => {
+          const value = row[col];
+          if (typeof value === 'string' && secretRedactor.containsSecrets(value)) {
+            changes.push(`${quoteIdent(col)} = ?`);
+            values.push(secretRedactor.redactSecrets(value));
+          }
+        });
+
+        if (changes.length > 0) {
+          values.push(row[pk]);
+          db.prepare(`UPDATE ${quoteIdent(table)} SET ${changes.join(', ')} WHERE ${quoteIdent(pk)} = ?`).run(...values);
+          sqliteRowsRedacted++;
+        }
+      });
+    });
+
+    db.pragma('wal_checkpoint(TRUNCATE)');
+    db.exec('VACUUM');
+    db.close();
+  } catch (err) {
+    console.error(`[Warning] SQLite cache redaction skipped: ${err.message}`);
+  }
+}
+
+redactSqliteCache();
+
 // Create security folder if needed
 const securityDir = path.join(rootDir, 'data/security');
 if (!fs.existsSync(securityDir)) {
@@ -108,6 +161,7 @@ reportMd += `## Security Audit Executive Summary\n\n`;
 reportMd += `A comprehensive security sweep was completed across all historical ecosystem memory assets. A total of **${totalScanned}** text-based log and memory files were analyzed. \n`;
 reportMd += `* **Total Files Containing Secrets**: ${redactedFiles.length}\n`;
 reportMd += `* **Total Secrets Redacted**: ${totalRedactionsCount}\n\n`;
+reportMd += `* **SQLite Rows Redacted**: ${sqliteRowsRedacted}\n\n`;
 
 if (redactedFiles.length === 0) {
   reportMd += `> [!NOTE]\n`;
@@ -131,4 +185,5 @@ fs.writeFileSync(reportPath, reportMd, 'utf8');
 console.log(`\n\x1b[32m✔ Sweep complete! Scanned ${totalScanned} files.\x1b[0m`);
 console.log(`✔ Redacted secrets in \x1b[31m${redactedFiles.length}\x1b[0m files.`);
 console.log(`✔ Total placeholders applied: \x1b[33m${totalRedactionsCount}\x1b[0m`);
+console.log(`✔ SQLite rows redacted: \x1b[33m${sqliteRowsRedacted}\x1b[0m`);
 console.log(`✔ Security audit report saved to: \x1b[36m${path.relative(rootDir, reportPath)}\x1b[0m\n`);

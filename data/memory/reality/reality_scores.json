@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-31T07:17:24.488Z",
+  "generated_at": "2026-05-31T07:38:08.827Z",
   "principle": "ACTION > WORDS",
   "scan_date": "2026-05-31",
   "windows": {
@@ -10,14 +10,14 @@
           "activity_score": 99,
           "signals": {
             "git_commits": {
-              "events": 16,
+              "events": 17,
               "score": 100,
               "weight": 0.3,
               "days_since_last": 0
             },
             "file_changes": {
-              "events": 265,
-              "score": 96,
+              "events": 279,
+              "score": 97,
               "weight": 0.25,
               "unique_files": 99
             },
@@ -27,18 +27,18 @@
               "weight": 0.2
             },
             "clipboard": {
-              "events": 110,
+              "events": 112,
               "score": 100,
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 3638,
+              "events": 3645,
               "score": 100,
               "weight": 0.1
             }
           },
-          "last_activity": "2026-05-31T13:59:30+07:00",
-          "evidence_count": 4054,
+          "last_activity": "2026-05-31T14:22:15+07:00",
+          "evidence_count": 4078,
           "trend": "active"
         },
         "aimemory": {
@@ -67,13 +67,13 @@
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 730,
+              "events": 731,
               "score": 100,
               "weight": 0.1
             }
           },
           "last_activity": "2026-05-26T09:54:40+07:00",
-          "evidence_count": 793,
+          "evidence_count": 794,
           "trend": "moderate"
         },
         "GiveGet": {
@@ -172,13 +172,13 @@
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 1184,
+              "events": 1185,
               "score": 100,
               "weight": 0.1
             }
           },
           "last_activity": null,
-          "evidence_count": 1198,
+          "evidence_count": 1199,
           "trend": "low"
         },
         "chothuexemay": {
@@ -252,7 +252,7 @@
           "trend": "low"
         },
         "qlythuexe": {
-          "activity_score": 20,
+          "activity_score": 22,
           "signals": {
             "git_commits": {
               "events": 0,
@@ -267,8 +267,8 @@
               "unique_files": 8
             },
             "terminal": {
-              "events": 0,
-              "score": 0,
+              "events": 1,
+              "score": 8,
               "weight": 0.2
             },
             "clipboard": {
@@ -277,13 +277,13 @@
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 1163,
+              "events": 1165,
               "score": 100,
               "weight": 0.1
             }
           },
           "last_activity": "2026-04-01T09:56:44+07:00",
-          "evidence_count": 1171,
+          "evidence_count": 1174,
           "trend": "low"
         },
         "qlythuexe vscode": {
@@ -487,13 +487,13 @@
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 721,
+              "events": 722,
               "score": 100,
               "weight": 0.1
             }
           },
           "last_activity": null,
-          "evidence_count": 721,
+          "evidence_count": 722,
           "trend": "dormant"
         },
         "robot": {
@@ -680,14 +680,14 @@
           "activity_score": 99,
           "signals": {
             "git_commits": {
-              "events": 16,
+              "events": 17,
               "score": 100,
               "weight": 0.3,
               "days_since_last": 0
             },
             "file_changes": {
-              "events": 265,
-              "score": 96,
+              "events": 279,
+              "score": 97,
               "weight": 0.25,
               "unique_files": 99
             },
@@ -697,18 +697,18 @@
               "weight": 0.2
             },
             "clipboard": {
-              "events": 110,
+              "events": 112,
               "score": 100,
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 3638,
+              "events": 3645,
               "score": 100,
               "weight": 0.1
             }
           },
-          "last_activity": "2026-05-31T13:59:30+07:00",
-          "evidence_count": 4054,
+          "last_activity": "2026-05-31T14:22:15+07:00",
+          "evidence_count": 4078,
           "trend": "active"
         },
         "aimemory": {
@@ -737,13 +737,13 @@
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 730,
+              "events": 731,
               "score": 100,
               "weight": 0.1
             }
           },
           "last_activity": "2026-05-26T09:54:40+07:00",
-          "evidence_count": 790,
+          "evidence_count": 791,
           "trend": "moderate"
         },
         "GiveGet": {
@@ -842,13 +842,13 @@
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 1184,
+              "events": 1185,
               "score": 100,
               "weight": 0.1
             }
           },
           "last_activity": null,
-          "evidence_count": 1198,
+          "evidence_count": 1199,
           "trend": "low"
         },
         "chothuexemay": {
@@ -922,7 +922,7 @@
           "trend": "low"
         },
         "qlythuexe": {
-          "activity_score": 20,
+          "activity_score": 22,
           "signals": {
             "git_commits": {
               "events": 0,
@@ -937,8 +937,8 @@
               "unique_files": 8
             },
             "terminal": {
-              "events": 0,
-              "score": 0,
+              "events": 1,
+              "score": 8,
               "weight": 0.2
             },
             "clipboard": {
@@ -947,13 +947,13 @@
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 1163,
+              "events": 1165,
               "score": 100,
               "weight": 0.1
             }
           },
           "last_activity": "2026-04-01T09:56:44+07:00",
-          "evidence_count": 1171,
+          "evidence_count": 1174,
           "trend": "low"
         },
         "qlythuexe vscode": {
@@ -1157,13 +1157,13 @@
               "weight": 0.15
             },
             "browser_mentions": {
-              "events": 721,
+              "events": 722,
               "score": 100,
               "weight": 0.1
             }
           },
           "last_activity": null,
-          "evidence_count": 721,
+          "evidence_count": 722,
           "trend": "dormant"
         },
         "robot": {
@@ -1354,14 +1354,14 @@
       "momentum": "stable",
       "signals": {
         "git_commits": {
-          "events": 16,
+          "events": 17,
           "score": 100,
           "weight": 0.3,
           "days_since_last": 0
         },
         "file_changes": {
-          "events": 265,
-          "score": 96,
+          "events": 279,
+          "score": 97,
           "weight": 0.25,
           "unique_files": 99
         },
@@ -1371,18 +1371,18 @@
           "weight": 0.2
         },
         "clipboard": {
-          "events": 110,
+          "events": 112,
           "score": 100,
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 3638,
+          "events": 3645,
           "score": 100,
           "weight": 0.1
         }
       },
-      "last_activity": "2026-05-31T13:59:30+07:00",
-      "evidence_count": 4054
+      "last_activity": "2026-05-31T14:22:15+07:00",
+      "evidence_count": 4078
     },
     "aimemory": {
       "activity_score": 56,
@@ -1414,13 +1414,13 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 730,
+          "events": 731,
           "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": "2026-05-26T09:54:40+07:00",
-      "evidence_count": 793
+      "evidence_count": 794
     },
     "GiveGet": {
       "activity_score": 34,
@@ -1528,13 +1528,13 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 1184,
+          "events": 1185,
           "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": null,
-      "evidence_count": 1198
+      "evidence_count": 1199
     },
     "chothuexemay": {
       "activity_score": 24,
@@ -1613,8 +1613,8 @@
       "evidence_count": 7
     },
     "qlythuexe": {
-      "activity_score": 20,
-      "score_7d": 20,
+      "activity_score": 22,
+      "score_7d": 22,
       "trend_30d": "low",
       "trend_7d": "low",
       "momentum": "stable",
@@ -1632,8 +1632,8 @@
           "unique_files": 8
         },
         "terminal": {
-          "events": 0,
-          "score": 0,
+          "events": 1,
+          "score": 8,
           "weight": 0.2
         },
         "clipboard": {
@@ -1642,13 +1642,13 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 1163,
+          "events": 1165,
           "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": "2026-04-01T09:56:44+07:00",
-      "evidence_count": 1171
+      "evidence_count": 1174
     },
     "qlythuexe vscode": {
       "activity_score": 20,
@@ -1870,13 +1870,13 @@
           "weight": 0.15
         },
         "browser_mentions": {
-          "events": 721,
+          "events": 722,
           "score": 100,
           "weight": 0.1
         }
       },
       "last_activity": null,
-      "evidence_count": 721
+      "evidence_count": 722
     },
     "robot": {
       "activity_score": 10,

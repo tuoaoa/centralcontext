@@ -39,20 +39,44 @@
     <!-- Sidebar Navigation -->
     <aside class="sidebar-panel">
       <nav class="nav-menu">
-        <button class="nav-tab active" id="tab-state" onclick="switchTab('state')">
-          <span class="icon">⚡</span> Current State
+        <button class="nav-tab active" id="tab-overview" onclick="switchTab('overview')">
+          <span class="icon">📊</span> Overview
         </button>
-        <button class="nav-tab" id="tab-central" onclick="switchTab('central')">
-          <span class="icon">📚</span> Central Context
+        <button class="nav-tab" id="tab-live-feed" onclick="switchTab('live-feed')">
+          <span class="icon">📡</span> Live Feed
         </button>
-        <button class="nav-tab" id="tab-decisions" onclick="switchTab('decisions')">
-          <span class="icon">⚖️</span> Architecture Decisions
+        <button class="nav-tab" id="tab-capture-health" onclick="switchTab('capture-health')">
+          <span class="icon">🛡️</span> Capture Health
         </button>
-        <button class="nav-tab" id="tab-logs" onclick="switchTab('logs')">
-          <span class="icon">📝</span> Raw Logs Feed
+        <button class="nav-tab" id="tab-factory-view" onclick="switchTab('factory-view')">
+          <span class="icon">🏭</span> Factory View
         </button>
-        <button class="nav-tab" id="tab-ai-settings" onclick="switchTab('ai-settings')">
-          <span class="icon">🤖</span> AI Settings
+        <button class="nav-tab" id="tab-distillery" onclick="switchTab('distillery')">
+          <span class="icon">🧪</span> Distillery
+        </button>
+        <button class="nav-tab" id="tab-candidates" onclick="switchTab('candidates')">
+          <span class="icon">📋</span> Candidates
+        </button>
+        <button class="nav-tab" id="tab-recall" onclick="switchTab('recall')">
+          <span class="icon">🔎</span> Recall
+        </button>
+        <button class="nav-tab" id="tab-context-injection" onclick="switchTab('context-injection')">
+          <span class="icon">📦</span> Context Injection
+        </button>
+        <button class="nav-tab" id="tab-promotion" onclick="switchTab('promotion')">
+          <span class="icon">⬆️</span> Promotion
+        </button>
+        <button class="nav-tab" id="tab-ai-judge" onclick="switchTab('ai-judge')">
+          <span class="icon">⚖️</span> AI Judge
+        </button>
+        <button class="nav-tab" id="tab-reality" onclick="switchTab('reality')">
+          <span class="icon">🔍</span> Reality Scan
+        </button>
+        <button class="nav-tab" id="tab-memory-graph" onclick="switchTab('memory-graph')">
+          <span class="icon">🕸️</span> Memory Graph
+        </button>
+        <button class="nav-tab" id="tab-context" onclick="switchTab('context')">
+          <span class="icon">📚</span> Context Docs
         </button>
       </nav>
 
@@ -62,11 +86,10 @@
         <button id="btn-copy-pack" class="btn-glow">⚡ Copy Context Pack</button>
       </div>
 
-      <!-- AI Settings Shortcut -->
-      <div class="action-box">
-        <h3>AI Judge Settings</h3>
-        <p class="description">Active provider, model presets, and daily budgets are managed centrally from the settings page.</p>
-        <button onclick="switchTab('ai-settings')" class="btn-primary" style="width: 100%; padding: 0.5rem; font-size: 0.8rem; border-radius: 6px; background-color: var(--secondary-color); cursor: pointer;">⚙️ Open AI Settings</button>
+      <div class="action-box" style="margin-top: 1rem; border-color: var(--secondary-color);">
+        <h3 style="color: var(--secondary-color);">⚡ Agent Startup Pack</h3>
+        <p class="description">Dynamic token-optimized briefing (200-500 tokens). Paste at the start of Claude, Gemini, ChatGPT, or Antigravity sessions.</p>
+        <button id="btn-copy-startup-pack" class="btn-glow" style="background-color: var(--secondary-color); cursor:pointer;">🚀 Copy Startup Pack</button>
       </div>
     </aside>
 
@@ -150,6 +173,25 @@
   <footer class="app-footer">
     <p>CentralContext MVP • Running in Local Caching Mode</p>
   </footer>
+
+  <!-- CLI Execution Log Console Modal -->
+  <div id="cli-console-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🚀 Knowledge Factory Curation Console</h3>
+        <button onclick="closeConsoleModal()" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="terminal-log-wrapper">
+          <pre id="cli-stdout-log">[System Status] Awaiting command...</pre>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span id="cli-duration" style="font-size:0.8rem; color:var(--text-muted);">Duration: 0.00s</span>
+        <button onclick="closeConsoleModal()" class="btn-primary" style="padding: 0.4rem 1rem; cursor:pointer;">Close Terminal</button>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

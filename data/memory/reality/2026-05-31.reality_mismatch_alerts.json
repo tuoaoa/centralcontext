@@ -1,6 +1,6 @@
 {
   "scan_date": "2026-05-31",
-  "generated_at": "2026-05-31T07:17:24.488Z",
+  "generated_at": "2026-05-31T07:38:08.827Z",
   "principle": "ACTION > WORDS",
   "note": "These alerts are generated because declared priorities in CURRENT_STATE.md do not match actual behavioral telemetry. Founder review required. CURRENT_STATE.md will NOT be auto-updated.",
   "alerts": [
@@ -8,17 +8,17 @@
       "type": "reality_mismatch_alert",
       "project": "qlythuexe",
       "source": "reality_scanner",
-      "proposed_memory": "REALITY MISMATCH: \"qlythuexe\" is declared in CURRENT_STATE.md but has activity_score = 20/100 (30d) and 20/100 (7d). Trend: low. No significant git commits, terminal activity, or file edits detected in the measurement window. This may indicate a stale priority declaration that no longer reflects actual Founder behavior.",
+      "proposed_memory": "REALITY MISMATCH: \"qlythuexe\" is declared in CURRENT_STATE.md but has activity_score = 22/100 (30d) and 22/100 (7d). Trend: low. No significant git commits, terminal activity, or file edits detected in the measurement window. This may indicate a stale priority declaration that no longer reflects actual Founder behavior.",
       "confidence": 95,
       "severity": "high",
       "action_required": "Founder should review whether this project is still a real priority or if CURRENT_STATE.md needs updating.",
       "evidence": {
-        "activity_score_30d": 20,
-        "activity_score_7d": 20,
+        "activity_score_30d": 22,
+        "activity_score_7d": 22,
         "trend": "low",
         "momentum": "stable"
       },
-      "generated_at": "2026-05-31T07:17:24.488Z"
+      "generated_at": "2026-05-31T07:38:08.827Z"
     },
     {
       "type": "reality_mismatch_alert",
@@ -34,7 +34,7 @@
         "trend": "dormant",
         "momentum": "stable"
       },
-      "generated_at": "2026-05-31T07:17:24.488Z"
+      "generated_at": "2026-05-31T07:38:08.827Z"
     },
     {
       "type": "reality_mismatch_alert",
@@ -50,7 +50,7 @@
         "trend": "dormant",
         "momentum": "stable"
       },
-      "generated_at": "2026-05-31T07:17:24.488Z"
+      "generated_at": "2026-05-31T07:38:08.827Z"
     }
   ]
 }

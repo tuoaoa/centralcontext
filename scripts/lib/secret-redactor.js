@@ -9,8 +9,23 @@
 
 const redactionRules = [
   {
+    name: 'Founder Code',
+    pattern: /FOUNDER_CODE_\d+/g,
+    placeholder: '[REDACTED_FOUNDER_CODE]'
+  },
+  {
     name: 'OpenRouter Key',
     pattern: /\bsk-or-v1-[a-zA-Z0-9_-]+\b/g,
+    placeholder: '[REDACTED_OPENROUTER_KEY]'
+  },
+  {
+    name: 'OpenRouter Key Prefix',
+    pattern: /sk-or-v1-(?:\*+|\.{3})?/g,
+    placeholder: '[REDACTED_OPENROUTER_KEY]'
+  },
+  {
+    name: 'Escaped OpenRouter Pattern',
+    pattern: /\\*bsk-or-v1-[^\s"'`]+/g,
     placeholder: '[REDACTED_OPENROUTER_KEY]'
   },
   {
@@ -24,8 +39,28 @@ const redactionRules = [
     placeholder: '[REDACTED_GEMINI_KEY]'
   },
   {
+    name: 'Gemini Key Prefix',
+    pattern: /AIza(?:\*+|\.{3})?/g,
+    placeholder: '[REDACTED_GEMINI_KEY]'
+  },
+  {
+    name: 'Escaped Gemini Pattern',
+    pattern: /\\*bAIza[^\s"'`]+/g,
+    placeholder: '[REDACTED_GEMINI_KEY]'
+  },
+  {
     name: 'GitHub Token',
     pattern: /\b(ghp|github_pat)_[a-zA-Z0-9_-]+\b/g,
+    placeholder: '[REDACTED_GITHUB_TOKEN]'
+  },
+  {
+    name: 'GitHub Token Prefix',
+    pattern: /(?:ghp|github_pat)_(?:\*+|\.{3})?/g,
+    placeholder: '[REDACTED_GITHUB_TOKEN]'
+  },
+  {
+    name: 'Escaped GitHub Token Pattern',
+    pattern: /\\*b(?:ghp|github_pat)_[^\s"'`]+/g,
     placeholder: '[REDACTED_GITHUB_TOKEN]'
   },
   {
@@ -40,7 +75,7 @@ const redactionRules = [
   },
   {
     name: 'Password Field',
-    pattern: /((?:[\"']?[a-zA-Z0-9_-]*)?(?:password|passwd|pwd)[\"']?\s*[:=]\s*)([\"']?)([^\s\"'\n&,;}]+)\2/gi,
+    pattern: /((?:[\"']?[a-zA-Z0-9_-]*)?(?:password|passwd|pwd)[\"']?\s*[:=]\s*)([\"']?)(?!\[REDACTED_PASSWORD\])([^\s\"'\n&,;}]+)\2/gi,
     replaceFn: (match, p1, p2, p3) => `${p1}${p2}[REDACTED_PASSWORD]${p2}`
   },
   {

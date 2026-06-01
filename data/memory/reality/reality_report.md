@@ -18,20 +18,20 @@
 
 | Rank | Project | 30d | 7d | Momentum | Trend | Git | Files | Terminal | Clipboard | Browser |
 |:---:|:---|:---:|:---:|:---|:---|:---:|:---:|:---:|:---:|:---:|
-| 1 | **centalcontext** | 99 | 99 | ➡️ stable | 🟢 active | 16 | 265 | 25 | 110 | 3638 |
-| 2 | **aimemory** | 56 | 56 | ➡️ stable | 🟡 moderate | 20 | 43 | 0 | 0 | 730 |
+| 1 | **centalcontext** | 99 | 99 | ➡️ stable | 🟢 active | 17 | 279 | 25 | 112 | 3645 |
+| 2 | **aimemory** | 56 | 56 | ➡️ stable | 🟡 moderate | 20 | 43 | 0 | 0 | 731 |
 | 3 | **GiveGet** | 34 | 34 | ➡️ stable | ⚪ low | 0 | 258 | 0 | 0 | 903 |
 | 4 | **somieng** | 32 | 32 | ➡️ stable | ⚪ low | 11 | 1 | 0 | 0 | 2 |
-| 5 | **SaveX** | 28 | 28 | ➡️ stable | ⚪ low | 0 | 14 | 0 | 0 | 1184 |
+| 5 | **SaveX** | 28 | 28 | ➡️ stable | ⚪ low | 0 | 14 | 0 | 0 | 1185 |
 | 6 | **chothuexemay** | 24 | 24 | ➡️ stable | ⚪ low | 1 | 4 | 0 | 0 | 713 |
 | 7 | **codegalaxy** | 24 | 24 | ➡️ stable | ⚪ low | 5 | 2 | 0 | 0 | 0 |
-| 8 | **qlythuexe** | 20 | 20 | ➡️ stable | ⚪ low | 0 | 8 | 0 | 0 | 1163 |
+| 8 | **qlythuexe** | 22 | 22 | ➡️ stable | ⚪ low | 0 | 8 | 1 | 0 | 1165 |
 | 9 | **qlythuexe vscode** | 20 | 20 | ➡️ stable | ⚪ low | 0 | 8 | 0 | 0 | 699 |
 | 10 | **aipilot_open_source** | 16 | 16 | ➡️ stable | 💤 dormant | 0 | 5 | 0 | 0 | 699 |
 | 11 | **everything-antigravity-code** | 16 | 16 | ➡️ stable | 💤 dormant | 4 | 1 | 0 | 0 | 0 |
 | 12 | **qlynhatro** | 15 | 15 | ➡️ stable | 💤 dormant | 2 | 2 | 0 | 0 | 0 |
 | 13 | **_archive_aifunnel-gateway** | 14 | 14 | ➡️ stable | 💤 dormant | 0 | 3 | 0 | 0 | 699 |
-| 14 | **aipilot** | 10 | 10 | ➡️ stable | 💤 dormant | 0 | 0 | 0 | 0 | 721 |
+| 14 | **aipilot** | 10 | 10 | ➡️ stable | 💤 dormant | 0 | 0 | 0 | 0 | 722 |
 | 15 | **robot** | 10 | 10 | ➡️ stable | 💤 dormant | 0 | 0 | 0 | 0 | 900 |
 | 16 | **robotv13** | 10 | 10 | ➡️ stable | 💤 dormant | 0 | 0 | 0 | 0 | 699 |
 | 17 | **videorender** | 5 | 5 | ➡️ stable | 💤 dormant | 0 | 4 | 0 | 0 | 1 |
@@ -42,8 +42,8 @@
 
 > [!WARNING]
 > **qlythuexe** is declared in CURRENT_STATE.md but has:
-> - 30-day activity_score = 20
-> - 7-day activity_score = 20
+> - 30-day activity_score = 22
+> - 7-day activity_score = 22
 > - Trend: low | Momentum: stable
 >
 > **Action Required**: Founder should review if this is still a real priority.

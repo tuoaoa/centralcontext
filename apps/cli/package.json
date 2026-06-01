@@ -9,7 +9,9 @@
     "sync:pull": "ts-node src/sync.ts pull",
     "capture:files": "ts-node src/capture/watcher.ts",
     "capture:clipboard": "ts-node src/capture/clipboard.ts",
-    "capture:terminal": "ts-node src/capture/terminal.ts"
+    "capture:terminal": "ts-node src/capture/terminal.ts",
+    "capture:cline": "ts-node src/capture/cline.ts",
+    "capture:codex": "ts-node src/capture/codex.ts"
   },
   "dependencies": {
     "chokidar": "^3.6.0",

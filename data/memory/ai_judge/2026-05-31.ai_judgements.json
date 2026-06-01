@@ -42,7 +42,7 @@
       "memory_type": "founder_preference",
       "confidence": 98,
       "reason": "[Dry-Run Skipped] Strategic priority modifications or credentials must undergo manual developer verification.",
-      "clean_memory": "Verification of direct Founder credentials (specifically token 'FOUNDER_CODE_8827' from FOUNDER_INTENT.md) was processed in the context layer. Always strictly protect and retrieve strategic founder authentication keys natively from dedicated intent stores.",
+      "clean_memory": "Verification of direct Founder credentials (specifically token '[REDACTED_FOUNDER_CODE]' from FOUNDER_INTENT.md) was processed in the context layer. Always strictly protect and retrieve strategic founder authentication keys natively from dedicated intent stores.",
       "risk": "medium"
     },
     {
@@ -51,7 +51,7 @@
       "memory_type": "current_state_update",
       "confidence": 90,
       "reason": "[Dry-Run Skipped] Trivial directory traversing (cd) contains no active build runs or state milestones. Filtered as noise.",
-      "clean_memory": "Development progress recorded. Successful shell executions verified: `[REDACTED SENSITIVE COMMAND]`, `cd ~/Tuoaoa/devflow/centalcontext`, `grep -Ri \"Central Brain\" data/raw/*.jsonl | head -20`, `grep -Ri \"browser_chat_backfill\" data/raw/*.jsonl | tail -20`, `grep -Ri \"Khởi tạo Central Brain\" data/raw/*.jsonl | grep browser_chat`, `grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `tail -100 data/raw/2026-05-31.jsonl`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `USER1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `tail -500 data/raw/2026-05-31.jsonl | \\`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U0=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `cd ~/Tuoaoa/devflow/centalcontext`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`. Use these verified terminal commands to update the active progress state of ecosystem milestones in the next iteration.",
+      "clean_memory": "Development progress recorded. Successful shell executions verified: `[REDACTED SENSITIVE COMMAND]`, `cd ~/Tuoaoa/devflow/centalcontext`, `grep -Ri \"Central Brain\" data/raw/*.jsonl | head -20`, `grep -Ri \"browser_chat_backfill\" data/raw/*.jsonl | tail -20`, `grep -Ri \"Khởi tạo Central Brain\" data/raw/*.jsonl | grep browser_chat`, `grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `tail -100 data/raw/2026-05-31.jsonl`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `USER1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `cd ~/Tuoaoa/devflow/centalcontext`, `cd ~/Tuoaoa/devflow/centalcontext`, `tail -500 data/raw/2026-05-31.jsonl | \\`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U0=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `cd ~/Tuoaoa/devflow/centalcontext`, `U1=$(grep -c '\"role\":\"user\"' data/raw/2026-05-31.jsonl)`, `git status`. Use these verified terminal commands to update the active progress state of ecosystem milestones in the next iteration.",
       "risk": "low"
     },
     {
@@ -65,17 +65,17 @@
     }
   ],
   "run_report": {
-    "run_id": "run_1780211844711",
-    "timestamp": "2026-05-31T07:17:24.711Z",
-    "model": "qwen/qwen3.5-coder:free",
+    "run_id": "run_1780214128351",
+    "timestamp": "2026-05-31T07:55:28.351Z",
+    "model": "google/gemini-2.5-flash",
     "candidates_total": 7,
     "candidates_skipped_cache": 0,
     "candidates_evaluated": 7,
     "estimated_input_tokens": 1698,
     "estimated_output_tokens": 1050,
-    "estimated_cost_usd": 0,
+    "estimated_cost_usd": 0.004848,
     "actual_cost_usd": 0,
     "status": "aborted",
-    "abort_reason": "Skipped (Dry run mode by default. Run with --execute to call API)"
+    "abort_reason": "Skipped (Emergency Switch OPENROUTER_ENABLED=false is active)"
   }
 }
