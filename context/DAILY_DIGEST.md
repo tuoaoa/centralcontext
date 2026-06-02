@@ -48,16 +48,7 @@
 
 ## Memory Activity
 
-### Recently Promoted Memories
-No recently promoted memories.
-
-### Recently Recalled Memories
-* [CentralContext] Strategic files (`SOURCE_PRIORITY.md`) were updated in the workspace. These revisions redefine source prioritization, project directives, or architectural structures that form the absolute Source of Truth for all active agents. (Recalled 1 times)
-
-### High-Value Memories
-* **[MID_TERM]** (Importance: 100) [CentralContext] Founder entered OpenRouter API key.
-* **[MID_TERM]** (Importance: 100) [CentralContext] Strategic files (`SOURCE_PRIORITY.md`) were updated in the workspace. These revisions redefine source prioritization, project directives, or architectural structures that form the absolute Source of Truth for all active agents.
-* **[MID_TERM]** (Importance: 100) [CentralContext] Verification of direct Founder credentials (specifically token '[REDACTED_FOUNDER_CODE]' from FOUNDER_INTENT.md) was processed in the context layer. Always strictly protect and retrieve strategic founder authentication keys natively from dedicated intent stores.
+Memory database is currently offline or unavailable.
 
 ---
 

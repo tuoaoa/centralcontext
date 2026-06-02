@@ -605,22 +605,9 @@ function injectPackText(packText, isForce = false) {
   }
 }
 
-// Expose debugInject to the page context via injection (Yêu cầu 3)
-try {
-  const script = document.createElement('script');
-  script.textContent = `
-    window.debugInject = function(customText) {
-      console.log('[CentralContext] [DEBUG] debugInject() triggered from page console.');
-      const event = new CustomEvent('CentralContextDebugInject', { detail: { text: customText } });
-      window.dispatchEvent(event);
-      return "Debug inject event dispatched to content script!";
-    };
-  `;
-  (document.head || document.documentElement).appendChild(script);
-  script.remove();
-} catch (e) {
-  console.error('[CentralContext] Failed to expose debugInject to page context:', e);
-}
+// Note: Exposing debugInject to the page context is handled by inject.js (running in the MAIN world)
+// to prevent Content Security Policy (CSP) inline script violations on strict host pages.
+
 
 // Listen for the custom event from the page context
 window.addEventListener('CentralContextDebugInject', (event) => {

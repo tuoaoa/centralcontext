@@ -10,3 +10,4 @@
 {"timestamp":"2026-06-01T05:21:17.964Z","mode":"HYBRID","metrics":{"top1":100,"top3":100,"top5":100,"mrr":1,"ndcg5":1}}
 {"timestamp":"2026-06-01T05:26:55.901Z","mode":"HYBRID","metrics":{"top1":100,"top3":100,"top5":100,"mrr":1,"ndcg5":1}}
 {"timestamp":"2026-06-01T05:29:51.071Z","mode":"HYBRID","metrics":{"top1":100,"top3":100,"top5":100,"mrr":1,"ndcg5":1}}
+{"timestamp":"2026-06-02T14:06:30.908Z","mode":"HYBRID","metrics":{"top1":100,"top3":100,"top5":100,"mrr":1,"ndcg5":1}}
